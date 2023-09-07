@@ -1,0 +1,3 @@
+[task.test]
+command = "go test ./tests"
+description = "Testing the entire project."
