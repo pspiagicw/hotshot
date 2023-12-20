@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/parser"
@@ -19,11 +20,10 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error scanning input: %v", err)
 		}
+		prompt = strings.TrimSpace(prompt)
 		lexer := lexer.NewLexer(prompt)
 		p := parser.NewParser(lexer)
 		for !lexer.EOF {
-			// fmt.Println(lexer.Next().String())
-			// fmt.Println(p.Parse())
 			fmt.Println(printer.PrintAST(p.Parse()))
 			fmt.Println(p.Errors)
 		}

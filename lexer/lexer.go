@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"unicode"
 
 	"github.com/pspiagicw/hotshot/token"
@@ -69,7 +68,6 @@ func (l *Lexer) Next() *token.Token {
 			l.advance()
 
 			number := l.extractNumber()
-			fmt.Println(number)
 
 			returnToken.TokenType = token.NUM
 			returnToken.TokenValue = number
