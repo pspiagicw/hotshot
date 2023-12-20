@@ -6,13 +6,26 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
-func TestParen(t *testing.T) {
-	input := "()"
+func TestIdent(t *testing.T) {
+
+	input := "(+ one two)"
 
 	expectedTokens := []token.Token{
 		{
 			TokenType:  token.LPAREN,
 			TokenValue: "(",
+		},
+		{
+			TokenType:  token.PLUS,
+			TokenValue: "+",
+		},
+		{
+			TokenType:  token.IDENT,
+			TokenValue: "one",
+		},
+		{
+			TokenType:  token.IDENT,
+			TokenValue: "two",
 		},
 		{
 			TokenType:  token.RPAREN,
@@ -24,15 +37,19 @@ func TestParen(t *testing.T) {
 		},
 	}
 	checkTokens(t, expectedTokens, input)
-}
 
-func TestParenWithSpaces(t *testing.T) {
-	input := "(     )"
+}
+func TestIdent2(t *testing.T) {
+	input := "(one)"
 
 	expectedTokens := []token.Token{
 		{
 			TokenType:  token.LPAREN,
 			TokenValue: "(",
+		},
+		{
+			TokenType:  token.IDENT,
+			TokenValue: "one",
 		},
 		{
 			TokenType:  token.RPAREN,

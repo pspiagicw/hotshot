@@ -1,9 +1,12 @@
 package tests
 
 import (
+	"reflect"
 	"testing"
 
+	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/lexer"
+	"github.com/pspiagicw/hotshot/parser"
 	"github.com/pspiagicw/hotshot/token"
 )
 
@@ -23,4 +26,29 @@ func checkTokens(t *testing.T, expected []token.Token, input string) {
 		}
 	}
 
+}
+func checkTree(t *testing.T, input string, expectedTree []ast.Statement) {
+
+	t.Helper()
+
+	lexer := lexer.NewLexer(input)
+	parser := parser.NewParser(lexer)
+
+	actualTree := parser.Parse()
+	if len(parser.Errors()) != 0 {
+		t.Fatalf("Errors while parsing")
+	}
+
+	for i, expectedStatement := range expectedTree {
+		actualStatement := actualTree.Statements[i]
+
+		if !matchStatement(t, expectedStatement, actualStatement) {
+			t.Errorf("Statement [%d], not matching, actual: %s, expected: %s", i+1, actualStatement.StringifyStatement(), expectedStatement.StringifyStatement())
+		}
+	}
+}
+func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	t.Helper()
+
+	return reflect.DeepEqual(expectedStatement, actualStatement)
 }
