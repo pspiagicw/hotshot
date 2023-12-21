@@ -43,7 +43,7 @@ func checkTree(t *testing.T, input string, expectedTree []ast.Statement) {
 		actualStatement := actualTree.Statements[i]
 
 		if !matchStatement(t, expectedStatement, actualStatement) {
-			t.Errorf("Statement [%d], not matching, actual: %s, expected: %s", i+1, actualStatement.StringifyStatement(), expectedStatement.StringifyStatement())
+			t.Errorf("Statement [%d], not matching, actual: \n%s, expected: \n%s", i+1, actualStatement.StringifyStatement(), expectedStatement.StringifyStatement())
 		}
 	}
 }

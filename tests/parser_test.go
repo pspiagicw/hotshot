@@ -7,8 +7,7 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
-func TestStatement(t *testing.T) {
-
+func TestEmptyStatement(t *testing.T) {
 	input := "()"
 
 	expectedTree := []ast.Statement{
@@ -79,11 +78,22 @@ func TestNestedStatement(t *testing.T) {
 				TokenValue: "+",
 			},
 			Args: []ast.Statement{
-				&ast.IntStatement{
-					Value: 1,
+				ast.FunctionalStatement{
+					Op: &token.Token{
+						TokenType:  token.PLUS,
+						TokenValue: "+",
+					},
+					Args: []ast.Statement{
+						&ast.IntStatement{
+							Value: 1,
+						},
+						&ast.IntStatement{
+							Value: 2,
+						},
+					},
 				},
 				&ast.IntStatement{
-					Value: 2,
+					Value: 3,
 				},
 			},
 		},

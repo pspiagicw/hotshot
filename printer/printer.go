@@ -1,22 +1,20 @@
 package printer
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/pspiagicw/hotshot/ast"
+	"github.com/shivamMg/ppds/tree"
 )
 
 func PrintAST(ast *ast.Program) string {
 	var output strings.Builder
-	for i, statement := range ast.Statements {
-		output.WriteString(fmt.Sprintf("[%d] ", i))
+	for _, statement := range ast.Statements {
 		if statement != nil {
-			output.WriteString(statement.StringifyStatement())
+			output.WriteString(tree.SprintHrn(statement))
 		} else {
-			output.WriteString("NIL Statement")
+			output.WriteString("NIL")
 		}
-		output.WriteString("\n")
 	}
 	return output.String()
 }

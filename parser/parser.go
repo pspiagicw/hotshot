@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -31,11 +32,11 @@ func (p *Parser) advance() {
 
 func (p *Parser) Parse() *ast.Program {
 	program := new(ast.Program)
-	for p.curToken.TokenType != token.EOF {
+	for p.curToken == nil || p.curToken.TokenType != token.EOF {
 		if len(p.Errors()) != 0 {
-			log.LogError("Error while parsing ")
+			log.Printf("Error while parsing")
 			for _, err := range p.Errors() {
-				log.LogError(err.Error())
+				log.Printf(err.Error())
 			}
 			os.Exit(1)
 		}
@@ -87,12 +88,13 @@ func (p *Parser) parseConcreteStatement() ast.Statement {
 		st := new(ast.FunctionalStatement)
 		st.Op = p.curToken
 		for p.peekToken.TokenType != token.RPAREN {
-			if p.peekToken.TokenType == token.EOF || p.peekToken.TokenType == token.ILLEGAL {
+			if p.peekToken.TokenType == token.EOF {
 				p.registerError(fmt.Errorf("Expected statement, got %s", p.peekToken.TokenType))
 			} else {
 				st.Args = append(st.Args, p.parseStatement())
 			}
 		}
+		p.advance()
 		return st
 	}
 }

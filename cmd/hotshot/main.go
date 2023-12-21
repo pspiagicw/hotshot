@@ -23,9 +23,7 @@ func main() {
 		prompt = strings.TrimSpace(prompt)
 		lexer := lexer.NewLexer(prompt)
 		p := parser.NewParser(lexer)
-		for !lexer.EOF {
-			fmt.Println(printer.PrintAST(p.Parse()))
-			fmt.Println(p.Errors)
-		}
+		fmt.Println(printer.PrintAST(p.Parse()))
+		fmt.Println(p.Errors)
 	}
 }
