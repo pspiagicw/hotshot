@@ -24,6 +24,13 @@ func main() {
 		lexer := lexer.NewLexer(prompt)
 		p := parser.NewParser(lexer)
 		fmt.Println(printer.PrintAST(p.Parse()))
-		fmt.Println(p.Errors)
+		if len(p.Errors()) == 0 {
+			fmt.Println("No parsing errors!")
+		} else {
+			fmt.Println("Error found during parsing!")
+			for _, err := range p.Errors() {
+				fmt.Println(err.Error())
+			}
+		}
 	}
 }

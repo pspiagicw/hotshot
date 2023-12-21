@@ -13,7 +13,7 @@ func PrintAST(ast *ast.Program) string {
 		if statement != nil {
 			output.WriteString(tree.SprintHrn(statement))
 		} else {
-			output.WriteString("NIL")
+			output.WriteString("NIL\n")
 		}
 	}
 	return output.String()

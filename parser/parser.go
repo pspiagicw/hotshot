@@ -3,7 +3,6 @@ package parser
 import (
 	"fmt"
 	"log"
-	"os"
 	"strconv"
 
 	"github.com/pspiagicw/hotshot/ast"
@@ -38,7 +37,6 @@ func (p *Parser) Parse() *ast.Program {
 			for _, err := range p.Errors() {
 				log.Printf(err.Error())
 			}
-			os.Exit(1)
 		}
 		currentStatement := p.parseStatement()
 		program.Statements = append(program.Statements, currentStatement)
@@ -90,6 +88,7 @@ func (p *Parser) parseConcreteStatement() ast.Statement {
 		for p.peekToken.TokenType != token.RPAREN {
 			if p.peekToken.TokenType == token.EOF {
 				p.registerError(fmt.Errorf("Expected statement, got %s", p.peekToken.TokenType))
+				return nil
 			} else {
 				st.Args = append(st.Args, p.parseStatement())
 			}
