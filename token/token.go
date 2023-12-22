@@ -42,4 +42,12 @@ const (
 	BANG     = "BANG"
 	COMMA    = "COMMA"
 	QUESTION = "QUESTION"
+	HASH     = "HASH"
+
+	IF    = "IF"
+	TRUE  = "TRUE"
+	FALSE = "FALSE"
+	WHILE = "WHILE"
+	SET   = "SET"
+	ECHO  = "ECHO"
 )

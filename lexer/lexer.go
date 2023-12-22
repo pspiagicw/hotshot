@@ -141,8 +141,12 @@ func (l *Lexer) Next() *token.Token {
 		if l.isLetter(l.currentChar) {
 			identifier := l.extractIdentifier()
 
-			returnToken.TokenType = token.IDENT
-			returnToken.TokenValue = identifier
+			if l.isKeyword(identifier) {
+				returnToken = l.parseKeyword()
+			} else {
+				returnToken.TokenType = token.IDENT
+				returnToken.TokenValue = identifier
+			}
 
 			shouldAdvance = false
 
@@ -165,6 +169,9 @@ func (l *Lexer) Next() *token.Token {
 	return returnToken
 
 }
+func (l *Lexer) parseKeyword() *token.Token {
+	return nil
+}
 func (l *Lexer) extractIdentifier() string {
 	identifier := ""
 	for l.isLetter(l.currentChar) {
@@ -185,7 +192,6 @@ func (l *Lexer) extractString() string {
 func (l *Lexer) extractNumber() string {
 	number := ""
 	for l.isDigit(l.currentChar) && !l.EOF {
-		// fmt.Println(l.input, l.currentChar, l.curPos, l.readPos)
 		number += l.currentChar
 		l.advance()
 	}
@@ -234,4 +240,7 @@ func NewLexer(input string) *Lexer {
 		currentChar: " ",
 	}
 	return l
+}
+func (l *Lexer) isKeyword(identifier string) bool {
+	return false
 }

@@ -66,7 +66,7 @@ func TestComparator(t *testing.T) {
 
 }
 func TestOthers(t *testing.T) {
-	input := "|;$@!,?"
+	input := "|;$@!,?#"
 
 	expectedTokens := []token.Token{
 		{
@@ -96,6 +96,10 @@ func TestOthers(t *testing.T) {
 		{
 			TokenType:  token.QUESTION,
 			TokenValue: "?",
+		},
+		{
+			TokenType:  token.HASH,
+			TokenValue: "#",
 		},
 		{
 			TokenType:  token.EOF,
