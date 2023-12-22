@@ -22,10 +22,10 @@ func createEOF() *token.Token {
 	}
 
 }
-func createILLEGAL() *token.Token {
+func (l *Lexer) createILLEGAL() *token.Token {
 	return &token.Token{
 		TokenType:  token.ILLEGAL,
-		TokenValue: " ",
+		TokenValue: l.currentChar,
 	}
 }
 
@@ -43,7 +43,6 @@ func (l *Lexer) peekInput() string {
 
 }
 func (l *Lexer) Next() *token.Token {
-	returnToken := createILLEGAL()
 
 	shouldAdvance := true
 
@@ -51,6 +50,8 @@ func (l *Lexer) Next() *token.Token {
 	if l.readPos < 0 {
 		l.advance()
 	}
+
+	returnToken := l.createILLEGAL()
 
 	if l.EOF {
 		return createEOF()

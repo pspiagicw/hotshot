@@ -2,7 +2,6 @@ package parser
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/pspiagicw/hotshot/ast"
@@ -32,12 +31,6 @@ func (p *Parser) advance() {
 func (p *Parser) Parse() *ast.Program {
 	program := new(ast.Program)
 	for p.curToken == nil || p.curToken.TokenType != token.EOF {
-		if len(p.Errors()) != 0 {
-			log.Printf("Error while parsing")
-			for _, err := range p.Errors() {
-				log.Printf(err.Error())
-			}
-		}
 		currentStatement := p.parseStatement()
 		program.Statements = append(program.Statements, currentStatement)
 	}
@@ -61,6 +54,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseStringStatement()
 	case token.LPAREN:
 		return p.parseConcreteStatement()
+	case token.ILLEGAL:
+		p.registerError(fmt.Errorf("Expected token found: %v", p.curToken.String()))
 	}
 	return nil
 }
