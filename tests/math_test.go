@@ -65,3 +65,43 @@ func TestComparator(t *testing.T) {
 	checkTokens(t, expectedTokens, input)
 
 }
+func TestOthers(t *testing.T) {
+	input := "|;$@!,?"
+
+	expectedTokens := []token.Token{
+		{
+			TokenType:  token.PIPE,
+			TokenValue: "|",
+		},
+		{
+			TokenType:  token.SEMICOLON,
+			TokenValue: ";",
+		},
+		{
+			TokenType:  token.DOLLAR,
+			TokenValue: "$",
+		},
+		{
+			TokenType:  token.AT,
+			TokenValue: "@",
+		},
+		{
+			TokenType:  token.BANG,
+			TokenValue: "!",
+		},
+		{
+			TokenType:  token.COMMA,
+			TokenValue: ",",
+		},
+		{
+			TokenType:  token.QUESTION,
+			TokenValue: "?",
+		},
+		{
+			TokenType:  token.EOF,
+			TokenValue: " ",
+		},
+	}
+	checkTokens(t, expectedTokens, input)
+
+}

@@ -33,5 +33,13 @@ const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
 
-	STRING = "STRING"
+	STRING    = "STRING"
+	PIPE      = "PIPE"
+	SEMICOLON = "SEMICOLON"
+
+	DOLLAR   = "DOLLAR"
+	AT       = "AT"
+	BANG     = "BANG"
+	COMMA    = "COMMA"
+	QUESTION = "QUESTION"
 )

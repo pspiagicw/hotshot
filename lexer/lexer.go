@@ -63,6 +63,27 @@ func (l *Lexer) Next() *token.Token {
 	case ")":
 		returnToken.TokenType = token.RPAREN
 		returnToken.TokenValue = l.currentChar
+	case "|":
+		returnToken.TokenType = token.PIPE
+		returnToken.TokenValue = l.currentChar
+	case "@":
+		returnToken.TokenType = token.AT
+		returnToken.TokenValue = l.currentChar
+	case ";":
+		returnToken.TokenType = token.SEMICOLON
+		returnToken.TokenValue = l.currentChar
+	case "$":
+		returnToken.TokenType = token.DOLLAR
+		returnToken.TokenValue = l.currentChar
+	case "!":
+		returnToken.TokenType = token.BANG
+		returnToken.TokenValue = l.currentChar
+	case ",":
+		returnToken.TokenType = token.COMMA
+		returnToken.TokenValue = l.currentChar
+	case "?":
+		returnToken.TokenType = token.QUESTION
+		returnToken.TokenValue = l.currentChar
 	case "+":
 		if l.isDigit(l.peekInput()) {
 			l.advance()
