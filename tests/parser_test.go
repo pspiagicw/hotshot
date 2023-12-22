@@ -78,7 +78,7 @@ func TestNestedStatement(t *testing.T) {
 				TokenValue: "+",
 			},
 			Args: []ast.Statement{
-				ast.FunctionalStatement{
+				&ast.FunctionalStatement{
 					Op: &token.Token{
 						TokenType:  token.PLUS,
 						TokenValue: "+",
