@@ -30,9 +30,26 @@ type StringStatement struct {
 	Value string
 }
 
+type BoolStatement struct {
+	Value bool
+}
+
 type FunctionalStatement struct {
 	Op   *token.Token
 	Args []Statement
+}
+
+func (b BoolStatement) StringifyStatement() string {
+	return fmt.Sprintf("Bool(%t)", b.Value)
+}
+func (b BoolStatement) String() string {
+	return b.StringifyStatement()
+}
+func (b BoolStatement) Data() interface{} {
+	return b.Value
+}
+func (b BoolStatement) Children() []tree.Node {
+	return []tree.Node{}
 }
 
 func (f FunctionalStatement) StringifyStatement() string {

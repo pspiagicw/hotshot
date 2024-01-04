@@ -41,3 +41,9 @@ func (p *Parser) parseFunctionCall() *ast.FunctionalStatement {
 	return st
 
 }
+func (p *Parser) parseBoolStatement() *ast.BoolStatement {
+	statement := &ast.BoolStatement{
+		Value: p.curToken.TokenType == token.TRUE,
+	}
+	return statement
+}

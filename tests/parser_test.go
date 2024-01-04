@@ -35,6 +35,21 @@ func TestSimpleParser(t *testing.T) {
 
 	checkTree(t, input, expectedTree)
 }
+func TestBoolStatements(t *testing.T) {
+	input := `true
+    false`
+
+	expectedTree := []ast.Statement{
+		&ast.BoolStatement{
+			Value: true,
+		},
+		&ast.BoolStatement{
+			Value: false,
+		},
+	}
+
+	checkTree(t, input, expectedTree)
+}
 
 func TestSimpleString(t *testing.T) {
 	input := `"hello"`

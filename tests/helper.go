@@ -21,6 +21,7 @@ func checkTokens(t *testing.T, expected []token.Token, input string) {
 
 }
 func matchToken(t *testing.T, i int, expected token.Token, actual *token.Token) {
+	t.Helper()
 	if actual.TokenType != expected.TokenType {
 		t.Errorf("Test [%d], Expected TokenType: '%v', Actual TokenType: '%v'", i, expected.TokenType, actual.TokenType)
 
@@ -45,9 +46,7 @@ func checkTree(t *testing.T, input string, expectedTree []ast.Statement) {
 	for i, expectedStatement := range expectedTree {
 		actualStatement := actualTree.Statements[i]
 
-		if !matchStatement(t, expectedStatement, actualStatement) {
-			t.Errorf("Statement [%d], not matching, actual: \n%s, expected: \n%s", i+1, actualStatement.StringifyStatement(), expectedStatement.StringifyStatement())
-		}
+		matchStatement(t, expectedStatement, actualStatement)
 	}
 }
 func matchIntStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
@@ -69,6 +68,17 @@ func matchStringStatement(t *testing.T, expectedStatement ast.Statement, actualS
 	a, ok := actualStatement.(*ast.StringStatement)
 	if !ok {
 		t.Fatalf("Expected string statement, got: %v", actualStatement)
+	}
+	return e.Value == a.Value
+}
+func matchBoolStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.BoolStatement)
+	if !ok {
+		t.Fatalf("Expected bool statement, got others")
+	}
+	a, ok := actualStatement.(*ast.BoolStatement)
+	if !ok {
+		t.Fatalf("Expected bool statement, got: %v", actualStatement)
 	}
 	return e.Value == a.Value
 }
@@ -94,6 +104,8 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			return matchEmptyStatement(t, expectedStatement, actualStatement)
 		case *ast.StringStatement:
 			return matchStringStatement(t, expectedStatement, actualStatement)
+		case *ast.BoolStatement:
+			return matchBoolStatement(t, expectedStatement, actualStatement)
 		default:
 			t.Fatalf("Some bloody type found!: %v", s)
 		}

@@ -45,6 +45,10 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseStringStatement()
 	case token.LPAREN:
 		return p.parseComplexStatement()
+	case token.TRUE:
+		return p.parseBoolStatement()
+	case token.FALSE:
+		return p.parseBoolStatement()
 	case token.ILLEGAL:
 		p.registerError(fmt.Errorf("Expected token found: %v", p.curToken.String()))
 	}
