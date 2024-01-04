@@ -132,6 +132,9 @@ func (l *Lexer) Next() *token.Token {
 	case ">":
 		returnToken.TokenType = token.GREATERTHAN
 		returnToken.TokenValue = l.currentChar
+	case "#":
+		returnToken.TokenType = token.HASH
+		returnToken.TokenValue = l.currentChar
 	case "\"":
 		l.advance()
 		string := l.extractString()
@@ -141,12 +144,7 @@ func (l *Lexer) Next() *token.Token {
 		if l.isLetter(l.currentChar) {
 			identifier := l.extractIdentifier()
 
-			if l.isKeyword(identifier) {
-				returnToken = l.parseKeyword()
-			} else {
-				returnToken.TokenType = token.IDENT
-				returnToken.TokenValue = identifier
-			}
+			returnToken = l.parseKeyword(identifier)
 
 			shouldAdvance = false
 
@@ -169,8 +167,24 @@ func (l *Lexer) Next() *token.Token {
 	return returnToken
 
 }
-func (l *Lexer) parseKeyword() *token.Token {
-	return nil
+func (l *Lexer) parseKeyword(identifier string) *token.Token {
+	keyword := token.Token{
+		TokenValue: identifier,
+		TokenType:  token.IDENT,
+	}
+	switch identifier {
+	case "case":
+		keyword.TokenType = token.CASE
+	case "if":
+		keyword.TokenType = token.IF
+	case "true":
+		keyword.TokenType = token.TRUE
+	case "false":
+		keyword.TokenType = token.FALSE
+	case "for":
+		keyword.TokenType = token.FOR
+	}
+	return &keyword
 }
 func (l *Lexer) extractIdentifier() string {
 	identifier := ""
@@ -240,7 +254,4 @@ func NewLexer(input string) *Lexer {
 		currentChar: " ",
 	}
 	return l
-}
-func (l *Lexer) isKeyword(identifier string) bool {
-	return false
 }

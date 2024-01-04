@@ -47,7 +47,6 @@ const (
 	IF    = "IF"
 	TRUE  = "TRUE"
 	FALSE = "FALSE"
-	WHILE = "WHILE"
-	SET   = "SET"
-	ECHO  = "ECHO"
+	FOR   = "FOR"
+	CASE  = "CASE"
 )

@@ -8,7 +8,7 @@ import (
 
 func TestKeywords(t *testing.T) {
 
-	input := "if true false while set echo"
+	input := "if true false for case"
 
 	expectedTokens := []token.Token{
 		{
@@ -24,16 +24,12 @@ func TestKeywords(t *testing.T) {
 			TokenValue: "false",
 		},
 		{
-			TokenType:  token.WHILE,
-			TokenValue: "while",
+			TokenType:  token.FOR,
+			TokenValue: "for",
 		},
 		{
-			TokenType:  token.SET,
-			TokenValue: "set",
-		},
-		{
-			TokenType:  token.ECHO,
-			TokenValue: "echo",
+			TokenType:  token.CASE,
+			TokenValue: "case",
 		},
 		{
 			TokenType:  token.EOF,
