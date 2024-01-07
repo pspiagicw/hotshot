@@ -1,0 +1,7 @@
+(if true (? "true!"))
+
+(if false (? "true!") (? "elses!"))
+
+(for true (? "infinite!"))
+
+(for (= 1 2) (? "No runs!"))
