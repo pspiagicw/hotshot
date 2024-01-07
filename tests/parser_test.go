@@ -116,3 +116,76 @@ func TestNestedStatement(t *testing.T) {
 	checkTree(t, input, expectedTree)
 
 }
+func TestValidOp(t *testing.T) {
+
+	tt := map[string]bool{
+		"(+ 1 2)":    true,
+		"(- 1 2)":    true,
+		"(/ 1 2)":    true,
+		"(* 1 2)":    true,
+		"(! 1 2)":    true,
+		"(^ 1 2)":    true,
+		"(if 1 2)":   true,
+		"(= 1 2)":    true,
+		"(< 1 2)":    true,
+		"(> 1 2)":    true,
+		"(% 1 2)":    true,
+		"(? 1 2)":    true,
+		"(# 1 2)":    true,
+		"(case 1 2)": true,
+
+		"(1 1 2)": false,
+		"($ 1 2)": false,
+		"(; 1 2)": false,
+		"(@ 1 2)": false,
+		"(, 1 2)": false,
+	}
+
+	for i, r := range tt {
+		if validStatement(t, i) != r {
+			t.Errorf("Test '%s' failed to match result: %t!", i, r)
+		}
+	}
+}
+func TestValidStatement(t *testing.T) {
+	tt := map[string]bool{
+		"+": false,
+		"-": false,
+		"*": false,
+		"/": false,
+		"%": false,
+		"|": false,
+		";": false,
+
+		"@": false,
+		"$": false,
+		"!": false,
+		"?": false,
+		"#": false,
+
+		"if":   false,
+		"for":  false,
+		"case": false,
+
+		"=": false,
+		">": false,
+		"<": false,
+
+		"somevar":      true,
+		"1":            true,
+		`"somestring"`: true,
+
+		`(+ 1 2)`:         true,
+		`(+ "foo" "bar")`: true,
+		// Should parse properly, execution is not a worry now! This would fail in execution, not here!
+		`(/ "foo" "bar")`:     true,
+		`(if (= 1 2) (? g))`:  true,
+		`(? "Hello, World!")`: true,
+	}
+
+	for i, r := range tt {
+		if validStatement(t, i) != r {
+			t.Errorf("Test '%s' failed to match result: %t!", i, r)
+		}
+	}
+}

@@ -8,7 +8,7 @@ import (
 
 func TestMath(t *testing.T) {
 
-	input := "+-/*%"
+	input := "+-/*%^"
 
 	expectedTokens := []token.Token{
 		{
@@ -30,6 +30,10 @@ func TestMath(t *testing.T) {
 		{
 			TokenType:  token.MOD,
 			TokenValue: "%",
+		},
+		{
+			TokenType:  token.POWER,
+			TokenValue: "^",
 		},
 		{
 			TokenType:  token.EOF,

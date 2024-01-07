@@ -20,11 +20,16 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error scanning input: %v", err)
 		}
+
 		prompt = strings.TrimSpace(prompt)
+
 		lexer := lexer.NewLexer(prompt)
 		p := parser.NewParser(lexer)
-		fmt.Println(printer.PrintAST(p.Parse()))
+
+		program := p.Parse()
+
 		if len(p.Errors()) == 0 {
+			fmt.Println(printer.PrintAST(program))
 			fmt.Println("No parsing errors!")
 		} else {
 			fmt.Println("Error found during parsing!")

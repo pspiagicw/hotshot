@@ -123,3 +123,15 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 	}
 	return true
 }
+func validStatement(t *testing.T, input string) bool {
+	t.Helper()
+
+	lexer := lexer.NewLexer(input)
+	parser := parser.NewParser(lexer)
+
+	_ = parser.Parse()
+	if len(parser.Errors()) != 0 {
+		return false
+	}
+	return true
+}

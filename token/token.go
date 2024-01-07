@@ -35,7 +35,6 @@ const (
 
 	STRING    = "STRING"
 	PIPE      = "PIPE"
-	SEMICOLON = "SEMICOLON"
 
 	DOLLAR   = "DOLLAR"
 	AT       = "AT"

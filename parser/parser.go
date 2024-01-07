@@ -9,17 +9,19 @@ import (
 )
 
 type Parser struct {
-	l         *lexer.Lexer
-	errors    []error
-	curToken  *token.Token
-	peekToken *token.Token
+	l            *lexer.Lexer
+	errors       []error
+	curToken     *token.Token
+	peekToken    *token.Token
+	nilStatement ast.Statement
 }
 
 func NewParser(l *lexer.Lexer) *Parser {
 	return &Parser{
-		l:         l,
-		errors:    []error{},
-		peekToken: l.Next(),
+		l:            l,
+		errors:       []error{},
+		peekToken:    l.Next(),
+		nilStatement: &ast.EmptyStatement{},
 	}
 }
 func (p *Parser) advance() {
@@ -50,9 +52,9 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.FALSE:
 		return p.parseBoolStatement()
 	case token.ILLEGAL:
-		p.registerError(fmt.Errorf("Expected token found: %v", p.curToken.String()))
+		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
 	}
-	return nil
+	return p.nilStatement
 }
 
 func (p *Parser) parseComplexStatement() ast.Statement {
