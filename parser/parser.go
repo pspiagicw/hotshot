@@ -53,6 +53,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseBoolStatement()
 	case token.ILLEGAL:
 		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
+	case token.IDENT:
+		return p.parseIdentStatement()
 	case token.EOF:
 		return p.nilStatement
 	default:
@@ -60,6 +62,11 @@ func (p *Parser) parseStatement() ast.Statement {
 
 	}
 	return p.nilStatement
+}
+func (p *Parser) parseIdentStatement() ast.Statement {
+	return &ast.IdentStatement{
+		Value: p.curToken,
+	}
 }
 func (p *Parser) parseAssignment() ast.Statement {
 	return nil

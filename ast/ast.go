@@ -39,6 +39,26 @@ type FunctionalStatement struct {
 	Args []Statement
 }
 
+type IdentStatement struct {
+	Value *token.Token
+}
+
+func (i IdentStatement) StringifyStatement() string {
+	return fmt.Sprintf("Ident(%s)", i.Value.TokenValue)
+}
+
+func (i IdentStatement) String() string {
+	return i.StringifyStatement()
+}
+
+func (i IdentStatement) Data() interface{} {
+	return i.StringifyStatement()
+}
+
+func (i IdentStatement) Children() []tree.Node {
+	return []tree.Node{}
+}
+
 func (b BoolStatement) StringifyStatement() string {
 	return fmt.Sprintf("Bool(%t)", b.Value)
 }
