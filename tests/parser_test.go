@@ -61,6 +61,18 @@ func TestSimpleString(t *testing.T) {
 	}
 	checkTree(t, input, expectedTree)
 }
+func TestComments(t *testing.T) {
+	input := `; some comments about you ;
+    69
+    `
+	expectedTree := []ast.Statement{
+		&ast.IntStatement{
+			Value: 69,
+		},
+	}
+
+	checkTree(t, input, expectedTree)
+}
 func TestAddition(t *testing.T) {
 	input := `(+ 1 2)`
 
@@ -134,7 +146,6 @@ func TestValidOp(t *testing.T) {
 		"(# 1 2)":    true,
 		"(case 1 2)": true,
 
-		"(1 1 2)": false,
 		"($ 1 2)": false,
 		"(; 1 2)": false,
 		"(@ 1 2)": false,
@@ -155,7 +166,7 @@ func TestValidStatement(t *testing.T) {
 		"/": false,
 		"%": false,
 		"|": false,
-		";": false,
+		";": true,
 
 		"@": false,
 		"$": false,
@@ -178,9 +189,13 @@ func TestValidStatement(t *testing.T) {
 		`(+ 1 2)`:         true,
 		`(+ "foo" "bar")`: true,
 		// Should parse properly, execution is not a worry now! This would fail in execution, not here!
-		`(/ "foo" "bar")`:     true,
-		`(if (= 1 2) (? g))`:  true,
-		`(? "Hello, World!")`: true,
+		`(/ "foo" "bar")`:              true,
+		`(if (= 1 2) (? g))`:           true,
+		`(? "Hello, World!")`:          true,
+		"; this should be a comment ;": true,
+		"; this should be a comment":   true,
+		"($ someVar 3)":                true,
+		"(somefunc somearg 1)":         true,
 	}
 
 	for i, r := range tt {

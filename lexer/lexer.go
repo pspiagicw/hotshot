@@ -30,14 +30,24 @@ func (l *Lexer) createILLEGAL() *token.Token {
 }
 
 func (l *Lexer) consumeSpaces() {
-	for l.currentChar == " " || l.currentChar == "\t" || l.currentChar == "\n" {
+	for l.currentChar == " " || l.currentChar == "\t" || l.currentChar == "\n" && l.EOF == false {
+		l.advance()
+	}
+}
+func (l *Lexer) consumeComments() {
+	if l.currentChar == ";" {
+		l.advance()
+		for l.currentChar != ";" && l.EOF == false {
+			l.advance()
+		}
+	}
+	if l.currentChar == ";" {
 		l.advance()
 	}
 }
 func (l *Lexer) peekInput() string {
 	if l.readPos < l.inputLen {
 		return string(l.input[l.readPos])
-
 	}
 	return " "
 
@@ -46,7 +56,13 @@ func (l *Lexer) Next() *token.Token {
 
 	shouldAdvance := true
 
+	// Consume any start empty lines.
 	l.consumeSpaces()
+	// Consume any comments.
+	l.consumeComments()
+	// Consume any newlines after the comments
+	l.consumeSpaces()
+
 	if l.readPos < 0 {
 		l.advance()
 	}
@@ -70,8 +86,8 @@ func (l *Lexer) Next() *token.Token {
 	case "@":
 		returnToken.TokenType = token.AT
 		returnToken.TokenValue = l.currentChar
-	case ";":
-		returnToken.TokenType = token.SEMICOLON
+	case "^":
+		returnToken.TokenType = token.POWER
 		returnToken.TokenValue = l.currentChar
 	case "$":
 		returnToken.TokenType = token.DOLLAR
@@ -140,6 +156,11 @@ func (l *Lexer) Next() *token.Token {
 		string := l.extractString()
 		returnToken.TokenType = token.STRING
 		returnToken.TokenValue = string
+	// case ";":
+	// 	l.advance()
+	// 	comment := l.extractComment()
+	// 	returnToken.TokenType = token.COMMENT
+	// 	returnToken.TokenValue = comment
 	default:
 		if l.isLetter(l.currentChar) {
 			identifier := l.extractIdentifier()
@@ -167,6 +188,19 @@ func (l *Lexer) Next() *token.Token {
 	return returnToken
 
 }
+
+// func (l *Lexer) extractComment() string {
+// 	comment := ""
+// 	for l.currentChar != ";" {
+// 		if l.EOF {
+// 			return comment
+// 		}
+// 		comment += l.currentChar
+// 		l.advance()
+// 	}
+// 	return comment
+// }
+
 func (l *Lexer) parseKeyword(identifier string) *token.Token {
 	keyword := token.Token{
 		TokenValue: identifier,

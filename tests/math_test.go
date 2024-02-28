@@ -70,16 +70,12 @@ func TestComparator(t *testing.T) {
 
 }
 func TestOthers(t *testing.T) {
-	input := "|;$@!,?#"
+	input := "|$@!,?#^"
 
 	expectedTokens := []token.Token{
 		{
 			TokenType:  token.PIPE,
 			TokenValue: "|",
-		},
-		{
-			TokenType:  token.SEMICOLON,
-			TokenValue: ";",
 		},
 		{
 			TokenType:  token.DOLLAR,
@@ -104,6 +100,10 @@ func TestOthers(t *testing.T) {
 		{
 			TokenType:  token.HASH,
 			TokenValue: "#",
+		},
+		{
+			TokenType:  token.POWER,
+			TokenValue: "^",
 		},
 		{
 			TokenType:  token.EOF,

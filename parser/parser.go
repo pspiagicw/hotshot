@@ -53,8 +53,16 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseBoolStatement()
 	case token.ILLEGAL:
 		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
+	case token.EOF:
+		return p.nilStatement
+	default:
+		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
+
 	}
 	return p.nilStatement
+}
+func (p *Parser) parseAssignment() ast.Statement {
+	return nil
 }
 
 func (p *Parser) parseComplexStatement() ast.Statement {

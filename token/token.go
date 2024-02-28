@@ -32,9 +32,10 @@ const (
 
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
+	COMMENT = "COMMENT"
 
-	STRING    = "STRING"
-	PIPE      = "PIPE"
+	STRING = "STRING"
+	PIPE   = "PIPE"
 
 	DOLLAR   = "DOLLAR"
 	AT       = "AT"
@@ -42,6 +43,7 @@ const (
 	COMMA    = "COMMA"
 	QUESTION = "QUESTION"
 	HASH     = "HASH"
+	POWER    = "POWER"
 
 	IF    = "IF"
 	TRUE  = "TRUE"

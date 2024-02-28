@@ -21,3 +21,14 @@ func TestStrings(t *testing.T) {
 	}
 	checkTokens(t, expectedTokens, input)
 }
+func TestComment(t *testing.T) {
+	input := "; this is a comment ;"
+
+	expectedTokens := []token.Token{
+		{
+			TokenType:  token.EOF,
+			TokenValue: " ",
+		},
+	}
+	checkTokens(t, expectedTokens, input)
+}

@@ -1,8 +1,8 @@
-1 ;; 1 ;;
-2 ;; 2 ;;
-(? 2) ;; prints 2 ;;
+1 ; 1 ;
+2 ; 2 ;
+(? 2) ; prints 2 ;
 
-;; this is a comment! ;;
+; this is a comment! ;
 
 ;; All comments can be multiline, 
 it simply matches till it encounters the double semicolon again ;;

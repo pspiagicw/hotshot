@@ -23,6 +23,7 @@ var validOps = map[token.TokenType]bool{
 	token.LESSTHAN:    true,
 	token.MOD:         true,
 	token.IDENT:       true,
+	token.POWER:       true,
 }
 
 func (p *Parser) parseStringStatement() *ast.StringStatement {
