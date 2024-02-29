@@ -75,6 +75,33 @@ type FunctionStatement struct {
 	Body Statement
 }
 
+type IfStatement struct {
+	Condition Statement
+	Body      Statement
+	Else      Statement
+}
+
+func (i IfStatement) StringifyStatement() string {
+	return fmt.Sprintf("If statement")
+}
+func (i IfStatement) String() string {
+	return i.StringifyStatement()
+}
+func (i IfStatement) Data() interface{} {
+	return "if"
+}
+func (i IfStatement) Children() []tree.Node {
+	if i.Else != nil {
+		return []tree.Node{
+			i.Body,
+			i.Else,
+		}
+	}
+	return []tree.Node{
+		i.Body,
+	}
+}
+
 func (f FunctionStatement) StringifyStatement() string {
 	return fmt.Sprintf("Function(%s)", f.Name.TokenValue)
 }

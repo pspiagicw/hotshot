@@ -110,6 +110,22 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 func (p *Parser) peekTokenIs(ex token.TokenType) bool {
 	return p.peekToken.TokenType == ex
 }
+func (p *Parser) parseIfStatement() ast.Statement {
+	st := &ast.IfStatement{}
+
+	st.Condition = p.parseStatement()
+
+	st.Body = p.parseStatement()
+
+	if !p.peekTokenIs(token.RPAREN) {
+		st.Else = p.parseStatement()
+	}
+
+	p.advance()
+
+	return st
+
+}
 
 func (p *Parser) parseComplexStatement() ast.Statement {
 	p.advance()
@@ -120,6 +136,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseAssignment()
 	case token.FN:
 		return p.parseFunctionDec()
+	case token.IF:
+		return p.parseIfStatement()
 	default:
 		return p.parseFunctionCall()
 	}

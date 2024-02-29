@@ -54,7 +54,10 @@ func TestEvalStatements(t *testing.T) {
 		`(or false false)`:  createBool(false),
 		`(or true true)`:    createBool(true),
 
-		// `(if true 5 2)`: createInt(5),
+		`(if true 5 2)`:    createInt(5),
+		`(if false 5 2)`:   createInt(2),
+		`(if (= 1 2) 5 2)`: createInt(2),
+		`(if (= 1 1) 7 2)`: createInt(7),
 	}
 
 	for input, expectedResult := range tt {

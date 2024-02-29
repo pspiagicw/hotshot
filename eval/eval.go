@@ -23,10 +23,30 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		return evalIdent(node, env)
 	case *ast.AssignmentStatement:
 		return applyAssignment(node, env)
+	case *ast.IfStatement:
+		return evalIfStatement(node, env)
 	}
 	return &object.Error{
 		Message: "ERROR: Evaluation for statement can't be done!\n",
 	}
+}
+func evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Object {
+
+	result := Eval(node.Condition, env)
+
+	if result.Type() != object.BOOLEAN_OBJ {
+		return object.Error{Message: "ERROR: Condition doesn't evaluate to Boolean!"}
+	}
+
+	if result.String() == "true" {
+		return Eval(node.Body, env)
+	} else {
+		if node.Else != nil {
+			return Eval(node.Else, env)
+		}
+	}
+	return object.Null{}
+
 }
 func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
 	value, ok := env.Vars[node.Value.TokenValue]
