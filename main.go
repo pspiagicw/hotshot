@@ -11,9 +11,12 @@ import (
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
+	"github.com/pspiagicw/hotshot/printer"
 )
 
 func main() {
+	env := object.NewEnvironment()
+
 	for true {
 		fmt.Printf(">>> ")
 		buffer := bufio.NewReader(os.Stdin)
@@ -28,10 +31,9 @@ func main() {
 		p := parser.NewParser(lexer)
 
 		program := p.Parse()
+		fmt.Println(printer.PrintAST(program))
 
 		program.Statements = program.Statements[:len(program.Statements)-1]
-
-		env := object.NewEnvironment()
 
 		if len(p.Errors()) == 0 {
 			result := eval.Eval(program, env)

@@ -16,10 +16,34 @@ func getBuiltins() map[string]Object {
 		"*": &Builtin{
 			Fn: multiplyFunc,
 		},
+		"/": &Builtin{
+			Fn: divideFunc,
+		},
 		"?": &Builtin{
 			Fn: printFunc,
 		},
+		"#": &Builtin{
+			Fn: lenFunc,
+		},
 	}
+}
+func lenFunc(args ...Object) Object {
+	if len(args) == 0 {
+		return createError("No arguments!")
+	}
+
+	if len(args) > 1 {
+		return createError("Length function expects only 1 argument!")
+	}
+
+	switch v := args[0].(type) {
+	case *String:
+		return &Integer{
+			Value: len(v.Value),
+		}
+	}
+
+	return createError("Can't find length of that type")
 }
 func printFunc(args ...Object) Object {
 	var output strings.Builder
@@ -32,80 +56,6 @@ func printFunc(args ...Object) Object {
 	return &String{
 		Value: output.String(),
 	}
-}
-
-func multiplyFunc(args ...Object) Object {
-	if len(args) == 0 {
-		return createError("No arguments!")
-	}
-
-	result := 1
-	for _, arg := range args {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("Argument not integer!")
-		}
-
-		result *= v.Value
-	}
-
-	return &Integer{
-		Value: result,
-	}
-
-}
-func minusFunc(args ...Object) Object {
-
-	if len(args) == 0 {
-		return createError("No arguments!")
-	}
-
-	f := args[0]
-
-	v, ok := f.(*Integer)
-
-	if !ok {
-		return createError("Argument not integer!")
-	}
-
-	result := v.Value
-	for _, arg := range args[1:] {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("Argument not integer!")
-		}
-
-		result -= v.Value
-	}
-
-	return &Integer{
-		Value: result,
-	}
-}
-
-func addFunc(args ...Object) Object {
-
-	if len(args) == 0 {
-		return createError("No arguments!")
-	}
-
-	result := 0
-	for _, arg := range args {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("Argument not integer!")
-		}
-
-		result += v.Value
-	}
-
-	return &Integer{
-		Value: result,
-	}
-
 }
 
 func createError(format string, v ...interface{}) Object {

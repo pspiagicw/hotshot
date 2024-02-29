@@ -25,6 +25,7 @@ func TestEvalStatements(t *testing.T) {
 		"(* 5 6)":                      createInt(30),
 		"(+ 5 (- 4 5))":                createInt(4),
 		"(+ -5 (* 4 5))":               createInt(15),
+		`($ name 5) name`:              createInt(5),
 	}
 
 	for input, expectedResult := range tt {

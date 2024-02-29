@@ -64,6 +64,26 @@ type IdentStatement struct {
 	Value *token.Token
 }
 
+type AssignmentStatement struct {
+	Name  *token.Token
+	Value Statement
+}
+
+func (a AssignmentStatement) StringifyStatement() string {
+	return fmt.Sprintf("($ %s %s)", a.Name.String(), a.Value.StringifyStatement())
+}
+func (a AssignmentStatement) String() string {
+	return a.StringifyStatement()
+}
+func (a AssignmentStatement) Data() interface{} {
+	return fmt.Sprintf("$(%s)", a.Name.TokenValue)
+}
+func (a AssignmentStatement) Children() []tree.Node {
+	return []tree.Node{
+		a.Value,
+	}
+}
+
 func (i IdentStatement) StringifyStatement() string {
 	return fmt.Sprintf("Ident(%s)", i.Value.TokenValue)
 }

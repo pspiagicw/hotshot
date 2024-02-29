@@ -16,6 +16,7 @@ const (
 	FUNCTION_OBJ = "FUNCTION"
 	BUILTIN_OBJ  = "BUILTIN"
 	ERROR_OBJ    = "ERROR"
+	BOOLEAN_OBJ  = "BOOLEAN"
 )
 
 type Null struct {
@@ -74,4 +75,18 @@ func (e Error) Type() ObjectType {
 }
 func (e Error) String() string {
 	return e.Message
+}
+
+type Boolean struct {
+	Value bool
+}
+
+func (b Boolean) Type() ObjectType {
+	return BOOLEAN_OBJ
+}
+func (b Boolean) String() string {
+	if b.Value {
+		return "true"
+	}
+	return "false"
 }

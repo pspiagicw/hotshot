@@ -4,8 +4,8 @@
 
 ; this is a comment! ;
 
-;; All comments can be multiline, 
-it simply matches till it encounters the double semicolon again ;;
+; All comments can be multiline, 
+it simply matches till it encounters the semicolon again ;
 
 
 (+ 2 1 2 1 2 3 4 1 1) ;; 17 ;;
@@ -60,7 +60,6 @@ false ;; false ;;
 (# "length") ;; 6 ;;
 
 (? "print this string!") ;; prints string ;;
-
 
 ($ name "pspiagicw") ;; assigns name to "pspiagicw" ;;
 

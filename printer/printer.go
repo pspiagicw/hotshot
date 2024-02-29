@@ -9,12 +9,6 @@ import (
 
 func PrintAST(ast *ast.Program) string {
 	var output strings.Builder
-	for _, statement := range ast.Statements {
-		if statement != nil {
-			output.WriteString(tree.SprintHrn(statement))
-		} else {
-			output.WriteString("NIL\n")
-		}
-	}
+	output.WriteString(tree.SprintHrn(ast))
 	return output.String()
 }

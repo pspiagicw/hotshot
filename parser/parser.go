@@ -69,7 +69,22 @@ func (p *Parser) parseIdentStatement() ast.Statement {
 	}
 }
 func (p *Parser) parseAssignment() ast.Statement {
-	return nil
+	p.advance()
+	st := &ast.AssignmentStatement{}
+
+	if p.curToken.TokenType != token.IDENT {
+		p.registerError(fmt.Errorf("Expected a ident, got %s", p.curToken.TokenType))
+	}
+
+	st.Name = p.curToken
+	st.Value = p.parseStatement()
+
+	p.advance()
+	if p.curToken.TokenType != token.RPAREN {
+		p.registerError(fmt.Errorf("Expected a ')', got %s", p.curToken.TokenType))
+	}
+
+	return st
 }
 
 func (p *Parser) parseComplexStatement() ast.Statement {
@@ -77,6 +92,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 	switch p.curToken.TokenType {
 	case token.RPAREN:
 		return &ast.EmptyStatement{}
+	case token.DOLLAR:
+		return p.parseAssignment()
 	default:
 		return p.parseFunctionCall()
 	}

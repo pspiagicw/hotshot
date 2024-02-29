@@ -17,10 +17,25 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		return evalFunction(node, env)
 	case *ast.EmptyStatement:
 		return object.Null{}
+	case *ast.BoolStatement:
+		return &object.Boolean{Value: node.Value}
+	case *ast.IdentStatement:
+		return evalIdent(node, env)
+	case *ast.AssignmentStatement:
+		return applyAssignment(node, env)
 	}
 	return &object.Error{
 		Message: "ERROR: Evaluation for statement can't be done!\n",
 	}
+}
+func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
+	value, ok := env.Vars[node.Value.TokenValue]
+
+	if !ok {
+		return object.Error{Message: "ERROR: No such variable defined!\n"}
+	}
+
+	return value
 }
 func evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
@@ -30,6 +45,14 @@ func evalProgram(statements []ast.Statement, env *object.Environment) object.Obj
 	}
 
 	return result
+}
+func applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
+
+	value := Eval(node.Value, env)
+
+	env.Vars[node.Name.TokenValue] = value
+
+	return object.Null{}
 }
 func evalFunction(node *ast.FunctionalStatement, env *object.Environment) object.Object {
 	fn, ok := env.Functions[node.Op.TokenValue]
