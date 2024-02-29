@@ -8,7 +8,7 @@ import (
 
 func TestKeywords(t *testing.T) {
 
-	input := "if true false for case fn"
+	input := "if true false while case fn"
 
 	expectedTokens := []token.Token{
 		{
@@ -24,8 +24,8 @@ func TestKeywords(t *testing.T) {
 			TokenValue: "false",
 		},
 		{
-			TokenType:  token.FOR,
-			TokenValue: "for",
+			TokenType:  token.WHILE,
+			TokenValue: "while",
 		},
 		{
 			TokenType:  token.CASE,

@@ -215,8 +215,8 @@ func (l *Lexer) parseKeyword(identifier string) *token.Token {
 		keyword.TokenType = token.TRUE
 	case "false":
 		keyword.TokenType = token.FALSE
-	case "for":
-		keyword.TokenType = token.FOR
+	case "while":
+		keyword.TokenType = token.WHILE
 	case "fn":
 		keyword.TokenType = token.FN
 	}

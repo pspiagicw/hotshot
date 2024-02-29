@@ -173,9 +173,9 @@ func TestValidStatement(t *testing.T) {
 		"?": false,
 		"#": false,
 
-		"if":   false,
-		"for":  false,
-		"case": false,
+		"if":    false,
+		"while": false,
+		"case":  false,
 
 		"=": false,
 		">": false,

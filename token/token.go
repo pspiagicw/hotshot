@@ -48,7 +48,7 @@ const (
 	IF    = "IF"
 	TRUE  = "TRUE"
 	FALSE = "FALSE"
-	FOR   = "FOR"
+	WHILE = "WHILE"
 	CASE  = "CASE"
 	FN    = "FN"
 )
