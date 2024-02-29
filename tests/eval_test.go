@@ -31,9 +31,20 @@ func TestEvalStatements(t *testing.T) {
 		`"someString"`:            createString("someString"),
 		`($ name "hotshot") name`: createString("hotshot"),
 
-		// `(= 1 1)`:          createString("hotshot"),
-		// `(> 1 1)`:          createString("hotshot"),
-		// `(< 1 1)`:          createString("hotshot"),
+		`(= 1 1)`:           createBool(true),
+		`(= 1 2)`:           createBool(false),
+		`(= "some" "some")`: createBool(true),
+		`(= "some" "else")`: createBool(false),
+
+		`(= true true)`:   createBool(true),
+		`(= false true)`:  createBool(false),
+		`(= false false)`: createBool(true),
+
+		`(> 1 1)`: createBool(false),
+		`(< 1 1)`: createBool(false),
+		`(< 2 1)`: createBool(false),
+		`(> 2 1)`: createBool(true),
+
 		// `(not true)`:       createString("hotshot"),
 		// `(not false)`:      createString("hotshot"),
 		// `(and false true)`: createString("hotshot"),
@@ -51,6 +62,11 @@ func createNull() *object.Null {
 }
 func createString(val string) *object.String {
 	return &object.String{
+		Value: val,
+	}
+}
+func createBool(val bool) *object.Boolean {
+	return &object.Boolean{
 		Value: val,
 	}
 }

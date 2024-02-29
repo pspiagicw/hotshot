@@ -199,6 +199,9 @@ func TestValidStatement(t *testing.T) {
 		"(> 1 1)":                      true,
 		"(< 1 1)":                      true,
 		`(= "some" "some")`:            true,
+
+		`(fn hello () (? "Hello, World"))`: true,
+		`(fn add (x y) (+ x y))`:           true,
 	}
 
 	for i, r := range tt {

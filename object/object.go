@@ -10,13 +10,14 @@ type Object interface {
 }
 
 const (
-	INTEGER_OBJ  = "INTEGER"
+	INTEGER_OBJ = "INTEGER"
+	STRING_OBJ  = "STRING"
+	BOOLEAN_OBJ = "BOOLEAN"
+
 	NULL_OBJ     = "NULL"
-	STRING_OBJ   = "STRING"
 	FUNCTION_OBJ = "FUNCTION"
 	BUILTIN_OBJ  = "BUILTIN"
 	ERROR_OBJ    = "ERROR"
-	BOOLEAN_OBJ  = "BOOLEAN"
 )
 
 type Null struct {
