@@ -34,63 +34,16 @@ func getBuiltins() map[string]Object {
 		">": &Builtin{
 			Fn: gtFunc,
 		},
+		"not": &Builtin{
+			Fn: notFunc,
+		},
+		"and": &Builtin{
+			Fn: andFunc,
+		},
+		"or": &Builtin{
+			Fn: orFunc,
+		},
 	}
-}
-func gtFunc(args ...Object) Object {
-	if len(args) != 2 {
-		return createError("lt expects 2 arguments!")
-	}
-
-	f, ok := args[0].(*Integer)
-	if !ok {
-		return createError("Integer expected, got %v", args[0].Type())
-	}
-
-	s, ok := args[1].(*Integer)
-	if !ok {
-		return createError("Integer expected, got %v", args[1].Type())
-	}
-
-	return &Boolean{
-		Value: f.Value > s.Value,
-	}
-
-}
-func ltFunc(args ...Object) Object {
-	if len(args) != 2 {
-		return createError("lt expects 2 arguments!")
-	}
-
-	f, ok := args[0].(*Integer)
-	if !ok {
-		return createError("Integer expected, got %v", args[0].Type())
-	}
-
-	s, ok := args[1].(*Integer)
-	if !ok {
-		return createError("Integer expected, got %v", args[1].Type())
-	}
-
-	return &Boolean{
-		Value: f.Value < s.Value,
-	}
-
-}
-func equalFunc(args ...Object) Object {
-	if len(args) != 2 {
-		return createError("eq expects 2 arguments!")
-	}
-
-	if args[0].Type() == args[1].Type() && args[0].String() == args[1].String() {
-		return &Boolean{
-			Value: true,
-		}
-	}
-
-	return &Boolean{
-		Value: false,
-	}
-
 }
 func lenFunc(args ...Object) Object {
 	if len(args) == 0 {

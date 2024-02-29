@@ -45,11 +45,16 @@ func TestEvalStatements(t *testing.T) {
 		`(< 2 1)`: createBool(false),
 		`(> 2 1)`: createBool(true),
 
-		// `(not true)`:       createString("hotshot"),
-		// `(not false)`:      createString("hotshot"),
-		// `(and false true)`: createString("hotshot"),
-		// `(and true true)`:  createString("hotshot"),
-		// `(or true false)`:  createString("hotshot"),
+		`(not true)`:        createBool(false),
+		`(not false)`:       createBool(true),
+		`(and false true)`:  createBool(false),
+		`(and true true)`:   createBool(true),
+		`(and false false)`: createBool(false),
+		`(or true false)`:   createBool(true),
+		`(or false false)`:  createBool(false),
+		`(or true true)`:    createBool(true),
+
+		// `(if true 5 2)`: createInt(5),
 	}
 
 	for input, expectedResult := range tt {
