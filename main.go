@@ -7,9 +7,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
+	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
-	"github.com/pspiagicw/hotshot/printer"
 )
 
 func main() {
@@ -28,9 +29,15 @@ func main() {
 
 		program := p.Parse()
 
+		program.Statements = program.Statements[:len(program.Statements)-1]
+
+		env := object.NewEnvironment()
+
 		if len(p.Errors()) == 0 {
-			fmt.Println(printer.PrintAST(program))
-			fmt.Println("No parsing errors!")
+			result := eval.Eval(program, env)
+			fmt.Print("=> ")
+			fmt.Print(result)
+			fmt.Println()
 		} else {
 			fmt.Println("Error found during parsing!")
 			for _, err := range p.Errors() {

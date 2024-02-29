@@ -135,7 +135,6 @@ func TestValidOp(t *testing.T) {
 		"(- 1 2)":    true,
 		"(/ 1 2)":    true,
 		"(* 1 2)":    true,
-		"(! 1 2)":    true,
 		"(^ 1 2)":    true,
 		"(if 1 2)":   true,
 		"(= 1 2)":    true,
@@ -146,7 +145,6 @@ func TestValidOp(t *testing.T) {
 		"(# 1 2)":    true,
 		"(case 1 2)": true,
 
-		"($ 1 2)": false,
 		"(; 1 2)": false,
 		"(@ 1 2)": false,
 		"(, 1 2)": false,

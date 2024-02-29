@@ -19,6 +19,27 @@ type Statement interface {
 	Children() []tree.Node
 }
 
+func (p *Program) StringifyStatement() string {
+	var output strings.Builder
+
+	for _, statement := range p.Statements {
+		output.WriteString(statement.StringifyStatement())
+		output.WriteString("\n")
+	}
+	output.WriteString("\n")
+	return output.String()
+}
+func (p *Program) Data() interface{} {
+	return "[Program]"
+}
+func (p *Program) Children() []tree.Node {
+	nodes := []tree.Node{}
+	for _, statement := range p.Statements {
+		nodes = append(nodes, statement)
+	}
+	return nodes
+}
+
 type IntStatement struct {
 	Value int
 }
