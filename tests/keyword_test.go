@@ -8,7 +8,7 @@ import (
 
 func TestKeywords(t *testing.T) {
 
-	input := "if true false for case"
+	input := "if true false for case fn"
 
 	expectedTokens := []token.Token{
 		{
@@ -30,6 +30,10 @@ func TestKeywords(t *testing.T) {
 		{
 			TokenType:  token.CASE,
 			TokenValue: "case",
+		},
+		{
+			TokenType:  token.FN,
+			TokenValue: "fn",
 		},
 		{
 			TokenType:  token.EOF,

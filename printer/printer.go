@@ -9,6 +9,6 @@ import (
 
 func PrintAST(ast *ast.Program) string {
 	var output strings.Builder
-	output.WriteString(tree.SprintHr(ast))
+	output.WriteString(tree.SprintHrn(ast))
 	return output.String()
 }

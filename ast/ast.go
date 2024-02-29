@@ -69,6 +69,34 @@ type AssignmentStatement struct {
 	Value Statement
 }
 
+type FunctionStatement struct {
+	Name *token.Token
+	Args []Statement
+	Body Statement
+}
+
+func (f FunctionStatement) StringifyStatement() string {
+	return fmt.Sprintf("Function(%s)", f.Name.TokenValue)
+}
+func (f FunctionStatement) String() string {
+	return f.StringifyStatement()
+}
+func (f FunctionStatement) Data() interface{} {
+	strArgs := []string{}
+
+	for _, arg := range f.Args {
+		strArgs = append(strArgs, arg.StringifyStatement())
+	}
+
+	return fmt.Sprintf("fn(%s[%s])", f.Name.TokenValue, strings.Join(strArgs, ","))
+}
+func (f FunctionStatement) Children() []tree.Node {
+	return []tree.Node{
+		f.Body,
+	}
+
+}
+
 func (a AssignmentStatement) StringifyStatement() string {
 	return fmt.Sprintf("($ %s %s)", a.Name.String(), a.Value.StringifyStatement())
 }

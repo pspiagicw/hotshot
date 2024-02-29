@@ -50,4 +50,5 @@ const (
 	FALSE = "FALSE"
 	FOR   = "FOR"
 	CASE  = "CASE"
+	FN    = "FN"
 )
