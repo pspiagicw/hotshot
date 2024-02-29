@@ -25,7 +25,8 @@ func TestEvalStatements(t *testing.T) {
 		"(* 5 6)":                      createInt(30),
 		"(+ 5 (- 4 5))":                createInt(4),
 		"(+ -5 (* 4 5))":               createInt(15),
-		`($ name 5) name`:              createInt(5),
+		`($ number 5) number`:          createInt(5),
+		`($ name "hotshot") name`:      createString("hotshot"),
 	}
 
 	for input, expectedResult := range tt {
@@ -48,6 +49,8 @@ func createInt(val int) *object.Integer {
 }
 func checkResult(t *testing.T, input string, expected object.Object) {
 
+	t.Helper()
+
 	lexer := lexer.NewLexer(input)
 	parser := parser.NewParser(lexer)
 
@@ -63,9 +66,30 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 
 	result := eval.Eval(ast, env)
 
+	equalResult(t, result, expected)
+
+}
+
+func equalResult(t *testing.T, result, expected object.Object) {
+
 	t.Helper()
 
-	if !reflect.DeepEqual(result, expected) {
-		t.Errorf("Evaluated result not equal! got %v, expected %v", result, expected)
+	if result == nil {
+		t.Fatalf("Evaluted result is nil!")
+	}
+
+	if result.Type() == object.NULL_OBJ && expected.Type() != object.NULL_OBJ {
+		t.Errorf("Evaluated result not equal! got %v, expected Null", result)
+	}
+
+	if result.Type() != expected.Type() {
+		t.Errorf("Evaluated result type not equal! got %v, expected %v", result.Type(), expected.Type())
+
+	}
+
+	if result.Type() != object.NULL_OBJ {
+		if !reflect.DeepEqual(result, expected) {
+			t.Errorf("Evaluated result not equal! got %v, expected %v", result, expected)
+		}
 	}
 }

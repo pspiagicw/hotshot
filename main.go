@@ -31,20 +31,22 @@ func main() {
 		p := parser.NewParser(lexer)
 
 		program := p.Parse()
-		fmt.Println(printer.PrintAST(program))
 
-		program.Statements = program.Statements[:len(program.Statements)-1]
-
-		if len(p.Errors()) == 0 {
-			result := eval.Eval(program, env)
-			fmt.Print("=> ")
-			fmt.Print(result)
-			fmt.Println()
-		} else {
+		if len(p.Errors()) != 0 {
 			fmt.Println("Error found during parsing!")
 			for _, err := range p.Errors() {
 				fmt.Println(err.Error())
 			}
+			continue
 		}
+
+		fmt.Println(printer.PrintAST(program))
+
+		program.Statements = program.Statements[:len(program.Statements)-1]
+
+		result := eval.Eval(program, env)
+		fmt.Print("=> ")
+		fmt.Print(result)
+		fmt.Println()
 	}
 }

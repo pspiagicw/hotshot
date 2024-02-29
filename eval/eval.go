@@ -39,6 +39,7 @@ func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object 
 }
 func evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
+	result = &object.Null{}
 
 	for _, statement := range statements {
 		result = Eval(statement, env)
