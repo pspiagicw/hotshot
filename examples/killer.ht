@@ -7,7 +7,7 @@
 
 
 (if (= (arg 1) "--integer")
-  (? "$(intfreq)Ghz" intfreq)
+  (? "$(intfreq)Ghz")
   (do 
     (if (< intfreq 1)
     )

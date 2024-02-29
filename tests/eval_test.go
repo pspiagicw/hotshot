@@ -16,17 +16,29 @@ func TestEvalStatements(t *testing.T) {
 	tt := map[string]object.Object{
 		"()":                           createNull(),
 		"; this is a simple comment ;": createNull(),
-		"1":                            createInt(1),
-		"23234":                        createInt(23234),
-		`"someString"`:                 createString("someString"),
-		"(+ 1 2)":                      createInt(3),
-		"(+ 1 (+ 1 2) 2)":              createInt(6),
-		"(- 2 1 )":                     createInt(1),
-		"(* 5 6)":                      createInt(30),
-		"(+ 5 (- 4 5))":                createInt(4),
-		"(+ -5 (* 4 5))":               createInt(15),
-		`($ number 5) number`:          createInt(5),
-		`($ name "hotshot") name`:      createString("hotshot"),
+
+		"1":                   createInt(1),
+		"23234":               createInt(23234),
+		"(+ 1 2)":             createInt(3),
+		"(+ 1 (+ 1 2) 2)":     createInt(6),
+		"(- 2 1 )":            createInt(1),
+		"(* 5 6)":             createInt(30),
+		"(+ 5 (- 4 5))":       createInt(4),
+		"(+ -5 (* 4 5))":      createInt(15),
+		"(% 4 3)":             createInt(1),
+		`($ number 5) number`: createInt(5),
+
+		`"someString"`:            createString("someString"),
+		`($ name "hotshot") name`: createString("hotshot"),
+
+		`(= 1 1)`:          createString("hotshot"),
+		`(> 1 1)`:          createString("hotshot"),
+		`(< 1 1)`:          createString("hotshot"),
+		`(not true)`:       createString("hotshot"),
+		`(not false)`:      createString("hotshot"),
+		`(and false true)`: createString("hotshot"),
+		`(and true true)`:  createString("hotshot"),
+		`(or true false)`:  createString("hotshot"),
 	}
 
 	for input, expectedResult := range tt {

@@ -195,6 +195,10 @@ func TestValidStatement(t *testing.T) {
 		"; this should be a comment":   true,
 		"($ someVar 3)":                true,
 		"(somefunc somearg 1)":         true,
+		"(= 1 1)":                      true,
+		"(> 1 1)":                      true,
+		"(< 1 1)":                      true,
+		`(= "some" "some")`:            true,
 	}
 
 	for i, r := range tt {

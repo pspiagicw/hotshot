@@ -45,15 +45,9 @@ false ;; false ;;
 (= 1 1) ;; true ;; 
 (= "some" "some") ;; true ;;
 
-(= < 1 2) ;; true ;;
-(= < 1 1) ;; true ;;
-(= > 1 2) ;; false ;;
-(= > 2 2) ;; true ;;
 
 (> 1 2) ;; false ;;
-
-(= < 100 val = > 2)
-(= > 100 val = < 2)
+(< 1 2) ;; true ;;
 
 "this is a string!" ;; "this is a string" ;;
 
