@@ -95,7 +95,7 @@ func matchEmptyStatement(t *testing.T, expectedStatement ast.Statement, actualSt
 }
 func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
 	t.Helper()
-	f, ok := expectedStatement.(*ast.FunctionalStatement)
+	f, ok := expectedStatement.(*ast.CallStatement)
 	if !ok {
 		switch s := expectedStatement.(type) {
 		case *ast.IntStatement:
@@ -110,7 +110,7 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			t.Fatalf("Some bloody type found!: %v", s)
 		}
 	}
-	g, ok := actualStatement.(*ast.FunctionalStatement)
+	g, ok := actualStatement.(*ast.CallStatement)
 	if !ok {
 		t.Fatalf("Error expected statement was Functional, actual isn't!\n")
 	}

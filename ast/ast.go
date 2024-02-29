@@ -30,7 +30,7 @@ func (p *Program) StringifyStatement() string {
 	return output.String()
 }
 func (p *Program) Data() interface{} {
-	return "[Program]"
+	return "[HT]"
 }
 func (p *Program) Children() []tree.Node {
 	nodes := []tree.Node{}
@@ -55,7 +55,7 @@ type BoolStatement struct {
 	Value bool
 }
 
-type FunctionalStatement struct {
+type CallStatement struct {
 	Op   *token.Token
 	Args []Statement
 }
@@ -113,19 +113,19 @@ func (b BoolStatement) Children() []tree.Node {
 	return []tree.Node{}
 }
 
-func (f FunctionalStatement) StringifyStatement() string {
+func (f CallStatement) StringifyStatement() string {
 	var output strings.Builder
 	output.WriteString(tree.SprintHrn(f))
 	return output.String()
 }
 
-func (f FunctionalStatement) String() string {
+func (f CallStatement) String() string {
 	return f.StringifyStatement()
 }
-func (f FunctionalStatement) Data() interface{} {
+func (f CallStatement) Data() interface{} {
 	return f.Op.TokenValue
 }
-func (f FunctionalStatement) Children() []tree.Node {
+func (f CallStatement) Children() []tree.Node {
 	nodes := []tree.Node{}
 	for _, statement := range f.Args {
 		nodes = append(nodes, statement)

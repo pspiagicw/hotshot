@@ -69,22 +69,22 @@ func (p *Parser) parseIdentStatement() ast.Statement {
 	}
 }
 func (p *Parser) parseAssignment() ast.Statement {
-	p.advance()
 	st := &ast.AssignmentStatement{}
 
-	if p.curToken.TokenType != token.IDENT {
-		p.registerError(fmt.Errorf("Expected a ident, got %s", p.curToken.TokenType))
-	}
+	p.expectToken(token.IDENT)
 
 	st.Name = p.curToken
 	st.Value = p.parseStatement()
 
-	p.advance()
-	if p.curToken.TokenType != token.RPAREN {
-		p.registerError(fmt.Errorf("Expected a ')', got %s", p.curToken.TokenType))
-	}
+	p.expectToken(token.RPAREN)
 
 	return st
+}
+func (p *Parser) expectToken(ex token.TokenType) {
+	if p.peekToken.TokenType != ex {
+		p.registerError(fmt.Errorf("Expected a ident, got %s", p.curToken.TokenType))
+	}
+	p.advance()
 }
 
 func (p *Parser) parseComplexStatement() ast.Statement {

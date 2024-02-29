@@ -77,7 +77,7 @@ func TestAddition(t *testing.T) {
 	input := `(+ 1 2)`
 
 	expectedTree := []ast.Statement{
-		&ast.FunctionalStatement{
+		&ast.CallStatement{
 			Op: &token.Token{
 				TokenType:  token.PLUS,
 				TokenValue: "+",
@@ -99,13 +99,13 @@ func TestNestedStatement(t *testing.T) {
 	input := `(+ (+ 1 2) 3)`
 
 	expectedTree := []ast.Statement{
-		&ast.FunctionalStatement{
+		&ast.CallStatement{
 			Op: &token.Token{
 				TokenType:  token.PLUS,
 				TokenValue: "+",
 			},
 			Args: []ast.Statement{
-				&ast.FunctionalStatement{
+				&ast.CallStatement{
 					Op: &token.Token{
 						TokenType:  token.PLUS,
 						TokenValue: "+",
@@ -148,6 +148,7 @@ func TestValidOp(t *testing.T) {
 		"(; 1 2)": false,
 		"(@ 1 2)": false,
 		"(, 1 2)": false,
+		"(! 1 2)": false,
 	}
 
 	for i, r := range tt {

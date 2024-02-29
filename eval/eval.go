@@ -13,7 +13,7 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		return &object.String{Value: node.Value}
 	case *ast.Program:
 		return evalProgram(node.Statements, env)
-	case *ast.FunctionalStatement:
+	case *ast.CallStatement:
 		return evalFunction(node, env)
 	case *ast.EmptyStatement:
 		return object.Null{}
@@ -55,7 +55,7 @@ func applyAssignment(node *ast.AssignmentStatement, env *object.Environment) obj
 
 	return object.Null{}
 }
-func evalFunction(node *ast.FunctionalStatement, env *object.Environment) object.Object {
+func evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
 	fn, ok := env.Functions[node.Op.TokenValue]
 
 	if !ok {

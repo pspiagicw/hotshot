@@ -17,14 +17,12 @@ var validOps = map[token.TokenType]bool{
 	token.MULTIPLY:    true,
 	token.IF:          true,
 	token.CASE:        true,
-	token.BANG:        true,
 	token.EQ:          true,
 	token.GREATERTHAN: true,
 	token.LESSTHAN:    true,
 	token.MOD:         true,
 	token.IDENT:       true,
 	token.POWER:       true,
-	token.DOLLAR:      true,
 }
 
 func (p *Parser) parseStringStatement() *ast.StringStatement {
@@ -46,8 +44,8 @@ func (p *Parser) checkOp(op *token.Token) bool {
 	return ok
 }
 
-func (p *Parser) parseFunctionCall() *ast.FunctionalStatement {
-	st := new(ast.FunctionalStatement)
+func (p *Parser) parseFunctionCall() *ast.CallStatement {
+	st := new(ast.CallStatement)
 	if p.checkOp(p.curToken) {
 		st.Op = p.curToken
 	} else {
