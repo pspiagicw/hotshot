@@ -43,7 +43,15 @@ func getBuiltins() map[string]Object {
 		"or": &Builtin{
 			Fn: orFunc,
 		},
+		"do": &Builtin{
+			Fn: doFunc,
+		},
 	}
+}
+func doFunc(args ...Object) Object {
+	length := len(args)
+
+	return args[length-1]
 }
 func lenFunc(args ...Object) Object {
 	if len(args) == 0 {
