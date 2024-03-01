@@ -74,14 +74,16 @@ func lenFunc(args ...Object) Object {
 func printFunc(args ...Object) Object {
 	var output strings.Builder
 
+	output.WriteString(" ")
+
 	for _, arg := range args {
 		output.WriteString(arg.String())
 		output.WriteString(" ")
 	}
 
-	return &String{
-		Value: output.String(),
-	}
+	fmt.Println(output.String())
+
+	return Null{}
 }
 
 func createError(format string, v ...interface{}) Object {
