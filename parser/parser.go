@@ -97,6 +97,12 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 
 	for !p.peekTokenIs(token.RPAREN) {
 		arg := p.parseStatement()
+		_, ok := arg.(*ast.IdentStatement)
+
+		if !ok {
+			p.registerError(fmt.Errorf("Expected a ident, got %v", arg))
+		}
+
 		st.Args = append(st.Args, arg)
 	}
 	p.expectedTokenIs(token.RPAREN)
