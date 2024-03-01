@@ -99,7 +99,7 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 		arg := p.parseStatement()
 		st.Args = append(st.Args, arg)
 	}
-	p.advance()
+	p.expectedTokenIs(token.RPAREN)
 
 	st.Body = p.parseStatement()
 
@@ -121,7 +121,20 @@ func (p *Parser) parseIfStatement() ast.Statement {
 		st.Else = p.parseStatement()
 	}
 
-	p.advance()
+	// p.advance()
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+
+}
+func (p *Parser) parseWhileStatement() ast.Statement {
+	st := &ast.WhileStatement{}
+
+	st.Condition = p.parseStatement()
+
+	st.Body = p.parseStatement()
+
+	p.expectedTokenIs(token.RPAREN)
 
 	return st
 
@@ -138,6 +151,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseFunctionDec()
 	case token.IF:
 		return p.parseIfStatement()
+	case token.WHILE:
+		return p.parseWhileStatement()
 	default:
 		return p.parseFunctionCall()
 	}

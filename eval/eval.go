@@ -30,6 +30,21 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		Message: "ERROR: Evaluation for statement can't be done!\n",
 	}
 }
+
+//	func evalWhileStatement(node *ast.WhileStatement, env *object.Environment) object.Object {
+//		for true {
+//			result := Eval(node.Condition, env)
+//
+//			if result.Type() != object.BOOLEAN_OBJ {
+//				return object.Error{Message: "ERROR: Condition for while doesn't evaluate to boolean!"}
+//			}
+//
+//			if result.String() == "true" {
+//				return Eval(node.Body, env)
+//			}
+//		}
+//		return object.Null{}
+//	}
 func evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Object {
 
 	result := Eval(node.Condition, env)

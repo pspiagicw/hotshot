@@ -81,6 +81,26 @@ type IfStatement struct {
 	Else      Statement
 }
 
+type WhileStatement struct {
+	Condition Statement
+	Body      Statement
+}
+
+func (w WhileStatement) StringifyStatement() string {
+	return fmt.Sprintf("while statement")
+}
+func (w WhileStatement) String() string {
+	return w.StringifyStatement()
+}
+func (w WhileStatement) Data() interface{} {
+	return "while"
+}
+func (w WhileStatement) Children() []tree.Node {
+	return []tree.Node{
+		w.Body,
+	}
+}
+
 func (i IfStatement) StringifyStatement() string {
 	return fmt.Sprintf("If statement")
 }

@@ -2,6 +2,6 @@
 
 (if false (? "true!") (? "elses!"))
 
-(for true (? "infinite!"))
+(while true (? "infinite!"))
 
-(for (= 1 2) (? "No runs!"))
+(while (= 1 2) (? "No runs!"))
