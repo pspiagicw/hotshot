@@ -1,0 +1,7 @@
+(? 2) ; prints 2 ;
+
+; this is a comment! ;
+
+; All comments can be multiline, 
+it simply matches till it encounters the semicolon again ;
+
