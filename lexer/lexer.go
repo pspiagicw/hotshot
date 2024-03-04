@@ -156,11 +156,8 @@ func (l *Lexer) Next() *token.Token {
 		string := l.extractString()
 		returnToken.TokenType = token.STRING
 		returnToken.TokenValue = string
-	// case ";":
-	// 	l.advance()
-	// 	comment := l.extractComment()
-	// 	returnToken.TokenType = token.COMMENT
-	// 	returnToken.TokenValue = comment
+	case ";":
+		return l.Next()
 	default:
 		if l.isLetter(l.currentChar) {
 			identifier := l.extractIdentifier()
