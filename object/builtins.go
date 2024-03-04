@@ -55,11 +55,11 @@ func doFunc(args ...Object) Object {
 }
 func lenFunc(args ...Object) Object {
 	if len(args) == 0 {
-		return createError("No arguments!")
+		return createError("No arguments given to LEN function!")
 	}
 
 	if len(args) > 1 {
-		return createError("Length function expects only 1 argument!")
+		return createError("LEN function only accepts 1 argument!")
 	}
 
 	switch v := args[0].(type) {
@@ -69,7 +69,7 @@ func lenFunc(args ...Object) Object {
 		}
 	}
 
-	return createError("Can't find length of that type")
+	return createError("LEN function can't find length of that type!")
 }
 func printFunc(args ...Object) Object {
 	var output strings.Builder

@@ -2,7 +2,7 @@ package object
 
 func multiplyFunc(args ...Object) Object {
 	if len(args) == 0 {
-		return createError("No arguments!")
+		return createError("No arguments given to MULTIPLY function!")
 	}
 
 	result := 1
@@ -10,7 +10,7 @@ func multiplyFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Argument not integer!")
+			return createError("Arguments given to MULTIPLY are not Integer")
 		}
 
 		result *= v.Value
@@ -24,7 +24,7 @@ func multiplyFunc(args ...Object) Object {
 func divideFunc(args ...Object) Object {
 
 	if len(args) == 0 {
-		return createError("No arguments!")
+		return createError("No arguments given to DIVIDE function!")
 	}
 
 	f := args[0]
@@ -32,7 +32,7 @@ func divideFunc(args ...Object) Object {
 	v, ok := f.(*Integer)
 
 	if !ok {
-		return createError("Argument not integer!")
+		return createError("Arguments given to DIVIDE are not Integer")
 	}
 
 	result := v.Value
@@ -40,7 +40,7 @@ func divideFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Argument not integer!")
+			return createError("Arguments given to DIVIDE are not Integer")
 		}
 
 		result /= v.Value
@@ -53,7 +53,7 @@ func divideFunc(args ...Object) Object {
 func minusFunc(args ...Object) Object {
 
 	if len(args) == 0 {
-		return createError("No arguments!")
+		return createError("No arguments given to MINUS function!")
 	}
 
 	f := args[0]
@@ -61,7 +61,7 @@ func minusFunc(args ...Object) Object {
 	v, ok := f.(*Integer)
 
 	if !ok {
-		return createError("Argument not integer!")
+		return createError("Arguments given to MINUS are not Integer")
 	}
 
 	result := v.Value
@@ -69,7 +69,7 @@ func minusFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Argument not integer!")
+			return createError("Arguments given to MINUS are not Integer")
 		}
 
 		result -= v.Value
@@ -83,7 +83,7 @@ func minusFunc(args ...Object) Object {
 func addFunc(args ...Object) Object {
 
 	if len(args) == 0 {
-		return createError("No arguments!")
+		return createError("No arguments given to ADD function!")
 	}
 
 	result := 0
@@ -91,7 +91,7 @@ func addFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Argument not integer!")
+			return createError("Arguments given to ADD are not Integer")
 		}
 
 		result += v.Value
@@ -104,17 +104,17 @@ func addFunc(args ...Object) Object {
 }
 func gtFunc(args ...Object) Object {
 	if len(args) != 2 {
-		return createError("lt expects 2 arguments!")
+		return createError("GT function needs 2 arguments!")
 	}
 
 	f, ok := args[0].(*Integer)
 	if !ok {
-		return createError("Integer expected, got %v", args[0].Type())
+		return createError("GT function expects Integer, found %v", args[0].Type())
 	}
 
 	s, ok := args[1].(*Integer)
 	if !ok {
-		return createError("Integer expected, got %v", args[1].Type())
+		return createError("GT function expects Integer, found %v", args[1].Type())
 	}
 
 	return &Boolean{
@@ -124,17 +124,17 @@ func gtFunc(args ...Object) Object {
 }
 func ltFunc(args ...Object) Object {
 	if len(args) != 2 {
-		return createError("lt expects 2 arguments!")
+		return createError("LT function needs 2 arguments!")
 	}
 
 	f, ok := args[0].(*Integer)
 	if !ok {
-		return createError("Integer expected, got %v", args[0].Type())
+		return createError("LT function expects Integer, found %v", args[1].Type())
 	}
 
 	s, ok := args[1].(*Integer)
 	if !ok {
-		return createError("Integer expected, got %v", args[1].Type())
+		return createError("LT function expects Integer, found %v", args[1].Type())
 	}
 
 	return &Boolean{
@@ -144,7 +144,7 @@ func ltFunc(args ...Object) Object {
 }
 func equalFunc(args ...Object) Object {
 	if len(args) != 2 {
-		return createError("eq expects 2 arguments!")
+		return createError("EQ function expects 2 arguments!")
 	}
 
 	if args[0].Type() == args[1].Type() && args[0].String() == args[1].String() {

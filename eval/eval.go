@@ -1,6 +1,8 @@
 package eval
 
 import (
+	"fmt"
+
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/object"
 )
@@ -27,34 +29,61 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		return evalIfStatement(node, env)
 	case *ast.WhileStatement:
 		return evalWhileStatement(node, env)
+	case *ast.FunctionStatement:
+		return evalFunctionStatement(node, env)
 	}
-	return &object.Error{
-		Message: "ERROR: Evaluation for statement can't be done!\n",
-	}
+	return createError("Evaluation for statement can't be done!")
 }
 
+func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment) object.Object {
+	name := node.Name.TokenValue
+
+	fn := &object.Function{}
+
+	args := []*ast.IdentStatement{}
+
+	for _, arg := range node.Args {
+		v, ok := arg.(*ast.IdentStatement)
+		if !ok {
+			return createError("Argument is not a identifier!")
+		}
+		args = append(args, v)
+	}
+
+	fn.Args = args
+
+	fn.Body = &node.Body
+
+	env.Functions[name] = fn
+
+	return object.Null{}
+}
 func evalWhileStatement(node *ast.WhileStatement, env *object.Environment) object.Object {
+	var result object.Object
+
+	result = object.Null{}
+
 	for true {
 		result := Eval(node.Condition, env)
 
 		if result.Type() != object.BOOLEAN_OBJ {
-			return object.Error{Message: "ERROR: Condition for while doesn't evaluate to boolean!"}
+			return createError("Condition for WHILE doesn't evaluate to true/false!")
 		}
 
 		if result.String() == "true" {
-			Eval(node.Body, env)
+			result = Eval(node.Body, env)
 		} else {
 			break
 		}
 	}
-	return object.Null{}
+	return result
 }
 func evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Object {
 
 	result := Eval(node.Condition, env)
 
 	if result.Type() != object.BOOLEAN_OBJ {
-		return object.Error{Message: "ERROR: Condition doesn't evaluate to Boolean!"}
+		return createError("Condition for IF doesn't evaluate to true/false!")
 	}
 
 	if result.String() == "true" {
@@ -71,7 +100,7 @@ func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object 
 	value, ok := env.Vars[node.Value.TokenValue]
 
 	if !ok {
-		return object.Error{Message: "ERROR: No such variable defined!\n"}
+		return createError("No variable '%s' defined!", node.Value.TokenValue)
 	}
 
 	return value
@@ -97,25 +126,36 @@ func applyAssignment(node *ast.AssignmentStatement, env *object.Environment) obj
 func evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
 	fn, ok := env.Functions[node.Op.TokenValue]
 
-	if !ok {
-		return object.Error{
-			Message: "ERROR: No function with that signature found!\n",
-		}
-	}
-
-	v, ok := fn.(*object.Builtin)
-
-	if !ok {
-		return object.Error{
-			Message: "ERROR: INTERNAL!!! Builtin can't be initialized!\n",
-		}
-	}
-
 	args := []object.Object{}
 
 	for _, arg := range node.Args {
 		args = append(args, Eval(arg, env))
 	}
 
+	if !ok {
+		return createError("No function '%s' found!", node.Op.TokenValue)
+	}
+
+	v, ok := fn.(*object.Builtin)
+
+	if !ok {
+		v, ok := fn.(*object.Function)
+		if !ok {
+			return createError("INTERNAL! Builtin or user function failed to initalize!")
+		} else {
+			// Apply user defined function!
+			return applyFunction(v, args, env)
+		}
+	}
+
 	return v.Fn(args...)
+}
+func applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
+	return Eval(*v.Body, env)
+}
+func createError(message string, v ...interface{}) *object.Error {
+	return &object.Error{
+		Message: fmt.Sprintf("ERROR: %s\n", fmt.Sprintf(message, v...)),
+	}
+
 }

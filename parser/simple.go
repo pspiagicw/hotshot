@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/pspiagicw/hotshot/ast"
@@ -30,15 +29,18 @@ func (p *Parser) parseStringStatement() *ast.StringStatement {
 		Value: p.curToken.TokenValue,
 	}
 }
+
 func (p *Parser) parseIntStatement() *ast.IntStatement {
 	value, err := strconv.Atoi(p.curToken.TokenValue)
 	if err != nil {
-		p.registerError(fmt.Errorf("Error parsing string into Integer: %v", err))
+		p.registerError("Error casting %s as Integer", err)
+		return nil
 	}
 	return &ast.IntStatement{
 		Value: value,
 	}
 }
+
 func (p *Parser) checkOp(op *token.Token) bool {
 	_, ok := validOps[op.TokenType]
 	return ok
@@ -49,20 +51,21 @@ func (p *Parser) parseFunctionCall() *ast.CallStatement {
 	if p.checkOp(p.curToken) {
 		st.Op = p.curToken
 	} else {
-		p.registerError(fmt.Errorf("Expected valid op, got %v", p.curToken))
+		p.registerError("Expected a valid function name, got %v", p.curToken)
+		return nil
 	}
 
 	for p.peekToken.TokenType != token.RPAREN {
 
 		if p.peekToken.TokenType == token.EOF {
-			p.registerError(fmt.Errorf("Expected a argument for function call, got %s", p.peekToken.TokenType))
+			p.registerError("Expected a expression as argument to function OR ), got %s", p.peekToken.TokenType)
 			return nil
 		}
 
 		st.Args = append(st.Args, p.parseStatement())
 	}
 
-	p.advance()
+	p.expectedTokenIs(token.RPAREN)
 	return st
 }
 func (p *Parser) parseBoolStatement() *ast.BoolStatement {

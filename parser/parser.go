@@ -1,8 +1,6 @@
 package parser
 
 import (
-	"fmt"
-
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/token"
@@ -52,14 +50,13 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.FALSE:
 		return p.parseBoolStatement()
 	case token.ILLEGAL:
-		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
+		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	case token.IDENT:
 		return p.parseIdentStatement()
 	case token.EOF:
 		return p.nilStatement
 	default:
-		p.registerError(fmt.Errorf("Expected a token for a statement, found: %v", p.curToken.String()))
-
+		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	}
 	return p.nilStatement
 }
@@ -82,17 +79,19 @@ func (p *Parser) parseAssignment() ast.Statement {
 }
 func (p *Parser) expectedTokenIs(ex token.TokenType) {
 	if p.peekToken.TokenType != ex {
-		p.registerError(fmt.Errorf("Expected a ident, got %s", p.curToken.TokenType))
+		p.registerError("Expected a ident, got %s", p.curToken.TokenType)
 	}
 	p.advance()
 }
 func (p *Parser) parseFunctionDec() ast.Statement {
+
 	st := &ast.FunctionStatement{}
 
 	p.expectedTokenIs(token.IDENT)
 
 	st.Name = p.curToken
 	p.expectedTokenIs(token.LPAREN)
+
 	st.Args = []ast.Statement{}
 
 	for !p.peekTokenIs(token.RPAREN) {
@@ -100,11 +99,13 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 		_, ok := arg.(*ast.IdentStatement)
 
 		if !ok {
-			p.registerError(fmt.Errorf("Expected a ident, got %v", arg))
+			p.registerError("Expected a ident, got %v", arg)
+			return nil
 		}
 
 		st.Args = append(st.Args, arg)
 	}
+
 	p.expectedTokenIs(token.RPAREN)
 
 	st.Body = p.parseStatement()
@@ -127,7 +128,6 @@ func (p *Parser) parseIfStatement() ast.Statement {
 		st.Else = p.parseStatement()
 	}
 
-	// p.advance()
 	p.expectedTokenIs(token.RPAREN)
 
 	return st

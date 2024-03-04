@@ -1,6 +1,10 @@
 package object
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/pspiagicw/hotshot/ast"
+)
 
 type ObjectType string
 
@@ -19,6 +23,18 @@ const (
 	BUILTIN_OBJ  = "BUILTIN"
 	ERROR_OBJ    = "ERROR"
 )
+
+type Function struct {
+	Args []*ast.IdentStatement
+	Body *ast.Statement
+}
+
+func (f Function) Type() ObjectType {
+	return FUNCTION_OBJ
+}
+func (f Function) String() string {
+	return "fn()"
+}
 
 type Null struct {
 }

@@ -1,6 +1,11 @@
 package parser
 
-func (p *Parser) registerError(err error) {
+import (
+	"fmt"
+)
+
+func (p *Parser) registerError(format string, v ...interface{}) {
+	err := fmt.Errorf(format, v...)
 	p.errors = append(p.errors, err)
 }
 
