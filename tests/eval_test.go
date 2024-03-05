@@ -4,13 +4,14 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/gkampitakis/go-snaps/snaps"
 	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
 )
 
-func TestEvalStatements(t *testing.T) {
+func TestEval(t *testing.T) {
 
 	// input := "()"
 	tt := map[string]object.Object{
@@ -61,7 +62,9 @@ func TestEvalStatements(t *testing.T) {
 	}
 
 	for input, expectedResult := range tt {
-		checkResult(t, input, expectedResult)
+		t.Run(input, func(t *testing.T) {
+			checkResult(t, input, expectedResult)
+		})
 	}
 
 }
@@ -94,6 +97,8 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 	if len(parser.Errors()) != 0 {
 		t.Fatalf("Errors while parsing")
 	}
+
+	snaps.MatchSnapshot(t, ast)
 
 	// TODO: Last statement is always nil!
 	ast.Statements = ast.Statements[:len(ast.Statements)-1]

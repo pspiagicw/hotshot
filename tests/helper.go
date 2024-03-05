@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 
+	"github.com/gkampitakis/go-snaps/snaps"
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/parser"
@@ -129,9 +130,12 @@ func validStatement(t *testing.T, input string) bool {
 	lexer := lexer.NewLexer(input)
 	parser := parser.NewParser(lexer)
 
-	_ = parser.Parse()
+	program := parser.Parse()
 	if len(parser.Errors()) != 0 {
 		return false
 	}
+
+	snaps.MatchSnapshot(t, program)
+
 	return true
 }

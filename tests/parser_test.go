@@ -13,6 +13,7 @@ func TestEmptyStatement(t *testing.T) {
 	expectedTree := []ast.Statement{
 		&ast.EmptyStatement{},
 	}
+
 	checkTree(t, input, expectedTree)
 
 }
@@ -151,10 +152,12 @@ func TestValidOp(t *testing.T) {
 		"(! 1 2)": false,
 	}
 
-	for i, r := range tt {
-		if validStatement(t, i) != r {
-			t.Errorf("Test '%s' failed to match result: %t!", i, r)
-		}
+	for input, expectedResult := range tt {
+		t.Run(input, func(t *testing.T) {
+			if validStatement(t, input) != expectedResult {
+				t.Errorf("Test '%s' failed to match result: %t!", input, expectedResult)
+			}
+		})
 	}
 }
 func TestValidStatement(t *testing.T) {
@@ -204,9 +207,11 @@ func TestValidStatement(t *testing.T) {
 		`(fn add (x y) (+ x y))`:           true,
 	}
 
-	for i, r := range tt {
-		if validStatement(t, i) != r {
-			t.Errorf("Test '%s' failed to match result: %t!", i, r)
-		}
+	for input, expectedResult := range tt {
+		t.Run(input, func(t *testing.T) {
+			if validStatement(t, input) != expectedResult {
+				t.Errorf("Test '%s' failed to match result: %t!", input, expectedResult)
+			}
+		})
 	}
 }

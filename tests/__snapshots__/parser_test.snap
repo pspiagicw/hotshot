@@ -1,0 +1,469 @@
+
+[TestValidOp/(+_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(*_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(=_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(>_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(case_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"CASE", TokenValue:"case"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(#_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"HASH", TokenValue:"#"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(/_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"SLASH", TokenValue:"/"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(^_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"POWER", TokenValue:"^"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(if_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.IntStatement{Value:1},
+            Body:      &ast.IntStatement{Value:2},
+            Else:      nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(<_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(?_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(-_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(%_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MOD", TokenValue:"%"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(fn_add_(x_y)_(+_x_y)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"add"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(/_"foo"_"bar") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"SLASH", TokenValue:"/"},
+            Args: {
+                &ast.StringStatement{Value:"foo"},
+                &ast.StringStatement{Value:"bar"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(if_(=_1_2)_(?_g)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"g"},
+                    },
+                },
+            },
+            Else: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/;_this_should_be_a_comment_; - 1]
+&ast.Program{
+    Statements: {
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(>_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(fn_hello_()_(?_"Hello,_World")) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
+                Args: {
+                    &ast.StringStatement{Value:"Hello, World"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/($_someVar_3) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"someVar"},
+            Value: &ast.IntStatement{Value:3},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/"somestring" - 1]
+&ast.Program{
+    Statements: {
+        &ast.StringStatement{Value:"somestring"},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(+_"foo"_"bar") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.StringStatement{Value:"foo"},
+                &ast.StringStatement{Value:"bar"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(?_"Hello,_World!") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
+            Args: {
+                &ast.StringStatement{Value:"Hello, World!"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(somefunc_somearg_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"somefunc"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"somearg"},
+                },
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(<_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/somevar - 1]
+&ast.Program{
+    Statements: {
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"somevar"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(=_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/1 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:1},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(=_"some"_"some") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.StringStatement{Value:"some"},
+                &ast.StringStatement{Value:"some"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/; - 1]
+&ast.Program{
+    Statements: {
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(+_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/;_this_should_be_a_comment - 1]
+&ast.Program{
+    Statements: {
+        &ast.EmptyStatement{},
+    },
+}
+---
