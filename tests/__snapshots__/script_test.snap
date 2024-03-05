@@ -1,0 +1,63 @@
+
+[TestScripts/Hello_World - 1]
+ Hello, World 
+
+---
+
+[TestScripts/Data_Types - 1]
+ 2 
+ this is a string 
+ true 
+ false 
+
+---
+
+[TestScripts/Arithmetic_Types - 1]
+ 3 
+ 17 
+ 1 
+ 14 
+ ERROR: Arguments given to MULTIPLY are not Integer 
+ ERROR: Arguments given to ADD are not Integer 
+ ERROR: Arguments given to MINUS are not Integer 
+ ERROR: Arguments given to DIVIDE are not Integer 
+ ERROR: Arguments given to MULTIPLY are not Integer 
+ ERROR: Arguments given to ADD are not Integer 
+ ERROR: Arguments given to MINUS are not Integer 
+ ERROR: Arguments given to DIVIDE are not Integer 
+
+---
+
+[TestScripts/Booleans - 1]
+ true 
+ false 
+ true 
+ false 
+ false 
+ true 
+ false 
+ false 
+ false 
+ true 
+ true 
+ true 
+ ERROR: NOT function expects Boolean, found STRING 
+ ERROR: NOT function expects Boolean, found STRING 
+ ERROR: AND function expects Boolean, found STRING 
+ ERROR: AND function expects Boolean, found STRING 
+ ERROR: AND function expects Boolean, found STRING 
+ ERROR: AND function expects Boolean, found STRING 
+ ERROR: OR function expects Boolean, found STRING 
+ ERROR: OR function expects Boolean, found STRING 
+ ERROR: OR function expects Boolean, found STRING 
+ ERROR: OR function expects Boolean, found STRING 
+ true 
+ false 
+ false 
+ false 
+ false 
+ true 
+ ERROR: GT function expects Integer, found STRING 
+ ERROR: LT function expects Integer, found INTEGER 
+
+---
