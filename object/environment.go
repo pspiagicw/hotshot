@@ -1,12 +1,14 @@
 package object
 
 type Environment struct {
+	Outer    *Environment
 	Bindings map[string]Object
 	Builtins map[string]*Builtin
 }
 
 func NewEnvironment() *Environment {
 	return &Environment{
+		Outer:    nil,
 		Bindings: map[string]Object{},
 		Builtins: getBuiltins(),
 	}
@@ -15,6 +17,9 @@ func NewEnvironment() *Environment {
 func (e *Environment) Get(name string) Object {
 	value, ok := e.Bindings[name]
 	if !ok {
+		if e.Outer != nil {
+			return e.Outer.Get(name)
+		}
 		return createError("No such variable or function!")
 	}
 

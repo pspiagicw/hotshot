@@ -162,7 +162,20 @@ func evalFunction(node *ast.CallStatement, env *object.Environment) object.Objec
 	return v.Fn(evals...)
 }
 func applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
-	return Eval(*v.Body, env)
+	if len(v.Args) != len(args) {
+		return createError("Function expects %d argument, given %d", len(v.Args), len(args))
+	}
+
+	newEnv := extendEnvironment(v.Args, args, env)
+	return Eval(*v.Body, newEnv)
+}
+func extendEnvironment(declaredArgs []*ast.IdentStatement, givenArgs []object.Object, env *object.Environment) *object.Environment {
+	newEnv := object.NewEnvironment()
+	newEnv.Outer = env
+	for i, darg := range declaredArgs {
+		newEnv.Set(darg.Value.TokenValue, givenArgs[i])
+	}
+	return newEnv
 }
 func createError(message string, v ...interface{}) *object.Error {
 	return &object.Error{
