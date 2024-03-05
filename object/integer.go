@@ -10,7 +10,7 @@ func multiplyFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Arguments given to MULTIPLY are not Integer")
+			return createError("MULTIPLY function expects Integer, found %v", arg.Type())
 		}
 
 		result *= v.Value
@@ -32,7 +32,7 @@ func divideFunc(args ...Object) Object {
 	v, ok := f.(*Integer)
 
 	if !ok {
-		return createError("Arguments given to DIVIDE are not Integer")
+		return createError("DIVIDE function expects Integer, found %v", f.Type())
 	}
 
 	result := v.Value
@@ -40,7 +40,7 @@ func divideFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Arguments given to DIVIDE are not Integer")
+			return createError("DIVIDE function expects Integer, found %v", arg.Type())
 		}
 
 		result /= v.Value
@@ -61,7 +61,7 @@ func minusFunc(args ...Object) Object {
 	v, ok := f.(*Integer)
 
 	if !ok {
-		return createError("Arguments given to MINUS are not Integer")
+		return createError("MINUS function expects Integer, found %v", f.Type())
 	}
 
 	result := v.Value
@@ -69,7 +69,7 @@ func minusFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Arguments given to MINUS are not Integer")
+			return createError("MINUS function expects Integer, found %v", arg.Type())
 		}
 
 		result -= v.Value
@@ -91,7 +91,7 @@ func addFunc(args ...Object) Object {
 		v, ok := arg.(*Integer)
 
 		if !ok {
-			return createError("Arguments given to ADD are not Integer")
+			return createError("ADD function expects Integer, found %v", arg.Type())
 		}
 
 		result += v.Value

@@ -17,14 +17,14 @@
  17 
  1 
  14 
- ERROR: Arguments given to MULTIPLY are not Integer 
- ERROR: Arguments given to ADD are not Integer 
- ERROR: Arguments given to MINUS are not Integer 
- ERROR: Arguments given to DIVIDE are not Integer 
- ERROR: Arguments given to MULTIPLY are not Integer 
- ERROR: Arguments given to ADD are not Integer 
- ERROR: Arguments given to MINUS are not Integer 
- ERROR: Arguments given to DIVIDE are not Integer 
+ ERROR: MULTIPLY function expects Integer, found STRING 
+ ERROR: ADD function expects Integer, found STRING 
+ ERROR: MINUS function expects Integer, found STRING 
+ ERROR: DIVIDE function expects Integer, found STRING 
+ ERROR: MULTIPLY function expects Integer, found BOOLEAN 
+ ERROR: ADD function expects Integer, found BOOLEAN 
+ ERROR: MINUS function expects Integer, found BOOLEAN 
+ ERROR: DIVIDE function expects Integer, found BOOLEAN 
 
 ---
 

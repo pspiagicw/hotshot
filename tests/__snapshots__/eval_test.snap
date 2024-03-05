@@ -528,3 +528,72 @@
     },
 }
 ---
+
+[TestEval/(fn_hello_()_"Hello,_World") - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.StringStatement{Value:"Hello, World"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_hello_()_"Hello,_World")_(hello) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.StringStatement{Value:"Hello, World"},
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_add_(x_y)_(+_x_y))_(add_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"add"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"add"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
