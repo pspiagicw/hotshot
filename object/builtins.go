@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-func getBuiltins() map[string]Object {
-	return map[string]Object{
+func getBuiltins() map[string]*Builtin {
+	return map[string]*Builtin{
 		"+": &Builtin{
 			Fn: addFunc,
 		},

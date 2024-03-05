@@ -54,7 +54,7 @@ func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment)
 
 	fn.Body = &node.Body
 
-	env.Functions[name] = fn
+	env.Set(name, fn)
 
 	return object.Null{}
 }
@@ -97,13 +97,9 @@ func evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Obje
 
 }
 func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
-	value, ok := env.Vars[node.Value.TokenValue]
+	val := env.Get(node.Value.TokenValue)
 
-	if !ok {
-		return createError("No variable '%s' defined!", node.Value.TokenValue)
-	}
-
-	return value
+	return val
 }
 func evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
@@ -119,36 +115,51 @@ func applyAssignment(node *ast.AssignmentStatement, env *object.Environment) obj
 
 	value := Eval(node.Value, env)
 
-	env.Vars[node.Name.TokenValue] = value
+	env.Set(node.Name.TokenValue, value)
 
 	return object.Null{}
 }
-func evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
-	fn, ok := env.Functions[node.Op.TokenValue]
+func evalArgs(args []ast.Statement, env *object.Environment) []object.Object {
+	evals := []object.Object{}
 
-	args := []object.Object{}
+	for _, arg := range args {
+		evals = append(evals, Eval(arg, env))
+	}
+	return evals
+}
+func evalUserFunc(node *ast.CallStatement, env *object.Environment) object.Object {
+	fn := env.Get(node.Op.TokenValue)
 
-	for _, arg := range node.Args {
-		args = append(args, Eval(arg, env))
+	if fn.Type() != object.FUNCTION_OBJ {
+		return createError("No function named '%s'", node.Op.TokenValue)
 	}
 
+	v, ok := fn.(*object.Function)
 	if !ok {
-		return createError("No function '%s' found!", node.Op.TokenValue)
+		return createError("INTERNAL: Couldn't initialize user function!")
 	}
+
+	evals := evalArgs(node.Args, env)
+
+	return applyFunction(v, evals, env)
+}
+func evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
+
+	fn := env.GetBuiltin(node.Op.TokenValue)
+
+	if fn == nil {
+		return evalUserFunc(node, env)
+	}
+
+	evals := evalArgs(node.Args, env)
 
 	v, ok := fn.(*object.Builtin)
 
 	if !ok {
-		v, ok := fn.(*object.Function)
-		if !ok {
-			return createError("INTERNAL! Builtin or user function failed to initalize!")
-		} else {
-			// Apply user defined function!
-			return applyFunction(v, args, env)
-		}
+		return createError("INTERNAL: Could't initalize builtin function")
 	}
 
-	return v.Fn(args...)
+	return v.Fn(evals...)
 }
 func applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
 	return Eval(*v.Body, env)
