@@ -63,6 +63,8 @@ func TestEval(t *testing.T) {
 		`(fn hello () "Hello, World")`:         createNull(),
 		`(fn hello () "Hello, World") (hello)`: createString("Hello, World"),
 		`(fn add (x y) (+ x y)) (add 2 1)`:     createInt(3),
+
+		`(fn hello (name) (? "Hello" name)) (hello "pspiagicw")`: createNull(),
 	}
 
 	for input, expectedResult := range tt {
