@@ -29,6 +29,7 @@ func StartREPL() {
 			continue
 		}
 
+		// A extra empty statement is added by the parser at the end.
 		program.Statements = program.Statements[:len(program.Statements)-1]
 
 		fmt.Println(printer.PrintAST(program))
