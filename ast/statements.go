@@ -67,10 +67,34 @@ func (f FunctionStatement) Data() interface{} {
 		strArgs = append(strArgs, arg.String())
 	}
 
-	return fmt.Sprintf("fn(%s[ %s ])", f.Name.TokenValue, strings.Join(strArgs, ","))
+	return fmt.Sprintf("fn(%s[%s])", f.Name.TokenValue, strings.Join(strArgs, ","))
 }
 func (f FunctionStatement) Children() []tree.Node {
 	return []tree.Node{
 		f.Body,
+	}
+}
+
+type LambdaStatement struct {
+	Args []Statement
+	Body Statement
+}
+
+func (l LambdaStatement) String() string {
+	var output strings.Builder
+	output.WriteString(tree.SprintHrn(l))
+	return output.String()
+}
+func (l LambdaStatement) Data() interface{} {
+	strArgs := []string{}
+
+	for _, arg := range l.Args {
+		strArgs = append(strArgs, arg.String())
+	}
+	return fmt.Sprintf("lambda([%s])", strings.Join(strArgs, ","))
+}
+func (l LambdaStatement) Children() []tree.Node {
+	return []tree.Node{
+		l.Body,
 	}
 }

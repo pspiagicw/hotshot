@@ -628,3 +628,23 @@
     },
 }
 ---
+
+[TestEval/($_a_(lambda_()_4))_(a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: &ast.IntStatement{Value:4},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

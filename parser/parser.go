@@ -145,6 +145,33 @@ func (p *Parser) parseWhileStatement() ast.Statement {
 	return st
 
 }
+func (p *Parser) parseLambdaStatement() ast.Statement {
+	st := &ast.LambdaStatement{}
+
+	p.expectedTokenIs(token.LPAREN)
+
+	st.Args = []ast.Statement{}
+
+	for !p.peekTokenIs(token.RPAREN) {
+		arg := p.parseStatement()
+		_, ok := arg.(*ast.IdentStatement)
+
+		if !ok {
+			p.registerError("Expected a ident, got %v", arg)
+			return nil
+		}
+
+		st.Args = append(st.Args, arg)
+	}
+
+	p.expectedTokenIs(token.RPAREN)
+
+	st.Body = p.parseStatement()
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+}
 
 func (p *Parser) parseComplexStatement() ast.Statement {
 	p.advance()
@@ -159,6 +186,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseIfStatement()
 	case token.WHILE:
 		return p.parseWhileStatement()
+	case token.LAMBDA:
+		return p.parseLambdaStatement()
 	default:
 		return p.parseFunctionCall()
 	}

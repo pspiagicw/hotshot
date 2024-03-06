@@ -45,10 +45,11 @@ const (
 	HASH     = "HASH"
 	POWER    = "POWER"
 
-	IF    = "IF"
-	TRUE  = "TRUE"
-	FALSE = "FALSE"
-	WHILE = "WHILE"
-	CASE  = "CASE"
-	FN    = "FN"
+	IF     = "IF"
+	TRUE   = "TRUE"
+	FALSE  = "FALSE"
+	WHILE  = "WHILE"
+	CASE   = "CASE"
+	FN     = "FN"
+	LAMBDA = "LAMBDA"
 )

@@ -31,8 +31,29 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 		return evalWhileStatement(node, env)
 	case *ast.FunctionStatement:
 		return evalFunctionStatement(node, env)
+	case *ast.LambdaStatement:
+		return evalLambdaStatement(node, env)
 	}
 	return createError("Evaluation for statement can't be done!")
+}
+func evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) object.Object {
+	fn := &object.Function{}
+
+	args := []*ast.IdentStatement{}
+
+	for _, arg := range node.Args {
+		v, ok := arg.(*ast.IdentStatement)
+		if !ok {
+			return createError("Argument is not a identifier!")
+		}
+		args = append(args, v)
+	}
+
+	fn.Args = args
+
+	fn.Body = &node.Body
+
+	return fn
 }
 
 func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment) object.Object {

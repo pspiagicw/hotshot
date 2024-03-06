@@ -205,6 +205,8 @@ func TestValidStatement(t *testing.T) {
 
 		`(fn hello () (? "Hello, World"))`: true,
 		`(fn add (x y) (+ x y))`:           true,
+
+		`(lambda () (? "Hello, World"))`: true,
 	}
 
 	for input, expectedResult := range tt {

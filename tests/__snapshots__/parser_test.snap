@@ -467,3 +467,21 @@
     },
 }
 ---
+
+[TestValidStatement/(lambda_()_(?_"Hello,_World")) - 1]
+&ast.Program{
+    Statements: {
+        &ast.LambdaStatement{
+            Args: {
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
+                Args: {
+                    &ast.StringStatement{Value:"Hello, World"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
