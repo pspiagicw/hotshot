@@ -3,6 +3,7 @@ module github.com/pspiagicw/hotshot
 go 1.21.0
 
 require (
+	github.com/chzyer/readline v1.5.1
 	github.com/gkampitakis/go-snaps v0.5.2
 	github.com/pspiagicw/goreland v0.0.0-20231129143657-4b9ff8ac7ad5
 	github.com/shivamMg/ppds v0.0.1

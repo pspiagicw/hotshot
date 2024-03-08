@@ -1,11 +1,11 @@
 package interpreter
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
 
+	"github.com/chzyer/readline"
 	"github.com/pspiagicw/goreland"
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/eval"
@@ -24,9 +24,7 @@ func StartREPL() {
 
 	e := eval.NewEvaluator(errorHandler)
 	for true {
-		fmt.Printf(">>> ")
-
-		prompt := getPrompt()
+		prompt := getInput(">>> ")
 
 		program, errors := parseCode(prompt)
 
@@ -45,17 +43,16 @@ func StartREPL() {
 		fmt.Println()
 	}
 }
-func getPrompt() string {
-	buffer := bufio.NewReader(os.Stdin)
-	prompt, err := buffer.ReadString('\n')
-
+func getInput(prompt string) string {
+	input, err := readline.Line(prompt)
 	if err != nil {
 		goreland.LogFatal("Error scanning input: %v", err)
 	}
+	return input
 
-	prompt = strings.TrimSpace(prompt)
-
-	return prompt
+}
+func completeInput(input string) bool {
+	return strings.Count(input, "(") == strings.Count(input, ")")
 }
 
 func ExecuteFile(file string, debug bool) {
