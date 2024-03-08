@@ -497,3 +497,80 @@
     },
 }
 ---
+
+[TestValidStatement/(if_(=_1_2)_(echo_g)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"g"},
+                    },
+                },
+            },
+            Else: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(echo_"Hello,_World!") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+            Args: {
+                &ast.StringStatement{Value:"Hello, World!"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(lambda_()_(echo_"Hello,_World")) - 1]
+&ast.Program{
+    Statements: {
+        &ast.LambdaStatement{
+            Args: {
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                Args: {
+                    &ast.StringStatement{Value:"Hello, World"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(fn_hello_()_(echo_"Hello,_World")) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                Args: {
+                    &ast.StringStatement{Value:"Hello, World"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

@@ -101,6 +101,7 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 
 	lexer := lexer.NewLexer(input)
 	parser := parser.NewParser(lexer)
+	e := eval.NewEvaluator(func(message string) {})
 
 	ast := parser.Parse()
 	if len(parser.Errors()) != 0 {
@@ -114,7 +115,7 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 
 	env := object.NewEnvironment()
 
-	result := eval.Eval(ast, env)
+	result := e.Eval(ast, env)
 
 	equalResult(t, result, expected)
 

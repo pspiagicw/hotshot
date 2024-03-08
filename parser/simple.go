@@ -11,7 +11,6 @@ var validOps = map[token.TokenType]bool{
 	token.PLUS:        true,
 	token.MINUS:       true,
 	token.SLASH:       true,
-	token.QUESTION:    true,
 	token.HASH:        true,
 	token.MULTIPLY:    true,
 	token.IF:          true,

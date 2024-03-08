@@ -18,6 +18,11 @@ import (
 func StartREPL() {
 	env := object.NewEnvironment()
 
+	errorHandler := func(message string) {
+		goreland.LogError("Runtime Error: %s\n", message)
+	}
+
+	e := eval.NewEvaluator(errorHandler)
 	for true {
 		fmt.Printf(">>> ")
 
@@ -34,7 +39,7 @@ func StartREPL() {
 
 		fmt.Println(printer.PrintAST(program))
 
-		result := eval.Eval(program, env)
+		result := e.Eval(program, env)
 		fmt.Print("=> ")
 		fmt.Print(result)
 		fmt.Println()
@@ -59,6 +64,12 @@ func ExecuteFile(file string, debug bool) {
 
 	program, errors := parseCode(code)
 
+	errorHandler := func(message string) {
+		goreland.LogFatal("Runtime Error: %s", message)
+	}
+
+	e := eval.NewEvaluator(errorHandler)
+
 	handleErrors(errors, false)
 
 	if debug {
@@ -67,7 +78,7 @@ func ExecuteFile(file string, debug bool) {
 
 	env := object.NewEnvironment()
 
-	_ = eval.Eval(program, env)
+	_ = e.Eval(program, env)
 }
 
 func handleErrors(errors []error, exit bool) int {

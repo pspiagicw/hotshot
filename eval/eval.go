@@ -7,16 +7,26 @@ import (
 	"github.com/pspiagicw/hotshot/object"
 )
 
-func Eval(node ast.Statement, env *object.Environment) object.Object {
+type Evaluator struct {
+	ErrorHandler func(message string)
+}
+
+func NewEvaluator(handler func(string)) *Evaluator {
+	return &Evaluator{
+		ErrorHandler: handler,
+	}
+}
+
+func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Object {
 	switch node := node.(type) {
 	case *ast.IntStatement:
 		return &object.Integer{Value: node.Value}
 	case *ast.StringStatement:
 		return &object.String{Value: node.Value}
 	case *ast.Program:
-		return evalProgram(node.Statements, env)
+		return e.evalProgram(node.Statements, env)
 	case *ast.CallStatement:
-		return evalFunction(node, env)
+		return e.evalFunction(node, env)
 	case *ast.EmptyStatement:
 		return object.Null{}
 	case *ast.BoolStatement:
@@ -24,19 +34,19 @@ func Eval(node ast.Statement, env *object.Environment) object.Object {
 	case *ast.IdentStatement:
 		return evalIdent(node, env)
 	case *ast.AssignmentStatement:
-		return applyAssignment(node, env)
+		return e.applyAssignment(node, env)
 	case *ast.IfStatement:
-		return evalIfStatement(node, env)
+		return e.evalIfStatement(node, env)
 	case *ast.WhileStatement:
-		return evalWhileStatement(node, env)
+		return e.evalWhileStatement(node, env)
 	case *ast.FunctionStatement:
-		return evalFunctionStatement(node, env)
+		return e.evalFunctionStatement(node, env)
 	case *ast.LambdaStatement:
-		return evalLambdaStatement(node, env)
+		return e.evalLambdaStatement(node, env)
 	}
-	return createError("Evaluation for statement can't be done!")
+	return e.createError("Evaluation for statement can't be done!")
 }
-func evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) object.Object {
 	fn := &object.Function{}
 
 	args := []*ast.IdentStatement{}
@@ -44,7 +54,7 @@ func evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) obj
 	for _, arg := range node.Args {
 		v, ok := arg.(*ast.IdentStatement)
 		if !ok {
-			return createError("Argument is not a identifier!")
+			return e.createError("Argument is not a identifier!")
 		}
 		args = append(args, v)
 	}
@@ -56,7 +66,7 @@ func evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) obj
 	return fn
 }
 
-func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment) object.Object {
 	name := node.Name.TokenValue
 
 	fn := &object.Function{}
@@ -66,7 +76,7 @@ func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment)
 	for _, arg := range node.Args {
 		v, ok := arg.(*ast.IdentStatement)
 		if !ok {
-			return createError("Argument is not a identifier!")
+			return e.createError("Argument is not a identifier!")
 		}
 		args = append(args, v)
 	}
@@ -79,39 +89,39 @@ func evalFunctionStatement(node *ast.FunctionStatement, env *object.Environment)
 
 	return object.Null{}
 }
-func evalWhileStatement(node *ast.WhileStatement, env *object.Environment) object.Object {
+func (e Evaluator) evalWhileStatement(node *ast.WhileStatement, env *object.Environment) object.Object {
 	var result object.Object
 
 	result = object.Null{}
 
 	for true {
-		result := Eval(node.Condition, env)
+		result := e.Eval(node.Condition, env)
 
 		if result.Type() != object.BOOLEAN_OBJ {
-			return createError("Condition for WHILE doesn't evaluate to true/false!")
+			return e.createError("Condition for WHILE doesn't evaluate to true/false!")
 		}
 
 		if result.String() == "true" {
-			result = Eval(node.Body, env)
+			result = e.Eval(node.Body, env)
 		} else {
 			break
 		}
 	}
 	return result
 }
-func evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalIfStatement(node *ast.IfStatement, env *object.Environment) object.Object {
 
-	result := Eval(node.Condition, env)
+	result := e.Eval(node.Condition, env)
 
 	if result.Type() != object.BOOLEAN_OBJ {
-		return createError("Condition for IF doesn't evaluate to true/false!")
+		return e.createError("Condition for IF doesn't evaluate to true/false!")
 	}
 
 	if result.String() == "true" {
-		return Eval(node.Body, env)
+		return e.Eval(node.Body, env)
 	} else {
 		if node.Else != nil {
-			return Eval(node.Else, env)
+			return e.Eval(node.Else, env)
 		}
 	}
 	return object.Null{}
@@ -122,73 +132,85 @@ func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object 
 
 	return val
 }
-func evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
+func (e *Evaluator) evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
 	result = &object.Null{}
 
 	for _, statement := range statements {
-		result = Eval(statement, env)
+		result = e.Eval(statement, env)
 	}
 
 	return result
 }
-func applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
+func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
 
-	value := Eval(node.Value, env)
+	value := e.Eval(node.Value, env)
 
 	env.Set(node.Name.TokenValue, value)
 
 	return object.Null{}
 }
-func evalArgs(args []ast.Statement, env *object.Environment) []object.Object {
+func (e *Evaluator) evalArgs(args []ast.Statement, env *object.Environment) []object.Object {
 	evals := []object.Object{}
 
 	for _, arg := range args {
-		evals = append(evals, Eval(arg, env))
+		evals = append(evals, e.Eval(arg, env))
 	}
 	return evals
 }
-func evalUserFunc(node *ast.CallStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalUserFunc(node *ast.CallStatement, env *object.Environment) object.Object {
 	fn := env.Get(node.Op.TokenValue)
 
 	if fn.Type() != object.FUNCTION_OBJ {
-		return createError("No function named '%s'", node.Op.TokenValue)
+		return e.createError("No function named '%s'", node.Op.TokenValue)
 	}
 
 	v, ok := fn.(*object.Function)
 	if !ok {
-		return createError("INTERNAL: Couldn't initialize user function!")
+		return e.createError("INTERNAL: Couldn't initialize user function!")
 	}
 
-	evals := evalArgs(node.Args, env)
+	evals := e.evalArgs(node.Args, env)
 
-	return applyFunction(v, evals, env)
+	return e.applyFunction(v, evals, env)
 }
-func evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environment) object.Object {
 
 	fn := env.GetBuiltin(node.Op.TokenValue)
 
 	if fn == nil {
-		return evalUserFunc(node, env)
+		return e.evalUserFunc(node, env)
 	}
 
-	evals := evalArgs(node.Args, env)
+	evals := e.evalArgs(node.Args, env)
 
 	v, ok := fn.(*object.Builtin)
 
 	if !ok {
-		return createError("INTERNAL: Could't initalize builtin function")
+		return e.createError("INTERNAL: Could't initalize builtin function")
 	}
 
-	return v.Fn(evals...)
+	value := v.Fn(evals...)
+
+	if value.Type() == object.ERROR_OBJ {
+		v, ok := value.(*object.Error)
+		if !ok {
+			return e.createError("INTERNAL: Couldn't cast error value")
+
+		}
+		e.createError(v.Message)
+	}
+
+	return value
+
 }
-func applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
+func (e *Evaluator) applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
 	if len(v.Args) != len(args) {
-		return createError("Function expects %d argument, given %d", len(v.Args), len(args))
+		return e.createError("Function expects %d argument, given %d", len(v.Args), len(args))
 	}
 
 	newEnv := extendEnvironment(v.Args, args, env)
-	return Eval(*v.Body, newEnv)
+	return e.Eval(*v.Body, newEnv)
 }
 func extendEnvironment(declaredArgs []*ast.IdentStatement, givenArgs []object.Object, env *object.Environment) *object.Environment {
 	newEnv := object.NewEnvironment()
@@ -198,9 +220,11 @@ func extendEnvironment(declaredArgs []*ast.IdentStatement, givenArgs []object.Ob
 	}
 	return newEnv
 }
-func createError(message string, v ...interface{}) *object.Error {
+func (e *Evaluator) createError(message string, v ...interface{}) *object.Error {
+	message = fmt.Sprintf("ERROR: %s\n", fmt.Sprintf(message, v...))
+	e.ErrorHandler(message)
 	return &object.Error{
-		Message: fmt.Sprintf("ERROR: %s\n", fmt.Sprintf(message, v...)),
+		Message: message,
 	}
 
 }

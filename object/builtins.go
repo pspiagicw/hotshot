@@ -88,6 +88,6 @@ func printFunc(args ...Object) Object {
 
 func createError(format string, v ...interface{}) Object {
 	return &Error{
-		Message: fmt.Sprintf("ERROR: %s", fmt.Sprintf(format, v...)),
+		Message: fmt.Sprintf(format, v...),
 	}
 }

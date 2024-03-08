@@ -1,4 +1,4 @@
-(? 2)
-(? "this is a string")
-(? true)
-(? false)
+(echo 2)
+(echo "this is a string")
+(echo true)
+(echo false)

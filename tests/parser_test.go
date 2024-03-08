@@ -142,7 +142,6 @@ func TestValidOp(t *testing.T) {
 		"(< 1 2)":    true,
 		"(> 1 2)":    true,
 		"(% 1 2)":    true,
-		"(? 1 2)":    true,
 		"(# 1 2)":    true,
 		"(case 1 2)": true,
 
@@ -151,6 +150,7 @@ func TestValidOp(t *testing.T) {
 		"(, 1 2)":   false,
 		"(! 1 2)":   false,
 		"(let 1 2)": false,
+		"(? 1 2)":   false,
 	}
 
 	for input, expectedResult := range tt {
@@ -193,8 +193,8 @@ func TestValidStatement(t *testing.T) {
 		`(+ "foo" "bar")`: true,
 		// Should parse properly, execution is not a worry now! This would fail in execution, not here!
 		`(/ "foo" "bar")`:              true,
-		`(if (= 1 2) (? g))`:           true,
-		`(? "Hello, World!")`:          true,
+		`(if (= 1 2) (echo g))`:        true,
+		`(echo "Hello, World!")`:       true,
 		"; this should be a comment ;": true,
 		"; this should be a comment":   true,
 		"(let someVar 3)":              true,
@@ -204,10 +204,10 @@ func TestValidStatement(t *testing.T) {
 		"(< 1 1)":                      true,
 		`(= "some" "some")`:            true,
 
-		`(fn hello () (? "Hello, World"))`: true,
-		`(fn add (x y) (+ x y))`:           true,
+		`(fn hello () (echo "Hello, World"))`: true,
+		`(fn add (x y) (+ x y))`:              true,
 
-		`(lambda () (? "Hello, World"))`: true,
+		`(lambda () (echo "Hello, World"))`: true,
 	}
 
 	for input, expectedResult := range tt {
