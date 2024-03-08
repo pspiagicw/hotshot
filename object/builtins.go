@@ -19,9 +19,6 @@ func getBuiltins() map[string]*Builtin {
 		"/": &Builtin{
 			Fn: divideFunc,
 		},
-		"?": &Builtin{
-			Fn: printFunc,
-		},
 		"#": &Builtin{
 			Fn: lenFunc,
 		},
@@ -45,6 +42,9 @@ func getBuiltins() map[string]*Builtin {
 		},
 		"do": &Builtin{
 			Fn: doFunc,
+		},
+		"echo": &Builtin{
+			Fn: printFunc,
 		},
 	}
 }

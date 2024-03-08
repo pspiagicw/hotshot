@@ -60,10 +60,10 @@ func TestEval(t *testing.T) {
 		`(if (= 1 2) 5 2)`: createInt(2),
 		`(if (= 1 1) 7 2)`: createInt(7),
 
-		`(fn hello () "Hello, World")`:                           createNull(),
-		`(fn hello () "Hello, World") (hello)`:                   createString("Hello, World"),
-		`(fn add (x y) (+ x y)) (add 2 1)`:                       createInt(3),
-		`(fn hello (name) (? "Hello" name)) (hello "pspiagicw")`: createNull(),
+		`(fn hello () "Hello, World")`:                              createNull(),
+		`(fn hello () "Hello, World") (hello)`:                      createString("Hello, World"),
+		`(fn add (x y) (+ x y)) (add 2 1)`:                          createInt(3),
+		`(fn hello (name) (echo "Hello" name)) (hello "pspiagicw")`: createNull(),
 
 		`(let a (lambda () 4)) (a)`: createInt(4),
 		`(fn arithmetic(op x y) (op x y))
