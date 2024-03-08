@@ -178,7 +178,7 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 	switch p.curToken.TokenType {
 	case token.RPAREN:
 		return &ast.EmptyStatement{}
-	case token.DOLLAR:
+	case token.LET:
 		return p.parseAssignment()
 	case token.FN:
 		return p.parseFunctionDec()

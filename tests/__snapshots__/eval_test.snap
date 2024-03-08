@@ -709,3 +709,53 @@
     },
 }
 ---
+
+[TestEval/(let_name_"hotshot")_name - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"name"},
+            Value: &ast.StringStatement{Value:"hotshot"},
+        },
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_a_(lambda_()_4))_(a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: &ast.IntStatement{Value:4},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_number_5)_number - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"number"},
+            Value: &ast.IntStatement{Value:5},
+        },
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"number"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

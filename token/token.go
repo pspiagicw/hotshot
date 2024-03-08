@@ -52,4 +52,5 @@ const (
 	CASE   = "CASE"
 	FN     = "FN"
 	LAMBDA = "LAMBDA"
+	LET    = "LET"
 )

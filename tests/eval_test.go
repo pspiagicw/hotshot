@@ -27,10 +27,10 @@ func TestEval(t *testing.T) {
 		"(+ 5 (- 4 5))":   createInt(4),
 		"(+ -5 (* 4 5))":  createInt(15),
 		// "(% 4 3)":             createInt(1),
-		`($ number 5) number`: createInt(5),
+		`(let number 5) number`: createInt(5),
 
-		`"someString"`:            createString("someString"),
-		`($ name "hotshot") name`: createString("hotshot"),
+		`"someString"`:              createString("someString"),
+		`(let name "hotshot") name`: createString("hotshot"),
 
 		`(= 1 1)`:           createBool(true),
 		`(= 1 2)`:           createBool(false),
@@ -65,7 +65,7 @@ func TestEval(t *testing.T) {
 		`(fn add (x y) (+ x y)) (add 2 1)`:                       createInt(3),
 		`(fn hello (name) (? "Hello" name)) (hello "pspiagicw")`: createNull(),
 
-		`($ a (lambda () 4)) (a)`: createInt(4),
+		`(let a (lambda () 4)) (a)`: createInt(4),
 		`(fn arithmetic(op x y) (op x y))
         (arithmetic (lambda (x y) (+ x y)) 2 1)`: createInt(3),
 	}

@@ -218,6 +218,8 @@ func (l *Lexer) parseKeyword(identifier string) *token.Token {
 		keyword.TokenType = token.FN
 	case "lambda":
 		keyword.TokenType = token.LAMBDA
+	case "let":
+		keyword.TokenType = token.LET
 	}
 	return &keyword
 }

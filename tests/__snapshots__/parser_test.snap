@@ -485,3 +485,15 @@
     },
 }
 ---
+
+[TestValidStatement/(let_someVar_3) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"someVar"},
+            Value: &ast.IntStatement{Value:3},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

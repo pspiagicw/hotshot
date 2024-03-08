@@ -146,10 +146,11 @@ func TestValidOp(t *testing.T) {
 		"(# 1 2)":    true,
 		"(case 1 2)": true,
 
-		"(; 1 2)": false,
-		"(@ 1 2)": false,
-		"(, 1 2)": false,
-		"(! 1 2)": false,
+		"(; 1 2)":   false,
+		"(@ 1 2)":   false,
+		"(, 1 2)":   false,
+		"(! 1 2)":   false,
+		"(let 1 2)": false,
 	}
 
 	for input, expectedResult := range tt {
@@ -196,7 +197,7 @@ func TestValidStatement(t *testing.T) {
 		`(? "Hello, World!")`:          true,
 		"; this should be a comment ;": true,
 		"; this should be a comment":   true,
-		"($ someVar 3)":                true,
+		"(let someVar 3)":              true,
 		"(somefunc somearg 1)":         true,
 		"(= 1 1)":                      true,
 		"(> 1 1)":                      true,
