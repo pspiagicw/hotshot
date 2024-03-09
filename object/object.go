@@ -2,6 +2,7 @@ package object
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/pspiagicw/hotshot/ast"
 )
@@ -17,6 +18,7 @@ const (
 	INTEGER_OBJ = "INTEGER"
 	STRING_OBJ  = "STRING"
 	BOOLEAN_OBJ = "BOOLEAN"
+	TABLE_OBJ   = "TABLE"
 
 	NULL_OBJ     = "NULL"
 	FUNCTION_OBJ = "FUNCTION"
@@ -106,4 +108,26 @@ func (b Boolean) String() string {
 		return "true"
 	}
 	return "false"
+}
+
+type Table struct {
+	Elements []Object
+}
+
+func (t Table) Type() ObjectType {
+	return TABLE_OBJ
+}
+func (t Table) String() string {
+	var output strings.Builder
+
+	output.WriteString("[")
+
+	elements := []string{}
+	for _, element := range t.Elements {
+		elements = append(elements, element.String())
+	}
+
+	output.WriteString(strings.Join(elements, " "))
+	output.WriteString("]")
+	return output.String()
 }

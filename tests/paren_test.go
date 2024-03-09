@@ -7,7 +7,7 @@ import (
 )
 
 func TestParen(t *testing.T) {
-	input := "()"
+	input := "(){}"
 
 	expectedTokens := []token.Token{
 		{
@@ -17,6 +17,14 @@ func TestParen(t *testing.T) {
 		{
 			TokenType:  token.RPAREN,
 			TokenValue: ")",
+		},
+		{
+			TokenType:  token.LBRACE,
+			TokenValue: "{",
+		},
+		{
+			TokenType:  token.RBRACE,
+			TokenValue: "}",
 		},
 		{
 			TokenType:  token.EOF,

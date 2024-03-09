@@ -66,8 +66,9 @@ func TestEval(t *testing.T) {
 		`(fn hello (name) (echo "Hello" name)) (hello "pspiagicw")`: createNull(),
 
 		`(let a (lambda () 4)) (a)`: createInt(4),
+
 		`(fn arithmetic(op x y) (op x y))
-        (arithmetic (lambda (x y) (+ x y)) 2 1)`: createInt(3),
+            (arithmetic (lambda (x y) (+ x y)) 2 1)`: createInt(3),
 	}
 
 	for input, expectedResult := range tt {

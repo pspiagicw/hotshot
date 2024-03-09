@@ -80,6 +80,12 @@ func (l *Lexer) Next() *token.Token {
 	case ")":
 		returnToken.TokenType = token.RPAREN
 		returnToken.TokenValue = l.currentChar
+	case "{":
+		returnToken.TokenType = token.LBRACE
+		returnToken.TokenValue = l.currentChar
+	case "}":
+		returnToken.TokenType = token.RBRACE
+		returnToken.TokenValue = l.currentChar
 	case "|":
 		returnToken.TokenType = token.PIPE
 		returnToken.TokenValue = l.currentChar

@@ -14,9 +14,7 @@ type CallStatement struct {
 }
 
 func (f CallStatement) String() string {
-	var output strings.Builder
-	output.WriteString(tree.SprintHrn(f))
-	return output.String()
+	return tree.SprintHrn(f)
 }
 
 func (f CallStatement) Data() interface{} {
@@ -36,9 +34,7 @@ type AssignmentStatement struct {
 }
 
 func (a AssignmentStatement) String() string {
-	var output strings.Builder
-	output.WriteString(tree.SprintHrn(a))
-	return output.String()
+	return tree.SprintHrn(a)
 }
 func (a AssignmentStatement) Data() interface{} {
 	return fmt.Sprintf("$(%s)", a.Name.TokenValue)
@@ -56,9 +52,7 @@ type FunctionStatement struct {
 }
 
 func (f FunctionStatement) String() string {
-	var output strings.Builder
-	output.WriteString(tree.SprintHrn(f))
-	return output.String()
+	return tree.SprintHrn(f)
 }
 func (f FunctionStatement) Data() interface{} {
 	strArgs := []string{}
@@ -81,9 +75,7 @@ type LambdaStatement struct {
 }
 
 func (l LambdaStatement) String() string {
-	var output strings.Builder
-	output.WriteString(tree.SprintHrn(l))
-	return output.String()
+	return tree.SprintHrn(l)
 }
 func (l LambdaStatement) Data() interface{} {
 	strArgs := []string{}

@@ -574,3 +574,18 @@
     },
 }
 ---
+
+[TestValidStatement/{_1_2_3} - 1]
+&ast.Program{
+    Statements: {
+        &ast.TableStatement{
+            Elements: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:3},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

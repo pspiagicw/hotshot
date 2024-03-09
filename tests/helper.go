@@ -41,6 +41,9 @@ func checkTree(t *testing.T, input string, expectedTree []ast.Statement) {
 
 	actualTree := parser.Parse()
 	if len(parser.Errors()) != 0 {
+		for _, err := range parser.Errors() {
+			t.Log(err)
+		}
 		t.Fatalf("Errors while parsing")
 	}
 
@@ -83,6 +86,21 @@ func matchBoolStatement(t *testing.T, expectedStatement ast.Statement, actualSta
 	}
 	return e.Value == a.Value
 }
+func matchTableStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.TableStatement)
+	if !ok {
+		t.Fatalf("Expected table statement, got others")
+	}
+	a, ok := actualStatement.(*ast.TableStatement)
+	if !ok {
+		t.Fatalf("Expected table statement, got others")
+	}
+	result := true
+	for index, _ := range e.Elements {
+		result = result && matchStatement(t, e.Elements[index], a.Elements[index])
+	}
+	return result
+}
 func matchEmptyStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
 	_, ok := expectedStatement.(*ast.EmptyStatement)
 	if !ok {
@@ -107,6 +125,8 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			return matchStringStatement(t, expectedStatement, actualStatement)
 		case *ast.BoolStatement:
 			return matchBoolStatement(t, expectedStatement, actualStatement)
+		case *ast.TableStatement:
+			return matchTableStatement(t, expectedStatement, actualStatement)
 		default:
 			t.Fatalf("Some bloody type found!: %v", s)
 		}

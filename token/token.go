@@ -16,6 +16,8 @@ func (t *Token) String() string {
 const (
 	LPAREN = "LPAREN"
 	RPAREN = "RPAREN"
+	LBRACE = "LBRACE"
+	RBRACE = "RBRACE"
 
 	PLUS     = "PLUS"
 	MINUS    = "MINUS"

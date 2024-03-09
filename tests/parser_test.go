@@ -62,6 +62,26 @@ func TestSimpleString(t *testing.T) {
 	}
 	checkTree(t, input, expectedTree)
 }
+func TestTableStatement(t *testing.T) {
+	input := `{1 2 3}`
+
+	expectedTree := []ast.Statement{
+		&ast.TableStatement{
+			Elements: []ast.Statement{
+				&ast.IntStatement{
+					Value: 1,
+				},
+				&ast.IntStatement{
+					Value: 2,
+				},
+				&ast.IntStatement{
+					Value: 3,
+				},
+			},
+		},
+	}
+	checkTree(t, input, expectedTree)
+}
 func TestComments(t *testing.T) {
 	input := `; some comments about you ;
     69
@@ -208,6 +228,8 @@ func TestValidStatement(t *testing.T) {
 		`(fn add (x y) (+ x y))`:              true,
 
 		`(lambda () (echo "Hello, World"))`: true,
+
+		`{ 1 2 3}`: true,
 	}
 
 	for input, expectedResult := range tt {

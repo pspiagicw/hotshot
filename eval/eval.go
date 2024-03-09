@@ -24,7 +24,7 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 	case *ast.StringStatement:
 		return &object.String{Value: node.Value}
 	case *ast.Program:
-		return e.evalProgram(node.Statements, env)
+		return e.evalProgram(node, env)
 	case *ast.CallStatement:
 		return e.evalFunction(node, env)
 	case *ast.EmptyStatement:
@@ -43,8 +43,17 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalFunctionStatement(node, env)
 	case *ast.LambdaStatement:
 		return e.evalLambdaStatement(node, env)
+	case *ast.TableStatement:
+		return e.evalTableStatement(node, env)
 	}
 	return e.createError("Evaluation for statement can't be done!")
+}
+func (e *Evaluator) evalTableStatement(node *ast.TableStatement, env *object.Environment) object.Object {
+	fn := &object.Table{}
+
+	fn.Elements = e.evalStatements(node.Elements, env)
+
+	return fn
 }
 func (e *Evaluator) evalLambdaStatement(node *ast.LambdaStatement, env *object.Environment) object.Object {
 	fn := &object.Function{}
@@ -132,15 +141,14 @@ func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object 
 
 	return val
 }
-func (e *Evaluator) evalProgram(statements []ast.Statement, env *object.Environment) object.Object {
-	var result object.Object
-	result = &object.Null{}
+func (e *Evaluator) evalProgram(statements *ast.Program, env *object.Environment) object.Object {
+	results := e.evalStatements(statements.Statements, env)
 
-	for _, statement := range statements {
-		result = e.Eval(statement, env)
+	if len(results) == 0 {
+		return object.Null{}
 	}
 
-	return result
+	return results[len(results)-1]
 }
 func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
 
@@ -150,7 +158,7 @@ func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.E
 
 	return object.Null{}
 }
-func (e *Evaluator) evalArgs(args []ast.Statement, env *object.Environment) []object.Object {
+func (e *Evaluator) evalStatements(args []ast.Statement, env *object.Environment) []object.Object {
 	evals := []object.Object{}
 
 	for _, arg := range args {
@@ -170,7 +178,7 @@ func (e *Evaluator) evalUserFunc(node *ast.CallStatement, env *object.Environmen
 		return e.createError("INTERNAL: Couldn't initialize user function!")
 	}
 
-	evals := e.evalArgs(node.Args, env)
+	evals := e.evalStatements(node.Args, env)
 
 	return e.applyFunction(v, evals, env)
 }
@@ -182,7 +190,7 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 		return e.evalUserFunc(node, env)
 	}
 
-	evals := e.evalArgs(node.Args, env)
+	evals := e.evalStatements(node.Args, env)
 
 	v, ok := fn.(*object.Builtin)
 
