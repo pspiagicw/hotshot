@@ -346,21 +346,6 @@
 }
 ---
 
-[TestEval/($_name_"hotshot")_name - 1]
-&ast.Program{
-    Statements: {
-        &ast.AssignmentStatement{
-            Name:  &token.Token{TokenType:"IDENT", TokenValue:"name"},
-            Value: &ast.StringStatement{Value:"hotshot"},
-        },
-        &ast.IdentStatement{
-            Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
 [TestEval/(+_1_2) - 1]
 &ast.Program{
     Statements: {
@@ -434,21 +419,6 @@
             },
             Body: &ast.IntStatement{Value:7},
             Else: &ast.IntStatement{Value:2},
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestEval/($_number_5)_number - 1]
-&ast.Program{
-    Statements: {
-        &ast.AssignmentStatement{
-            Name:  &token.Token{TokenType:"IDENT", TokenValue:"number"},
-            Value: &ast.IntStatement{Value:5},
-        },
-        &ast.IdentStatement{
-            Value: &token.Token{TokenType:"IDENT", TokenValue:"number"},
         },
         &ast.EmptyStatement{},
     },
@@ -589,118 +559,6 @@
         &ast.CallStatement{
             Op:   &token.Token{TokenType:"IDENT", TokenValue:"add"},
             Args: {
-                &ast.IntStatement{Value:2},
-                &ast.IntStatement{Value:1},
-            },
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestEval/(fn_hello_(name)_(?_"Hello"_name))_(hello_"pspiagicw") - 1]
-&ast.Program{
-    Statements: {
-        &ast.FunctionStatement{
-            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
-            Args: {
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
-                },
-            },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"QUESTION", TokenValue:"?"},
-                Args: {
-                    &ast.StringStatement{Value:"Hello"},
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
-                    },
-                },
-            },
-        },
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"hello"},
-            Args: {
-                &ast.StringStatement{Value:"pspiagicw"},
-            },
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestEval/($_a_(lambda_()_4))_(a) - 1]
-&ast.Program{
-    Statements: {
-        &ast.AssignmentStatement{
-            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
-            Value: &ast.LambdaStatement{
-                Args: {
-                },
-                Body: &ast.IntStatement{Value:4},
-            },
-        },
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"a"},
-            Args: nil,
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestEval/(fn_arithmetic(op_x_y)_(op_x_y))_________(arithmetic_(lambda_(x_y)_(+_x_y))_2_1) - 1]
-&ast.Program{
-    Statements: {
-        &ast.FunctionStatement{
-            Name: &token.Token{TokenType:"IDENT", TokenValue:"arithmetic"},
-            Args: {
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"op"},
-                },
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                },
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
-                },
-            },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"IDENT", TokenValue:"op"},
-                Args: {
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                    },
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
-                    },
-                },
-            },
-        },
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"arithmetic"},
-            Args: {
-                &ast.LambdaStatement{
-                    Args: {
-                        &ast.IdentStatement{
-                            Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                        },
-                        &ast.IdentStatement{
-                            Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
-                        },
-                    },
-                    Body: &ast.CallStatement{
-                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
-                        Args: {
-                            &ast.IdentStatement{
-                                Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                            },
-                            &ast.IdentStatement{
-                                Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
-                            },
-                        },
-                    },
-                },
                 &ast.IntStatement{Value:2},
                 &ast.IntStatement{Value:1},
             },

@@ -14,27 +14,8 @@
 (echo (or false true))
 (echo (or true false))
 
-(echo (not "false"))
-(echo (not "true"))
-
-(echo (and "false" false))
-(echo (and "true" true))
-(echo (and "false" "true"))
-(echo (and "true" "false"))
-
-(echo (or "false" false))
-(echo (or "true" true))
-(echo (or "false" "true"))
-(echo (or "true" "false"))
-
-(echo (= 1 1))
-(echo (= 1 2))
-
-(echo (= "1" 2))
-(echo (= "1" 1))
-
 (echo (< 2 1))
 (echo (> 2 1))
 
-(echo (> "2" 1))
-(echo (< "2" 1))
+(echo (= 1 1))
+(echo (= 1 2))

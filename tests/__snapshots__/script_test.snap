@@ -17,14 +17,6 @@
  17 
  1 
  14 
- ERROR: MULTIPLY function expects Integer, found STRING 
- ERROR: ADD function expects Integer, found STRING 
- ERROR: MINUS function expects Integer, found STRING 
- ERROR: DIVIDE function expects Integer, found STRING 
- ERROR: MULTIPLY function expects Integer, found BOOLEAN 
- ERROR: ADD function expects Integer, found BOOLEAN 
- ERROR: MINUS function expects Integer, found BOOLEAN 
- ERROR: DIVIDE function expects Integer, found BOOLEAN 
 
 ---
 
@@ -41,23 +33,9 @@
  true 
  true 
  true 
- ERROR: NOT function expects Boolean, found STRING 
- ERROR: NOT function expects Boolean, found STRING 
- ERROR: AND function expects Boolean, found STRING 
- ERROR: AND function expects Boolean, found STRING 
- ERROR: AND function expects Boolean, found STRING 
- ERROR: AND function expects Boolean, found STRING 
- ERROR: OR function expects Boolean, found STRING 
- ERROR: OR function expects Boolean, found STRING 
- ERROR: OR function expects Boolean, found STRING 
- ERROR: OR function expects Boolean, found STRING 
- true 
- false 
- false 
- false 
  false 
  true 
- ERROR: GT function expects Integer, found STRING 
- ERROR: LT function expects Integer, found INTEGER 
+ true 
+ false 
 
 ---

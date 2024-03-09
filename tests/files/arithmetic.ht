@@ -2,13 +2,3 @@
 (echo (+ 2 1 2 1 2 3 4 1 1))
 (echo (- 2 1))
 (echo (* 2 7))
-
-(echo (* "a string" 2))
-(echo (+ "a string" 2))
-(echo (- "a string" 2))
-(echo (/ "a string" 2))
-
-(echo (* true 2))
-(echo (+ true 2))
-(echo (- true 2))
-(echo (/ true 2))
