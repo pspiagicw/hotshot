@@ -2,5 +2,10 @@
   (cond ((and (= (mod n 3) 0) (= (mod n 5) 0)) "FizzBuzz")
         ((= (mod n 3) 0) "Fizz")
         ((= (mod n 5) 0) "Buzz")
-        (true (write-to-string n))))
+        (true n)))
+
+(echo (fizzbuzz 3))
+(echo (fizzbuzz 5))
+(echo (fizzbuzz 15))
+(echo (fizzbuzz 1))
 

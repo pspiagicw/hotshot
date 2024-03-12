@@ -1,4 +1,0 @@
-(import math mt) ;; value.ht should be in same directory, second argument compulsory! ;;
-
-
-(? (add@mt 2 1 )) ;; function/variable first, then module. ;;

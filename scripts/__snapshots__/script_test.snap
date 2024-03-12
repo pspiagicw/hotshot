@@ -83,16 +83,16 @@
 ---
 
 [TestScripts/fibonacci.ht - 1]
- 12 
- 50 
+ 13 
+ 55 
 
 ---
 
 [TestScripts/fizzbuzz.ht - 1]
- [!!] Error parsing the file.
-Expected a token for a statement, found: Token(Type: MINUS, Value: '-')
-Expected a token for a statement, found: Token(Type: MINUS, Value: '-')
- [!!] Not executing till errors resolved!
+ Fizz 
+ Buzz 
+ FizzBuzz 
+ 1 
 
 ---
 
