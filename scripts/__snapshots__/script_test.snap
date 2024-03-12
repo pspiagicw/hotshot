@@ -45,6 +45,8 @@
  17 
  1 
  14 
+ 0 
+ 1 
 
 ---
 
@@ -105,5 +107,37 @@
  1 
  10 
  15 
+
+---
+
+[TestScripts/variables.ht - 1]
+ My name is pspiagicw 
+
+---
+
+[TestScripts/flow.ht - 1]
+ Always true! 
+ NULL 
+ Number is 1 
+ Number is not 1 
+ The value is: 3 
+ The value is: 2 
+ The value is: 1 
+ Number is something else 
+ The number is 3! 
+ Number is 2 
+ NULL 
+ Number is 1 
+ NULL 
+ Number is something else 
+
+---
+
+[TestScripts/functions.ht - 1]
+ Hello, hotshooter! 
+ Hello, pspiagicw 
+ Hello hotshooter! 
+ 7 
+ 7 
 
 ---

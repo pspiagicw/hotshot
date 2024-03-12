@@ -1,0 +1,4 @@
+(let name "pspiagicw")
+
+(echo "My name is" name)
+

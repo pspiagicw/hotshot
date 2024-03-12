@@ -1,0 +1,29 @@
+; Declare a function using 'fn' ; 
+
+(fn hello () (echo "Hello, hotshooter!"))
+
+(hello)
+
+; Functions can have arguments ;
+
+(fn helloName (name) (echo "Hello," name))
+
+(helloName "pspiagicw")
+
+; use 'lambda' to declare a lambda. Meaning, functions are 'first-class'!;
+
+(let name (lambda (name) (echo "Hello" name)))
+(name "hotshooter!")
+
+; You can give functions as arguments ; 
+
+(fn add (x y) (+ x y))
+
+(fn arithmetic (operation x y) (operation x y))
+
+(echo (arithmetic add 3 4))
+
+; or mention the function as a labmda ;
+
+(echo (arithmetic (lambda (x y) (+ x y)) 3 4))
+

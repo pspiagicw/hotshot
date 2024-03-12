@@ -2,3 +2,5 @@
 (echo (+ 2 1 2 1 2 3 4 1 1))
 (echo (- 2 1))
 (echo (* 2 7))
+(echo (mod 10 2))
+(echo (mod 10 9))
