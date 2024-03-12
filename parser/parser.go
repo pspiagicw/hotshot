@@ -188,6 +188,23 @@ func (p *Parser) parseLambdaStatement() ast.Statement {
 
 	return st
 }
+func (p *Parser) parseCondStatement() ast.Statement {
+	st := &ast.CondStatement{}
+
+	st.Conditions = map[ast.Statement]ast.Statement{}
+
+	for p.peekTokenIs(token.LPAREN) {
+		p.expectedTokenIs(token.LPAREN)
+		condition := p.parseStatement()
+		body := p.parseStatement()
+		p.expectedTokenIs(token.RPAREN)
+		st.Conditions[condition] = body
+	}
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+}
 
 func (p *Parser) parseComplexStatement() ast.Statement {
 	p.advance()
@@ -204,6 +221,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseWhileStatement()
 	case token.LAMBDA:
 		return p.parseLambdaStatement()
+	case token.COND:
+		return p.parseCondStatement()
 	default:
 		return p.parseFunctionCall()
 	}

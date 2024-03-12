@@ -41,9 +41,7 @@ type WhileStatement struct {
 }
 
 func (w WhileStatement) String() string {
-	var output strings.Builder
-	output.WriteString(tree.SprintHrn(w))
-	return output.String()
+	return tree.SprintHrn(w)
 }
 func (w WhileStatement) Data() interface{} {
 	return "while"
@@ -53,4 +51,24 @@ func (w WhileStatement) Children() []tree.Node {
 		w.Condition,
 		w.Body,
 	}
+}
+
+type CondStatement struct {
+	Conditions map[Statement]Statement
+}
+
+func (c CondStatement) String() string {
+	return tree.SprintHrn(c)
+}
+func (c CondStatement) Data() interface{} {
+	return "cond"
+}
+func (c CondStatement) Children() []tree.Node {
+	value := []tree.Node{}
+
+	for condition, body := range c.Conditions {
+		value = append(value, condition)
+		value = append(value, body)
+	}
+	return value
 }

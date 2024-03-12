@@ -89,23 +89,8 @@ func (l *Lexer) Next() *token.Token {
 	case "|":
 		returnToken.TokenType = token.PIPE
 		returnToken.TokenValue = l.currentChar
-	case "@":
-		returnToken.TokenType = token.AT
-		returnToken.TokenValue = l.currentChar
 	case "^":
 		returnToken.TokenType = token.POWER
-		returnToken.TokenValue = l.currentChar
-	case "$":
-		returnToken.TokenType = token.DOLLAR
-		returnToken.TokenValue = l.currentChar
-	case "!":
-		returnToken.TokenType = token.BANG
-		returnToken.TokenValue = l.currentChar
-	case ",":
-		returnToken.TokenType = token.COMMA
-		returnToken.TokenValue = l.currentChar
-	case "?":
-		returnToken.TokenType = token.QUESTION
 		returnToken.TokenValue = l.currentChar
 	case "+":
 		if l.isDigit(l.peekInput()) {
@@ -145,17 +130,11 @@ func (l *Lexer) Next() *token.Token {
 	case "=":
 		returnToken.TokenType = token.EQ
 		returnToken.TokenValue = l.currentChar
-	case "%":
-		returnToken.TokenType = token.MOD
-		returnToken.TokenValue = l.currentChar
 	case "<":
 		returnToken.TokenType = token.LESSTHAN
 		returnToken.TokenValue = l.currentChar
 	case ">":
 		returnToken.TokenType = token.GREATERTHAN
-		returnToken.TokenValue = l.currentChar
-	case "#":
-		returnToken.TokenType = token.HASH
 		returnToken.TokenValue = l.currentChar
 	case "\"":
 		l.advance()
@@ -226,6 +205,8 @@ func (l *Lexer) parseKeyword(identifier string) *token.Token {
 		keyword.TokenType = token.LAMBDA
 	case "let":
 		keyword.TokenType = token.LET
+	case "cond":
+		keyword.TokenType = token.COND
 	}
 	return &keyword
 }

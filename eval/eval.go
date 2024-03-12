@@ -45,8 +45,21 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalLambdaStatement(node, env)
 	case *ast.TableStatement:
 		return e.evalTableStatement(node, env)
+	case *ast.CondStatement:
+		return e.evalCondStatement(node, env)
 	}
 	return e.createError("Evaluation for statement can't be done!")
+}
+
+func (e *Evaluator) evalCondStatement(node *ast.CondStatement, env *object.Environment) object.Object {
+
+	for condition, body := range node.Conditions {
+		if e.isTrue(e.Eval(condition, env)) {
+			return e.Eval(body, env)
+		}
+	}
+
+	return object.Null{}
 }
 func (e *Evaluator) evalTableStatement(node *ast.TableStatement, env *object.Environment) object.Object {
 	fn := &object.Table{}
@@ -106,11 +119,7 @@ func (e Evaluator) evalWhileStatement(node *ast.WhileStatement, env *object.Envi
 	for true {
 		result := e.Eval(node.Condition, env)
 
-		if result.Type() != object.BOOLEAN_OBJ {
-			return e.createError("Condition for WHILE doesn't evaluate to true/false!")
-		}
-
-		if result.String() == "true" {
+		if e.isTrue(result) {
 			result = e.Eval(node.Body, env)
 		} else {
 			break
@@ -122,19 +131,23 @@ func (e *Evaluator) evalIfStatement(node *ast.IfStatement, env *object.Environme
 
 	result := e.Eval(node.Condition, env)
 
-	if result.Type() != object.BOOLEAN_OBJ {
-		return e.createError("Condition for IF doesn't evaluate to true/false!")
-	}
-
-	if result.String() == "true" {
+	if e.isTrue(result) {
 		return e.Eval(node.Body, env)
 	} else {
 		if node.Else != nil {
 			return e.Eval(node.Else, env)
 		}
 	}
+
 	return object.Null{}
 
+}
+func (e *Evaluator) isTrue(value object.Object) bool {
+	if value.Type() != object.BOOLEAN_OBJ {
+		e.createError("Condition doesn't evaluate to true/false!")
+	}
+
+	return value.String() == "true"
 }
 func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
 	val := env.Get(node.Value.TokenValue)

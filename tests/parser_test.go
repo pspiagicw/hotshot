@@ -152,19 +152,18 @@ func TestNestedStatement(t *testing.T) {
 func TestValidOp(t *testing.T) {
 
 	tt := map[string]bool{
-		"(+ 1 2)":    true,
-		"(- 1 2)":    true,
-		"(/ 1 2)":    true,
-		"(* 1 2)":    true,
-		"(^ 1 2)":    true,
-		"(if 1 2)":   true,
-		"(= 1 2)":    true,
-		"(< 1 2)":    true,
-		"(> 1 2)":    true,
-		"(% 1 2)":    true,
-		"(# 1 2)":    true,
-		"(case 1 2)": true,
+		"(+ 1 2)":  true,
+		"(- 1 2)":  true,
+		"(/ 1 2)":  true,
+		"(* 1 2)":  true,
+		"(^ 1 2)":  true,
+		"(if 1 2)": true,
+		"(= 1 2)":  true,
+		"(< 1 2)":  true,
+		"(> 1 2)":  true,
 
+		"(% 1 2)":   false,
+		"(# 1 2)":   false,
 		"(; 1 2)":   false,
 		"(@ 1 2)":   false,
 		"(, 1 2)":   false,
@@ -230,6 +229,9 @@ func TestValidStatement(t *testing.T) {
 		`(lambda () (echo "Hello, World"))`: true,
 
 		`{ 1 2 3}`: true,
+		`(cond ((= 1 1) "1 is equal")
+    ((< 2 1) "2 is smaller than 1")
+    (true "Always true"))`: true,
 	}
 
 	for input, expectedResult := range tt {

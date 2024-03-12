@@ -67,7 +67,7 @@ func ExecuteFile(file string, debug bool) {
 
 	e := eval.NewEvaluator(errorHandler)
 
-	handleErrors(errors, false)
+	handleErrors(errors, true)
 
 	if debug {
 		fmt.Println(printer.PrintAST(program))

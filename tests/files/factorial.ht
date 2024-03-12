@@ -1,7 +1,13 @@
-(fn factorial (x)
-    (if (< x 2)
+; Old code
+(fn factorial (n)
+    (if (< n 2)
       1
-      (* x (factorial (- x 1)))))
+      (* n (factorial (- n 1))))) ;
+
+(fn factorial (n)
+  (cond ((< n 2) 1)
+        (true (* n (factorial (- n 1))))))
+
 
 (echo (factorial 5))
 (echo (factorial 10))

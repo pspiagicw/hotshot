@@ -485,3 +485,30 @@
     },
 }
 ---
+
+[TestValidStatement/(cond_((=_1_1)_"1_is_equal")_____((<_2_1)_"2_is_smaller_than_1")_____(true_"Always_true")) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CondStatement{
+            Conditions: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:1},
+                    },
+                }:  &ast.StringStatement{Value:"1 is equal"},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                    Args: {
+                        &ast.IntStatement{Value:2},
+                        &ast.IntStatement{Value:1},
+                    },
+                }:                              &ast.StringStatement{Value:"2 is smaller than 1"},
+                &ast.BoolStatement{Value:true}: &ast.StringStatement{Value:"Always true"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

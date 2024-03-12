@@ -23,7 +23,6 @@ const (
 	MINUS    = "MINUS"
 	MULTIPLY = "MULTIPLY"
 	SLASH    = "SLASH"
-	MOD      = "MOD"
 
 	LESSTHAN    = "LESSTHAN"
 	GREATERTHAN = "GREATERTHAN"
@@ -39,13 +38,7 @@ const (
 	STRING = "STRING"
 	PIPE   = "PIPE"
 
-	DOLLAR   = "DOLLAR"
-	AT       = "AT"
-	BANG     = "BANG"
-	COMMA    = "COMMA"
-	QUESTION = "QUESTION"
-	HASH     = "HASH"
-	POWER    = "POWER"
+	POWER = "POWER"
 
 	IF     = "IF"
 	TRUE   = "TRUE"
@@ -55,4 +48,5 @@ const (
 	FN     = "FN"
 	LAMBDA = "LAMBDA"
 	LET    = "LET"
+	COND   = "COND"
 )
