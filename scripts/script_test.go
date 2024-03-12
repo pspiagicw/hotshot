@@ -1,7 +1,9 @@
 package tests
 
 import (
+	"io/fs"
 	"os/exec"
+	"path/filepath"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
@@ -22,29 +24,28 @@ func checkFile(t *testing.T, filename string) {
 }
 
 func TestScripts(t *testing.T) {
-	tt := []scriptTest{
-		{
-			name: "Hello World",
-			file: "files/hello-world.ht",
-		},
-		{
-			name: "Data Types",
-			file: "files/data-types.ht",
-		},
-		{
-			name: "Arithmetic Types",
-			file: "files/arithmetic.ht",
-		},
-		{
-			name: "Booleans",
-			file: "files/booleans.ht",
-		},
-	}
+	tt := getFiles()
 
 	for _, test := range tt {
 		t.Run(test.name, func(t *testing.T) {
 			checkFile(t, test.file)
 		})
 	}
+
+}
+func getFiles() []scriptTest {
+	files := []scriptTest{}
+	filepath.WalkDir("files", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if !d.IsDir() {
+			files = append(files, scriptTest{name: d.Name(), file: path})
+		}
+
+		return nil
+	})
+
+	return files
 
 }

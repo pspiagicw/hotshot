@@ -59,36 +59,6 @@
 }
 ---
 
-[TestValidOp/(case_1_2) - 1]
-&ast.Program{
-    Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"CASE", TokenValue:"case"},
-            Args: {
-                &ast.IntStatement{Value:1},
-                &ast.IntStatement{Value:2},
-            },
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestValidOp/(#_1_2) - 1]
-&ast.Program{
-    Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"HASH", TokenValue:"#"},
-            Args: {
-                &ast.IntStatement{Value:1},
-                &ast.IntStatement{Value:2},
-            },
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
 [TestValidOp/(/_1_2) - 1]
 &ast.Program{
     Statements: {
@@ -152,21 +122,6 @@
     Statements: {
         &ast.CallStatement{
             Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
-            Args: {
-                &ast.IntStatement{Value:1},
-                &ast.IntStatement{Value:2},
-            },
-        },
-        &ast.EmptyStatement{},
-    },
-}
----
-
-[TestValidOp/(%_1_2) - 1]
-&ast.Program{
-    Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"MOD", TokenValue:"%"},
             Args: {
                 &ast.IntStatement{Value:1},
                 &ast.IntStatement{Value:2},

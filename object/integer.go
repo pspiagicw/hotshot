@@ -158,3 +158,22 @@ func equalFunc(args ...Object) Object {
 	}
 
 }
+func modFunc(args ...Object) Object {
+	if len(args) != 2 {
+		return createError("MOD function expects 2 arguments")
+	}
+
+	f, ok := args[0].(*Integer)
+	if !ok {
+		return createError("MOD function expects Integer, found %v", args[0].Type())
+	}
+
+	s, ok := args[1].(*Integer)
+	if !ok {
+		return createError("MOD function expects Integer, found %v", args[1].Type())
+	}
+
+	return &Integer{
+		Value: f.Value % s.Value,
+	}
+}

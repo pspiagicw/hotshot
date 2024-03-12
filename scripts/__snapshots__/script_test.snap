@@ -1,0 +1,109 @@
+
+[TestScripts/Hello_World - 1]
+ Hello, World 
+
+---
+
+[TestScripts/Data_Types - 1]
+ 2 
+ this is a string 
+ true 
+ false 
+
+---
+
+[TestScripts/Arithmetic_Types - 1]
+ 3 
+ 17 
+ 1 
+ 14 
+
+---
+
+[TestScripts/Booleans - 1]
+ true 
+ false 
+ true 
+ false 
+ false 
+ true 
+ false 
+ false 
+ false 
+ true 
+ true 
+ true 
+ false 
+ true 
+ true 
+ false 
+
+---
+
+[TestScripts/arithmetic.ht - 1]
+ 3 
+ 17 
+ 1 
+ 14 
+
+---
+
+[TestScripts/booleans.ht - 1]
+ true 
+ false 
+ true 
+ false 
+ false 
+ true 
+ false 
+ false 
+ false 
+ true 
+ true 
+ true 
+ false 
+ true 
+ true 
+ false 
+
+---
+
+[TestScripts/data-types.ht - 1]
+ 2 
+ this is a string 
+ true 
+ false 
+
+---
+
+[TestScripts/factorial.ht - 1]
+ 120 
+ 3628800 
+
+---
+
+[TestScripts/fibonacci.ht - 1]
+ 11 
+ 47 
+
+---
+
+[TestScripts/fizzbuzz.ht - 1]
+ [!!] Error parsing the file.
+Expected a token for a statement, found: Token(Type: MINUS, Value: '-')
+Expected a token for a statement, found: Token(Type: MINUS, Value: '-')
+ [!!] Not executing till errors resolved!
+
+---
+
+[TestScripts/hello-world.ht - 1]
+ Hello, World 
+
+---
+
+[TestScripts/sum-of-digits.ht - 1]
+ 1 
+ 10 
+ 15 
+
+---

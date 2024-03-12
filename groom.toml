@@ -1,5 +1,5 @@
 [task.test]
-command = "go test -fullpath ./tests"
+command = "go test -fullpath ./..."
 description = "Testing the entire project."
 depends = [
     "format"
