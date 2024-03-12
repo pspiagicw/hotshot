@@ -191,14 +191,18 @@ func (p *Parser) parseLambdaStatement() ast.Statement {
 func (p *Parser) parseCondStatement() ast.Statement {
 	st := &ast.CondStatement{}
 
-	st.Conditions = map[ast.Statement]ast.Statement{}
+	// st.Conditions = map[ast.Statement]ast.Statement{}
+	st.Expressions = []ast.ConditionExpression{}
 
 	for p.peekTokenIs(token.LPAREN) {
 		p.expectedTokenIs(token.LPAREN)
 		condition := p.parseStatement()
 		body := p.parseStatement()
 		p.expectedTokenIs(token.RPAREN)
-		st.Conditions[condition] = body
+		st.Expressions = append(st.Expressions, ast.ConditionExpression{
+			Condition: condition,
+			Body:      body,
+		})
 	}
 
 	p.expectedTokenIs(token.RPAREN)

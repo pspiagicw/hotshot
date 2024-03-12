@@ -53,9 +53,9 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 
 func (e *Evaluator) evalCondStatement(node *ast.CondStatement, env *object.Environment) object.Object {
 
-	for condition, body := range node.Conditions {
-		if e.isTrue(e.Eval(condition, env)) {
-			return e.Eval(body, env)
+	for _, exp := range node.Expressions {
+		if e.isTrue(e.Eval(exp.Condition, env)) {
+			return e.Eval(exp.Body, env)
 		}
 	}
 

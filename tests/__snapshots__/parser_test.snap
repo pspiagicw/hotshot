@@ -445,22 +445,31 @@
 &ast.Program{
     Statements: {
         &ast.CondStatement{
-            Conditions: {
-                &ast.CallStatement{
-                    Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
-                    Args: {
-                        &ast.IntStatement{Value:1},
-                        &ast.IntStatement{Value:1},
+            Expressions: {
+                {
+                    Condition: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                        Args: {
+                            &ast.IntStatement{Value:1},
+                            &ast.IntStatement{Value:1},
+                        },
                     },
-                }:  &ast.StringStatement{Value:"1 is equal"},
-                &ast.CallStatement{
-                    Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
-                    Args: {
-                        &ast.IntStatement{Value:2},
-                        &ast.IntStatement{Value:1},
+                    Body: &ast.StringStatement{Value:"1 is equal"},
+                },
+                {
+                    Condition: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                        Args: {
+                            &ast.IntStatement{Value:2},
+                            &ast.IntStatement{Value:1},
+                        },
                     },
-                }:                              &ast.StringStatement{Value:"2 is smaller than 1"},
-                &ast.BoolStatement{Value:true}: &ast.StringStatement{Value:"Always true"},
+                    Body: &ast.StringStatement{Value:"2 is smaller than 1"},
+                },
+                {
+                    Condition: &ast.BoolStatement{Value:true},
+                    Body:      &ast.StringStatement{Value:"Always true"},
+                },
             },
         },
         &ast.EmptyStatement{},

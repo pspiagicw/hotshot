@@ -53,8 +53,27 @@ func (w WhileStatement) Children() []tree.Node {
 	}
 }
 
+type ConditionExpression struct {
+	Condition Statement
+	Body      Statement
+}
+
+func (c ConditionExpression) String() string {
+	return tree.SprintHrn(c)
+}
+func (c ConditionExpression) Data() interface{} {
+	return "exp"
+}
+
+func (c ConditionExpression) Children() []tree.Node {
+	return []tree.Node{
+		c.Condition,
+		c.Body,
+	}
+}
+
 type CondStatement struct {
-	Conditions map[Statement]Statement
+	Expressions []ConditionExpression
 }
 
 func (c CondStatement) String() string {
@@ -66,9 +85,9 @@ func (c CondStatement) Data() interface{} {
 func (c CondStatement) Children() []tree.Node {
 	value := []tree.Node{}
 
-	for condition, body := range c.Conditions {
-		value = append(value, condition)
-		value = append(value, body)
+	for _, expression := range c.Expressions {
+		value = append(value, expression)
 	}
+
 	return value
 }
