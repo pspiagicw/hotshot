@@ -72,7 +72,7 @@ func (s String) String() string {
 	return s.Value
 }
 
-type BuiltinFunc func(args ...Object) Object
+type BuiltinFunc func(args []ast.Statement, evalFunc func(node ast.Statement) Object, env *Environment) Object
 
 type Builtin struct {
 	Fn BuiltinFunc

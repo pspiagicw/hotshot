@@ -33,8 +33,6 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return &object.Boolean{Value: node.Value}
 	case *ast.IdentStatement:
 		return evalIdent(node, env)
-	case *ast.AssignmentStatement:
-		return e.applyAssignment(node, env)
 	case *ast.IfStatement:
 		return e.evalIfStatement(node, env)
 	case *ast.WhileStatement:
@@ -163,14 +161,15 @@ func (e *Evaluator) evalProgram(statements *ast.Program, env *object.Environment
 
 	return results[len(results)-1]
 }
-func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
 
-	value := e.Eval(node.Value, env)
-
-	env.Set(node.Name.TokenValue, value)
-
-	return object.Null{}
-}
+// func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
+//
+//		value := e.Eval(node.Value, env)
+//
+//		env.Set(node.Name.TokenValue, value)
+//
+//		return object.Null{}
+//	}
 func (e *Evaluator) evalStatements(args []ast.Statement, env *object.Environment) []object.Object {
 	evals := []object.Object{}
 
@@ -203,15 +202,16 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 		return e.evalUserFunc(node, env)
 	}
 
-	evals := e.evalStatements(node.Args, env)
-
 	v, ok := fn.(*object.Builtin)
 
 	if !ok {
 		return e.createError("INTERNAL: Could't initalize builtin function")
 	}
 
-	value := v.Fn(evals...)
+	evalFunc := func(node ast.Statement) object.Object {
+		return e.Eval(node, env)
+	}
+	value := v.Fn(node.Args, evalFunc, env)
 
 	if value.Type() == object.ERROR_OBJ {
 		v, ok := value.(*object.Error)

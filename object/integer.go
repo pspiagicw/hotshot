@@ -1,16 +1,21 @@
 package object
 
-func multiplyFunc(args ...Object) Object {
+import "github.com/pspiagicw/hotshot/ast"
+
+type EvalFunc func(ast.Statement) Object
+
+func multiplyFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) == 0 {
 		return createError("No arguments given to MULTIPLY function!")
 	}
 
 	result := 1
 	for _, arg := range args {
-		v, ok := arg.(*Integer)
+		value := evalFunc(arg)
+		v, ok := value.(*Integer)
 
 		if !ok {
-			return createError("MULTIPLY function expects Integer, found %v", arg.Type())
+			return createError("MULTIPLY function expects Integer, found %v", value.Type())
 		}
 
 		result *= v.Value
@@ -21,13 +26,13 @@ func multiplyFunc(args ...Object) Object {
 	}
 
 }
-func divideFunc(args ...Object) Object {
+func divideFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 
 	if len(args) == 0 {
 		return createError("No arguments given to DIVIDE function!")
 	}
 
-	f := args[0]
+	f := evalFunc(args[0])
 
 	v, ok := f.(*Integer)
 
@@ -37,10 +42,11 @@ func divideFunc(args ...Object) Object {
 
 	result := v.Value
 	for _, arg := range args[1:] {
-		v, ok := arg.(*Integer)
+		value := evalFunc(arg)
+		v, ok := value.(*Integer)
 
 		if !ok {
-			return createError("DIVIDE function expects Integer, found %v", arg.Type())
+			return createError("DIVIDE function expects Integer, found %v", value.Type())
 		}
 
 		result /= v.Value
@@ -50,13 +56,13 @@ func divideFunc(args ...Object) Object {
 		Value: result,
 	}
 }
-func minusFunc(args ...Object) Object {
+func minusFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 
 	if len(args) == 0 {
 		return createError("No arguments given to MINUS function!")
 	}
 
-	f := args[0]
+	f := evalFunc(args[0])
 
 	v, ok := f.(*Integer)
 
@@ -66,10 +72,11 @@ func minusFunc(args ...Object) Object {
 
 	result := v.Value
 	for _, arg := range args[1:] {
-		v, ok := arg.(*Integer)
+		value := evalFunc(arg)
+		v, ok := value.(*Integer)
 
 		if !ok {
-			return createError("MINUS function expects Integer, found %v", arg.Type())
+			return createError("MINUS function expects Integer, found %v", value.Type())
 		}
 
 		result -= v.Value
@@ -80,7 +87,7 @@ func minusFunc(args ...Object) Object {
 	}
 }
 
-func addFunc(args ...Object) Object {
+func addFunc(args []ast.Statement, evalFunc func(node ast.Statement) Object, env *Environment) Object {
 
 	if len(args) == 0 {
 		return createError("No arguments given to ADD function!")
@@ -88,10 +95,12 @@ func addFunc(args ...Object) Object {
 
 	result := 0
 	for _, arg := range args {
-		v, ok := arg.(*Integer)
+
+		value := evalFunc(arg)
+		v, ok := value.(*Integer)
 
 		if !ok {
-			return createError("ADD function expects Integer, found %v", arg.Type())
+			return createError("ADD function expects Integer, found %v", value.Type())
 		}
 
 		result += v.Value
@@ -102,19 +111,21 @@ func addFunc(args ...Object) Object {
 	}
 
 }
-func gtFunc(args ...Object) Object {
+func gtFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("GT function needs 2 arguments!")
 	}
 
-	f, ok := args[0].(*Integer)
+	left := evalFunc(args[0])
+	f, ok := left.(*Integer)
 	if !ok {
-		return createError("GT function expects Integer, found %v", args[0].Type())
+		return createError("GT function expects Integer, found %v", left.Type())
 	}
 
-	s, ok := args[1].(*Integer)
+	right := evalFunc(args[1])
+	s, ok := right.(*Integer)
 	if !ok {
-		return createError("GT function expects Integer, found %v", args[1].Type())
+		return createError("GT function expects Integer, found %v", right.Type())
 	}
 
 	return &Boolean{
@@ -122,19 +133,21 @@ func gtFunc(args ...Object) Object {
 	}
 
 }
-func ltFunc(args ...Object) Object {
+func ltFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("LT function needs 2 arguments!")
 	}
 
-	f, ok := args[0].(*Integer)
+	left := evalFunc(args[0])
+	f, ok := left.(*Integer)
 	if !ok {
-		return createError("LT function expects Integer, found %v", args[1].Type())
+		return createError("LT function expects Integer, found %v", left.Type())
 	}
 
-	s, ok := args[1].(*Integer)
+	right := evalFunc(args[1])
+	s, ok := right.(*Integer)
 	if !ok {
-		return createError("LT function expects Integer, found %v", args[1].Type())
+		return createError("LT function expects Integer, found %v", right.Type())
 	}
 
 	return &Boolean{
@@ -142,12 +155,15 @@ func ltFunc(args ...Object) Object {
 	}
 
 }
-func equalFunc(args ...Object) Object {
+func equalFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("EQ function expects 2 arguments!")
 	}
 
-	if args[0].Type() == args[1].Type() && args[0].String() == args[1].String() {
+	left := evalFunc(args[0])
+	right := evalFunc(args[1])
+
+	if left.Type() == right.Type() && left.String() == right.String() {
 		return &Boolean{
 			Value: true,
 		}
@@ -158,19 +174,21 @@ func equalFunc(args ...Object) Object {
 	}
 
 }
-func modFunc(args ...Object) Object {
+func modFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("MOD function expects 2 arguments")
 	}
 
-	f, ok := args[0].(*Integer)
+	left := evalFunc(args[0])
+	f, ok := left.(*Integer)
 	if !ok {
-		return createError("MOD function expects Integer, found %v", args[0].Type())
+		return createError("MOD function expects Integer, found %v", left.Type())
 	}
 
-	s, ok := args[1].(*Integer)
+	right := evalFunc(args[1])
+	s, ok := right.(*Integer)
 	if !ok {
-		return createError("MOD function expects Integer, found %v", args[1].Type())
+		return createError("MOD function expects Integer, found %v", right.Type())
 	}
 
 	return &Integer{

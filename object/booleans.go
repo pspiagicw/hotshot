@@ -1,18 +1,22 @@
 package object
 
-func orFunc(args ...Object) Object {
+import "github.com/pspiagicw/hotshot/ast"
+
+func orFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("OR function expects 2 arguments")
 	}
 
-	f, ok := args[0].(*Boolean)
+	left := evalFunc(args[0])
+	f, ok := left.(*Boolean)
 	if !ok {
-		return createError("OR function expects Boolean, found %v", args[0].Type())
+		return createError("OR function expects Boolean, found %v", left.Type())
 	}
 
-	s, ok := args[1].(*Boolean)
+	right := evalFunc(args[1])
+	s, ok := right.(*Boolean)
 	if !ok {
-		return createError("OR function expects Boolean, found %v", args[0].Type())
+		return createError("OR function expects Boolean, found %v", right.Type())
 	}
 
 	return &Boolean{
@@ -20,19 +24,21 @@ func orFunc(args ...Object) Object {
 	}
 
 }
-func andFunc(args ...Object) Object {
+func andFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 2 {
 		return createError("AND function expects 2 arguments")
 	}
 
-	f, ok := args[0].(*Boolean)
+	left := evalFunc(args[0])
+	f, ok := left.(*Boolean)
 	if !ok {
-		return createError("AND function expects Boolean, found %v", args[0].Type())
+		return createError("AND function expects Boolean, found %v", left.Type())
 	}
 
-	s, ok := args[1].(*Boolean)
+	right := evalFunc(args[1])
+	s, ok := right.(*Boolean)
 	if !ok {
-		return createError("AND function expects Boolean, found %v", args[0].Type())
+		return createError("AND function expects Boolean, found %v", right.Type())
 	}
 
 	return &Boolean{
@@ -40,14 +46,15 @@ func andFunc(args ...Object) Object {
 	}
 
 }
-func notFunc(args ...Object) Object {
+func notFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) != 1 {
 		return createError("NOT function expects 1 argument")
 	}
 
-	v, ok := args[0].(*Boolean)
+	value := evalFunc(args[0])
+	v, ok := value.(*Boolean)
 	if !ok {
-		return createError("NOT function expects Boolean, found %v", args[0].Type())
+		return createError("NOT function expects Boolean, found %v", value.Type())
 	}
 
 	return &Boolean{

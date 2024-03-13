@@ -340,9 +340,14 @@
 [TestValidStatement/(let_someVar_3) - 1]
 &ast.Program{
     Statements: {
-        &ast.AssignmentStatement{
-            Name:  &token.Token{TokenType:"IDENT", TokenValue:"someVar"},
-            Value: &ast.IntStatement{Value:3},
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"let"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"someVar"},
+                },
+                &ast.IntStatement{Value:3},
+            },
         },
         &ast.EmptyStatement{},
     },
@@ -470,6 +475,21 @@
                     Condition: &ast.BoolStatement{Value:true},
                     Body:      &ast.StringStatement{Value:"Always true"},
                 },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidOp/(let_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"let"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
             },
         },
         &ast.EmptyStatement{},

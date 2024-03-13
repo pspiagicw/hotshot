@@ -3,6 +3,8 @@ package object
 import (
 	"fmt"
 	"strings"
+
+	"github.com/pspiagicw/hotshot/ast"
 )
 
 func getBuiltins() map[string]*Builtin {
@@ -49,14 +51,39 @@ func getBuiltins() map[string]*Builtin {
 		"mod": &Builtin{
 			Fn: modFunc,
 		},
+		"let": &Builtin{
+			Fn: letFunc,
+		},
 	}
 }
-func doFunc(args ...Object) Object {
+func letFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
+	if len(args) != 2 {
+		return createError("LET function expects 2 arguments.")
+	}
+
+	nameIdent, ok := args[0].(*ast.IdentStatement)
+	if !ok {
+		return createError("LET expects IDENT to be first argument!")
+	}
+
+	value := evalFunc(args[1])
+
+	env.Set(nameIdent.Value.TokenValue, value)
+
+	return Null{}
+}
+func doFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	length := len(args)
 
-	return args[length-1]
+	evals := []Object{}
+
+	for _, arg := range args {
+		evals = append(evals, evalFunc(arg))
+	}
+
+	return evals[length-1]
 }
-func lenFunc(args ...Object) Object {
+func lenFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	if len(args) == 0 {
 		return createError("No arguments given to LEN function!")
 	}
@@ -65,7 +92,8 @@ func lenFunc(args ...Object) Object {
 		return createError("LEN function only accepts 1 argument!")
 	}
 
-	switch v := args[0].(type) {
+	value := evalFunc(args[0])
+	switch v := value.(type) {
 	case *String:
 		return &Integer{
 			Value: len(v.Value),
@@ -74,13 +102,13 @@ func lenFunc(args ...Object) Object {
 
 	return createError("LEN function can't find length of that type!")
 }
-func printFunc(args ...Object) Object {
+func printFunc(args []ast.Statement, evalFunc func(ast.Statement) Object, env *Environment) Object {
 	var output strings.Builder
 
 	output.WriteString(" ")
 
 	for _, arg := range args {
-		output.WriteString(arg.String())
+		output.WriteString(evalFunc(arg).String())
 		output.WriteString(" ")
 	}
 
