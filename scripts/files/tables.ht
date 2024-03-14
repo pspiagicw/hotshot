@@ -5,11 +5,9 @@
 (echo (car arr)) ; Should print 1 ;
 (echo (cdr arr)) ; Should print [2 3] ;
 
-(echo (list 1 2 "something" 1)) ; Should print [1 2 "something"] ;
+(echo (list 1 2 "something" 1)) ; Should print [1 2 "something"1 ] ;
 
-(let arr1 {1 2 3 4})
-(let arr2 {5 6 7 8})
-
+(let arr1 {2 2 3 1 1})
 
 (echo (extend arr1 arr2)) ; Should print [1 2 3 4 5 6 7 8] ;
 (echo (len arr1)) ; Should print 4 ;

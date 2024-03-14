@@ -28,22 +28,44 @@ func (f CallStatement) Children() []tree.Node {
 	return nodes
 }
 
-// type AssignmentStatement struct {
-// 	Name  *token.Token
-// 	Value Statement
-// }
-//
-// func (a AssignmentStatement) String() string {
-// 	return tree.SprintHrn(a)
-// }
-// func (a AssignmentStatement) Data() interface{} {
-// 	return fmt.Sprintf("$(%s)", a.Name.TokenValue)
-// }
-// func (a AssignmentStatement) Children() []tree.Node {
-// 	return []tree.Node{
-// 		a.Value,
-// 	}
-// }
+type AssertStatement struct {
+	Left    Statement
+	Right   Statement
+	Message *token.Token
+}
+
+func (a AssertStatement) String() string {
+	return tree.SprintHrn(a)
+}
+func (a AssertStatement) Data() interface{} {
+	return fmt.Sprintf("assert")
+}
+func (a AssertStatement) Children() []tree.Node {
+	return []tree.Node{
+		a.Left,
+		a.Right,
+		&StringStatement{
+			Value: a.Message.String(),
+		},
+	}
+}
+
+type AssignmentStatement struct {
+	Name  *token.Token
+	Value Statement
+}
+
+func (a AssignmentStatement) String() string {
+	return tree.SprintHrn(a)
+}
+func (a AssignmentStatement) Data() interface{} {
+	return fmt.Sprintf("$(%s)", a.Name.TokenValue)
+}
+func (a AssignmentStatement) Children() []tree.Node {
+	return []tree.Node{
+		a.Value,
+	}
+}
 
 type FunctionStatement struct {
 	Name *token.Token

@@ -82,21 +82,21 @@ func (p *Parser) parseIdentStatement() ast.Statement {
 	}
 }
 
-//	func (p *Parser) parseAssignment() ast.Statement {
-//		st := &ast.AssignmentStatement{}
-//
-//		p.expectedTokenIs(token.IDENT)
-//
-//		st.Name = p.curToken
-//		st.Value = p.parseStatement()
-//
-//		p.expectedTokenIs(token.RPAREN)
-//
-//		return st
-//	}
+func (p *Parser) parseAssignment() ast.Statement {
+	st := &ast.AssignmentStatement{}
+
+	p.expectedTokenIs(token.IDENT)
+
+	st.Name = p.curToken
+	st.Value = p.parseStatement()
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+}
 func (p *Parser) expectedTokenIs(ex token.TokenType) {
 	if p.peekToken.TokenType != ex {
-		p.registerError("Expected a ident, got %s", p.curToken.TokenType)
+		p.registerError("Expected a %s, got %s", ex, p.curToken.TokenType)
 	}
 	p.advance()
 }
@@ -210,14 +210,30 @@ func (p *Parser) parseCondStatement() ast.Statement {
 
 	return st
 }
+func (p *Parser) parseAssertStatement() ast.Statement {
+	st := &ast.AssertStatement{}
+
+	st.Left = p.parseStatement()
+
+	st.Right = p.parseStatement()
+
+	p.expectedTokenIs(token.STRING)
+
+	st.Message = p.curToken
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+
+}
 
 func (p *Parser) parseComplexStatement() ast.Statement {
 	p.advance()
 	switch p.curToken.TokenType {
 	case token.RPAREN:
 		return &ast.EmptyStatement{}
-	// case token.LET:
-	// 	return p.parseAssignment()
+	case token.LET:
+		return p.parseAssignment()
 	case token.FN:
 		return p.parseFunctionDec()
 	case token.IF:
@@ -228,6 +244,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseLambdaStatement()
 	case token.COND:
 		return p.parseCondStatement()
+	case token.ASSERT:
+		return p.parseAssertStatement()
 	default:
 		return p.parseFunctionCall()
 	}

@@ -205,12 +205,16 @@ func (l *Lexer) parseKeyword(identifier string) *token.Token {
 		keyword.TokenType = token.LAMBDA
 	case "cond":
 		keyword.TokenType = token.COND
+	case "let":
+		keyword.TokenType = token.LET
+	case "assert":
+		keyword.TokenType = token.ASSERT
 	}
 	return &keyword
 }
 func (l *Lexer) extractIdentifier() string {
 	identifier := ""
-	for l.isLetter(l.currentChar) || l.currentChar == "-" {
+	for l.isLetter(l.currentChar) || l.currentChar == "-" || l.isDigit(l.currentChar) {
 		identifier += l.currentChar
 		l.advance()
 	}

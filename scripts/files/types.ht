@@ -1,8 +1,8 @@
 (let a 1)
 
-(echo (numberp 1))
-(echo (stringp "something"))
-(echo (tablep {}))
+(echo (assert true (numberp 1) "numberp failed"))
+(echo (assert true (stringp "something") "stringp failed!"))
+(echo (assert true (tablep {}) "tablep failed!"))
 (fn hello() (echo "hello"))
 
-(echo (functionp hello))
+(echo (assert true (functionp hello) "functionp failed!"))

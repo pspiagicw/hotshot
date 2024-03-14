@@ -163,15 +163,15 @@ func TestValidOp(t *testing.T) {
 		"(> 1 2)":  true,
 		// Will fail in execution, but pass in parser.
 		// Can be fixed with AST passes.
-		"(let 1 2)": true,
 
-		"(% 1 2)": false,
-		"(# 1 2)": false,
-		"(; 1 2)": false,
-		"(@ 1 2)": false,
-		"(, 1 2)": false,
-		"(! 1 2)": false,
-		"(? 1 2)": false,
+		"(let 1 2)": false,
+		"(% 1 2)":   false,
+		"(# 1 2)":   false,
+		"(; 1 2)":   false,
+		"(@ 1 2)":   false,
+		"(, 1 2)":   false,
+		"(! 1 2)":   false,
+		"(? 1 2)":   false,
 	}
 
 	for input, expectedResult := range tt {

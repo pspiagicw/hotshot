@@ -8,7 +8,7 @@ import (
 
 func TestKeywords(t *testing.T) {
 
-	input := "if true false while case fn lambda cond"
+	input := "if true false while case fn lambda cond let assert"
 
 	expectedTokens := []token.Token{
 		{
@@ -42,6 +42,14 @@ func TestKeywords(t *testing.T) {
 		{
 			TokenType:  token.COND,
 			TokenValue: "cond",
+		},
+		{
+			TokenType:  token.LET,
+			TokenValue: "let",
+		},
+		{
+			TokenType:  token.ASSERT,
+			TokenValue: "assert",
 		},
 		{
 			TokenType:  token.EOF,

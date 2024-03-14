@@ -143,9 +143,44 @@
 ---
 
 [TestScripts/palindrome.ht - 1]
+ [!!] Runtime Error: ERROR: No function named 'concat'
+
 
 ---
 
 [TestScripts/linear-search.ht - 1]
+
+---
+
+[TestScripts/test.ht - 1]
+
+---
+
+[TestScripts/types.ht - 1]
+ true 
+ true 
+ true 
+ true 
+
+---
+
+[TestScripts/numbers.ht - 1]
+ [!!] Runtime Error: ERROR: No function named 'sqrt'
+
+
+---
+
+[TestScripts/strings.ht - 1]
+ [!!] Runtime Error: ERROR: No function named 'concat'
+
+
+---
+
+[TestScripts/tables.ht - 1]
+ 8 
+ 1 
+ [2 3] 
+ [!!] Runtime Error: ERROR: No function named 'list'
+
 
 ---

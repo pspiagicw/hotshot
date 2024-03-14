@@ -571,14 +571,9 @@
 [TestEval/(let_name_"hotshot")_name - 1]
 &ast.Program{
     Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"let"},
-            Args: {
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
-                },
-                &ast.StringStatement{Value:"hotshot"},
-            },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"name"},
+            Value: &ast.StringStatement{Value:"hotshot"},
         },
         &ast.IdentStatement{
             Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
@@ -591,17 +586,12 @@
 [TestEval/(let_a_(lambda_()_4))_(a) - 1]
 &ast.Program{
     Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"let"},
-            Args: {
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.LambdaStatement{
+                Args: {
                 },
-                &ast.LambdaStatement{
-                    Args: {
-                    },
-                    Body: &ast.IntStatement{Value:4},
-                },
+                Body: &ast.IntStatement{Value:4},
             },
         },
         &ast.CallStatement{
@@ -616,14 +606,9 @@
 [TestEval/(let_number_5)_number - 1]
 &ast.Program{
     Statements: {
-        &ast.CallStatement{
-            Op:   &token.Token{TokenType:"IDENT", TokenValue:"let"},
-            Args: {
-                &ast.IdentStatement{
-                    Value: &token.Token{TokenType:"IDENT", TokenValue:"number"},
-                },
-                &ast.IntStatement{Value:5},
-            },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"number"},
+            Value: &ast.IntStatement{Value:5},
         },
         &ast.IdentStatement{
             Value: &token.Token{TokenType:"IDENT", TokenValue:"number"},
@@ -718,6 +703,38 @@
                 },
                 &ast.IntStatement{Value:2},
                 &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_a_{})_(push_a_2)_(pop_a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.TableStatement{
+                Elements: {
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"push"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"pop"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
             },
         },
         &ast.EmptyStatement{},

@@ -1,6 +1,6 @@
 (let number 1)
 
-(echo (if true "Always true!"))
+(echo (assert (if true "Always true!") "Always true!" "If consequents failed!"))
 
 (echo (if false "Something needs to be here"))
 

@@ -29,6 +29,8 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalFunction(node, env)
 	case *ast.EmptyStatement:
 		return object.Null{}
+	case *ast.AssignmentStatement:
+		return e.applyAssignment(node, env)
 	case *ast.BoolStatement:
 		return &object.Boolean{Value: node.Value}
 	case *ast.IdentStatement:
@@ -45,10 +47,22 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalTableStatement(node, env)
 	case *ast.CondStatement:
 		return e.evalCondStatement(node, env)
+	case *ast.AssertStatement:
+		return e.evalAssertStatement(node, env)
 	}
 	return e.createError("Evaluation for statement can't be done!")
 }
 
+func (e *Evaluator) evalAssertStatement(node *ast.AssertStatement, env *object.Environment) object.Object {
+	left := e.Eval(node.Left, env)
+	right := e.Eval(node.Right, env)
+
+	if left.Type() != right.Type() || left.String() != right.String() {
+		return e.createError("Assertion Error: %s", node.Message.TokenValue)
+	}
+
+	return left
+}
 func (e *Evaluator) evalCondStatement(node *ast.CondStatement, env *object.Environment) object.Object {
 
 	for _, exp := range node.Expressions {
@@ -162,14 +176,14 @@ func (e *Evaluator) evalProgram(statements *ast.Program, env *object.Environment
 	return results[len(results)-1]
 }
 
-// func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
-//
-//		value := e.Eval(node.Value, env)
-//
-//		env.Set(node.Name.TokenValue, value)
-//
-//		return object.Null{}
-//	}
+func (e *Evaluator) applyAssignment(node *ast.AssignmentStatement, env *object.Environment) object.Object {
+
+	value := e.Eval(node.Value, env)
+
+	env.Set(node.Name.TokenValue, value)
+
+	return object.Null{}
+}
 func (e *Evaluator) evalStatements(args []ast.Statement, env *object.Environment) []object.Object {
 	evals := []object.Object{}
 
@@ -202,16 +216,15 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 		return e.evalUserFunc(node, env)
 	}
 
+	evals := e.evalStatements(node.Args, env)
+
 	v, ok := fn.(*object.Builtin)
 
 	if !ok {
 		return e.createError("INTERNAL: Could't initalize builtin function")
 	}
 
-	evalFunc := func(node ast.Statement) object.Object {
-		return e.Eval(node, env)
-	}
-	value := v.Fn(node.Args, evalFunc, env)
+	value := v.Fn(evals)
 
 	if value.Type() == object.ERROR_OBJ {
 		v, ok := value.(*object.Error)

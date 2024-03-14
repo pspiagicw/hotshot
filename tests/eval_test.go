@@ -69,6 +69,8 @@ func TestEval(t *testing.T) {
 
 		`(fn arithmetic(op x y) (op x y))
             (arithmetic (lambda (x y) (+ x y)) 2 1)`: createInt(3),
+
+		`(let a {}) (push a 2) (pop a)`: createInt(2),
 	}
 
 	for input, expectedResult := range tt {

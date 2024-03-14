@@ -1,7 +1,7 @@
-(concat "Hello" "World")
-(string 4)
-(string true)
-(string {1 2 3 4})
+(echo (assert "HelloWorld" (concat "Hello" "World") "concat failed!"))
+(echo (assert "4" (string 4) "string failed!"))
+(echo (assert true (string true) "string failed!"))
+(echo (assert "[1 2 3 4]" (string {1 2 3 4}) "string failed!"))
 
 
 (getchar "Hello" 0)

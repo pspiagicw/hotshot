@@ -48,4 +48,6 @@ const (
 	FN     = "FN"
 	LAMBDA = "LAMBDA"
 	COND   = "COND"
+	LET    = "LET"
+	ASSERT = "ASSERT"
 )
