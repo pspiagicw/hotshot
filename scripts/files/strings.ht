@@ -1,0 +1,15 @@
+(concat "Hello" "World")
+(string 4)
+(string true)
+(string {1 2 3 4})
+
+
+(getchar "Hello" 0)
+(substring "Hello" 1 4)
+(len "Hello")
+
+(echo (format "Hello %s" "pspiagicw"))
+
+(echo (format "Number of errors: %d" 3))
+(echo (lowercase "Make this lowercase"))
+(echo (uppercase "Make this uppercase"))

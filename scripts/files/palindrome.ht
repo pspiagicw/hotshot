@@ -1,0 +1,15 @@
+(fn reverse-string (element)
+    (do
+      (if (not (stringp element)) (raise "Argument not string"))
+      (let returnValue "")
+      (let length (len element))
+      (while (> length -1)
+             (do
+               (let returnValue (concat returnValue (getchar element length)))
+               (dec length)
+               ))
+      returnValue))
+
+(echo (reverse-string "desrever si gnirts siht"))
+(echo (= "this" (reverse-string "this")))
+(echo (= "sis" (reverse-string "sis")))
