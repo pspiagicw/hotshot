@@ -1,6 +1,10 @@
 package object
 
-import "github.com/pspiagicw/hotshot/ast"
+import (
+	"math"
+
+	"github.com/pspiagicw/hotshot/ast"
+)
 
 type EvalFunc func(ast.Statement) Object
 
@@ -192,4 +196,79 @@ func modFunc(args []Object) Object {
 	return &Integer{
 		Value: f.Value % s.Value,
 	}
+}
+func sqrtFunc(args []Object) Object {
+	err := assertArity("SQRT", args, 1)
+	if err != nil {
+		return err
+	}
+
+	value, ok := args[0].(*Integer)
+	if !ok {
+		return createError("SQRT expects Integer, found %v", args[0].Type())
+	}
+
+	return &Integer{
+		Value: int(math.Sqrt(float64(value.Value))),
+	}
+}
+func expFunc(args []Object) Object {
+	err := assertArity("EXP", args, 2)
+	if err != nil {
+		return err
+	}
+
+	base, ok := args[0].(*Integer)
+	if !ok {
+		return createError("EXP expects Integer, found %v", args[0].Type())
+	}
+
+	exp, ok := args[1].(*Integer)
+	if !ok {
+		return createError("EXP expects Integer, found %v", args[1].Type())
+	}
+
+	return &Integer{
+		Value: int(math.Pow(float64(base.Value), float64(exp.Value))),
+	}
+}
+func minFunc(args []Object) Object {
+	err := assertArgs("MIN", args)
+	if err != nil {
+		return err
+	}
+
+	min := &Integer{Value: math.MaxInt}
+	for _, arg := range args {
+		i, ok := arg.(*Integer)
+		if !ok {
+			return createError("MIN expects Integer, got %v", arg.Type())
+		}
+
+		if i.Value < min.Value {
+			min = i
+		}
+	}
+
+	return min
+}
+func maxFunc(args []Object) Object {
+	err := assertArgs("MAX", args)
+	if err != nil {
+		return err
+	}
+
+	max := &Integer{Value: math.MinInt}
+	for _, arg := range args {
+		i, ok := arg.(*Integer)
+		if !ok {
+			return createError("MAX expects Integer, got %v", arg.Type())
+		}
+
+		if i.Value > max.Value {
+			max = i
+		}
+	}
+
+	return max
 }

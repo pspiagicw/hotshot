@@ -22,6 +22,10 @@ func lenFunc(args []Object) Object {
 		return &Integer{
 			Value: len(v.Value),
 		}
+	case *Table:
+		return &Integer{
+			Value: len(v.Elements),
+		}
 	}
 
 	return createError("LEN function can't find length of that type!")

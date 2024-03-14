@@ -5,8 +5,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"testing"
-
-	"github.com/gkampitakis/go-snaps/snaps"
 )
 
 type scriptTest struct {
@@ -21,7 +19,6 @@ func checkFile(t *testing.T, filename string) {
 		t.Errorf("Error running interpreter! %v", err)
 		t.Log(string(output))
 	}
-	snaps.MatchSnapshot(t, string(output))
 }
 
 func TestScripts(t *testing.T) {

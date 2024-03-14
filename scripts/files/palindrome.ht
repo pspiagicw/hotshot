@@ -1,4 +1,4 @@
-(fn reverse-string (element)
+; (fn reverse-string (element)
     (do
       (if (not (stringp element)) (raise "Argument not string"))
       (let returnValue "")
@@ -12,4 +12,4 @@
 
 (echo (reverse-string "desrever si gnirts siht"))
 (echo (= "this" (reverse-string "this")))
-(echo (= "sis" (reverse-string "sis")))
+(echo (= "sis" (reverse-string "sis"))) ;

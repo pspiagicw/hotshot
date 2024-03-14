@@ -109,3 +109,22 @@ func listFunc(args []Object) Object {
 		Elements: args,
 	}
 }
+func reverseFunc(args []Object) Object {
+	err := assertArgs("REVERSE", args)
+	if err != nil {
+		return err
+	}
+
+	value := args[0].(*Table)
+
+	reverseElements := []Object{}
+
+	length := len(value.Elements)
+
+	for i := length - 1; i >= 0; i-- {
+		reverseElements = append(reverseElements, value.Elements[i])
+	}
+	return &Table{
+		Elements: reverseElements,
+	}
+}

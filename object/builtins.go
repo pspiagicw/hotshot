@@ -33,6 +33,14 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "cdr", cdrFunc)
 	registerBuiltin(builtins, "list", listFunc)
 	registerBuiltin(builtins, "extend", listFunc)
+	registerBuiltin(builtins, "reverse", reverseFunc)
 
+	registerBuiltin(builtins, "sqrt", sqrtFunc)
+	registerBuiltin(builtins, "exp", expFunc)
+	registerBuiltin(builtins, "min", minFunc)
+	registerBuiltin(builtins, "max", maxFunc)
+
+	registerBuiltin(builtins, "concat", concatFunc)
+	registerBuiltin(builtins, "string", stringFunc)
 	return builtins
 }
