@@ -19,8 +19,10 @@ func checkFile(t *testing.T, filename string) {
 	output, err := cmd.Output()
 	if err != nil {
 		t.Errorf("Error running interpreter! %v", err)
+		t.Log(string(output))
+	} else {
+		snaps.MatchSnapshot(t, string(output))
 	}
-	snaps.MatchSnapshot(t, string(output))
 }
 
 func TestScripts(t *testing.T) {
