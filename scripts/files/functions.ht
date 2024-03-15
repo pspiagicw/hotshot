@@ -1,18 +1,18 @@
 ; Declare a function using 'fn' ; 
 
-(fn hello () (echo "Hello, hotshooter!"))
+(fn hello () "Hello, hotshooter!")
 
-(hello)
+(assert (hello) "Hello, hotshooter!" "function failed!")
 
 ; Functions can have arguments ;
 
-(fn helloName (name) (echo "Hello," name))
+(fn helloName (name) (concat "Hello " name))
 
-(helloName "pspiagicw")
+(assert "Hello pspiagicw" (helloName "pspiagicw") "function with argument failed")
 
 ; use 'lambda' to declare a lambda. Meaning, functions are 'first-class'!;
 
-(let name (lambda (name) (echo "Hello" name)))
+(let name (lambda (name) (concat "Hello " name)))
 (name "hotshooter!")
 
 ; You can give functions as arguments ; 

@@ -128,3 +128,19 @@ func reverseFunc(args []Object) Object {
 		Elements: reverseElements,
 	}
 }
+func lastFunc(args []Object) Object {
+	err := assertArity("LAST", args, 1)
+	if err != nil {
+		return err
+	}
+
+	table := args[0].(*Table)
+
+	length := len(table.Elements)
+
+	if length == 0 {
+		return createError("Attempt to get last value from empty table")
+	}
+
+	return table.Elements[length-1]
+}

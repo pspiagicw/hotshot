@@ -4,8 +4,8 @@
         ((= (mod n 5) 0) "Buzz")
         (true n)))
 
-(echo (fizzbuzz 3))
-(echo (fizzbuzz 5))
-(echo (fizzbuzz 15))
-(echo (fizzbuzz 1))
+(assert (fizzbuzz 3) "Fizz" "fizz failed")
+(assert (fizzbuzz 5) "Buzz" "buzz failed")
+(assert (fizzbuzz 15) "FizzBuzz" "fizzbuzz failed")
+(assert (fizzbuzz 1) 1 "fizz-buzz failed")
 

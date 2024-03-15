@@ -1,13 +1,7 @@
-; Old code
-(fn factorial (n)
-    (if (< n 2)
-      1
-      (* n (factorial (- n 1))))) ;
-
 (fn factorial (n)
   (cond ((< n 2) 1)
         (true (* n (factorial (- n 1))))))
 
 
-(echo (factorial 5))
-(echo (factorial 10))
+(assert (factorial 5) 120 "factorial failed!")
+(assert (factorial 10) 3628800 "factorial failed!")

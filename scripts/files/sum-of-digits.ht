@@ -3,6 +3,6 @@
       n
       (+ (mod n 10) (sum (/ n 10)))))
 
-(echo (sum 10))
-(echo (sum 19))
-(echo (sum 12345))
+(assert (sum 10) 1 "sum of digits failed")
+(assert (sum 19) 10 "sum of digits failed")
+(assert (sum 12345) 15 "sum of digits failed")

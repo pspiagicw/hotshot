@@ -28,3 +28,28 @@ func stringFunc(args []Object) Object {
 		Value: args[0].String(),
 	}
 }
+func getCharFunc(args []Object) Object {
+	err := assertArity("GETCHAR", args, 2)
+	if err != nil {
+		return err
+	}
+
+	strValue, ok := args[0].(*String)
+
+	if !ok {
+		return createError("GETCHAR expected string, got %v", args[0].Type())
+	}
+
+	indexValue, ok := args[1].(*Integer)
+	if !ok {
+		return createError("GETCHAR expected int as index, got %v", args[1].Type())
+	}
+
+	if indexValue.Value >= len(strValue.Value) {
+		return createError("Index out of bounds")
+	}
+
+	return &String{
+		Value: string(strValue.Value[indexValue.Value]),
+	}
+}

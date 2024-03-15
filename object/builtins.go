@@ -42,5 +42,7 @@ func getBuiltins() map[string]*Builtin {
 
 	registerBuiltin(builtins, "concat", concatFunc)
 	registerBuiltin(builtins, "string", stringFunc)
+	registerBuiltin(builtins, "last", lastFunc)
+	registerBuiltin(builtins, "getchar", getCharFunc)
 	return builtins
 }
