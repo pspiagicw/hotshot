@@ -2,7 +2,6 @@ package interpreter
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/chzyer/readline"
@@ -51,32 +50,6 @@ func getInput(prompt string) string {
 	return input
 
 }
-func completeInput(input string) bool {
-	return strings.Count(input, "(") == strings.Count(input, ")")
-}
-
-func ExecuteFile(file string, debug bool) {
-
-	code := readFile(file)
-
-	program, errors := parseCode(code)
-
-	errorHandler := func(message string) {
-		goreland.LogFatal("Runtime Error: %s", message)
-	}
-
-	e := eval.NewEvaluator(errorHandler)
-
-	handleErrors(errors, true)
-
-	if debug {
-		fmt.Println(printer.PrintAST(program))
-	}
-
-	env := object.NewEnvironment()
-
-	_ = e.Eval(program, env)
-}
 
 func handleErrors(errors []error, exit bool) int {
 	if len(errors) != 0 {
@@ -99,14 +72,4 @@ func parseCode(code string) (*ast.Program, []error) {
 
 	program := p.Parse()
 	return program, p.Errors()
-}
-
-func readFile(file string) string {
-
-	contents, err := os.ReadFile(file)
-	if err != nil {
-		goreland.LogFatal("Error while reading file '%s'", file)
-	}
-
-	return string(contents)
 }

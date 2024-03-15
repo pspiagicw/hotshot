@@ -21,7 +21,7 @@ func checkFile(t *testing.T, filename string) {
 	}
 }
 
-func TestScripts(t *testing.T) {
+func TestPrograms(t *testing.T) {
 	tt := getFiles()
 
 	for _, test := range tt {
