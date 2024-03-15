@@ -1,69 +1,45 @@
 package object
 
 func pushFunc(args []Object) Object {
-	err := assertArity("PUSH", args, 2)
-	if err != nil {
+	if err := assertArity("PUSH", args, 2); err != nil {
 		return err
 	}
 
-	table := args[0]
-	if table.Type() != TABLE_OBJ {
-		return createError("Object not a table.")
+	if err := validateTable(args[0]); err != nil {
+		return err
 	}
 
-	t, ok := table.(*Table)
-	if !ok {
-		return createError("Couldn't cast object to table.")
-	}
-
+	t := args[0].(*Table)
 	value := args[1]
 
-	t.Elements = append(t.Elements, value)
+	addToTable(t, value)
 
 	return Null{}
 }
 func popFunc(args []Object) Object {
-	err := assertArity("POP", args, 1)
-	if err != nil {
+	if err := assertArity("POP", args, 1); err != nil {
 		return err
 	}
 
-	table := args[0]
-	if table.Type() != TABLE_OBJ {
-		return createError("Object not a table.")
+	if err := validateTable(args[0]); err != nil {
+		return err
 	}
 
-	t, ok := table.(*Table)
-	if !ok {
-		return createError("Couldn't cast object to table.")
-	}
+	t := args[0].(*Table)
 
-	count := len(t.Elements)
-
-	if count == 0 {
-		return createError("Attempt to pop from empty table!")
-	}
-
-	value := t.Elements[count-1]
-
-	t.Elements = t.Elements[:count-1]
-	return value
+	return popFromTable(t)
 }
+
 func carFunc(args []Object) Object {
-	err := assertArity("CAR", args, 1)
-	if err != nil {
+	if err := assertArity("CAR", args, 1); err != nil {
 		return err
 	}
 
-	table := args[0]
-	if table.Type() != TABLE_OBJ {
-		return createError("Object not a table.")
+	if err := validateTable(args[0]); err != nil {
+		return err
 	}
 
-	t, ok := table.(*Table)
-	if !ok {
-		return createError("Couldn't cast object to table.")
-	}
+	t := args[0].(*Table)
 
 	count := len(t.Elements)
 
@@ -110,9 +86,9 @@ func listFunc(args []Object) Object {
 	}
 }
 func reverseFunc(args []Object) Object {
-	err := assertArgs("REVERSE", args)
-	if err != nil {
+	if err := assertArgs("REVERSE", args); err != nil {
 		return err
+
 	}
 
 	value := args[0].(*Table)
@@ -143,4 +119,25 @@ func lastFunc(args []Object) Object {
 	}
 
 	return table.Elements[length-1]
+}
+func addToTable(t *Table, value Object) {
+	t.Elements = append(t.Elements, value)
+}
+func validateTable(object Object) Object {
+	if object.Type() != TABLE_OBJ {
+		return createError("Object not a table.")
+	}
+	return nil
+}
+func popFromTable(t *Table) Object {
+	count := len(t.Elements)
+
+	if count == 0 {
+		return createError("Attempt to pop from empty table!")
+	}
+
+	value := t.Elements[count-1]
+
+	t.Elements = t.Elements[:count-1]
+	return value
 }
