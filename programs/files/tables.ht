@@ -19,7 +19,7 @@
 
 (put arr1 2 1) ; Should put 1 in index 2 ; 
 
-(maplist (lambda (x) (echo "Element:" x)) arr1); Should print element on newlines, Return null; 
+(map (lambda (x) (echo "Element:" x)) arr1); Should print element on newlines, Return null; 
 
 (echo arr1)
 
@@ -39,8 +39,8 @@
 (maphash (lambda (key value) (echo "Key:" key "Value:" value)) names)
 
 
-(echo (minlist arr1))
-(echo (maxlist arr1))
+(echo (min arr1))
+(echo (max arr1))
 
 (echo (apply (lambda (x) (* x x)) arr1)) ; Prints [1 4 9 16] ;
 (echo (reduce (lambda (x y) (+ x y)) arr1)) ; Prints sum of array ;

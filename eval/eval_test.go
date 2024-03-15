@@ -1,11 +1,10 @@
-package tests
+package eval
 
 import (
 	"reflect"
 	"testing"
 
 	"github.com/gkampitakis/go-snaps/snaps"
-	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
@@ -104,7 +103,7 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 
 	lexer := lexer.NewLexer(input)
 	parser := parser.NewParser(lexer)
-	e := eval.NewEvaluator(func(message string) {})
+	e := NewEvaluator(func(message string) {})
 
 	ast := parser.Parse()
 	if len(parser.Errors()) != 0 {

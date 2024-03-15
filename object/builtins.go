@@ -16,17 +16,21 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "=", equalFunc)
 	registerBuiltin(builtins, "<", ltFunc)
 	registerBuiltin(builtins, ">", gtFunc)
+
 	registerBuiltin(builtins, "not", notFunc)
 	registerBuiltin(builtins, "and", andFunc)
 	registerBuiltin(builtins, "or", orFunc)
+
 	registerBuiltin(builtins, "do", doFunc)
 	registerBuiltin(builtins, "echo", printFunc)
 	registerBuiltin(builtins, "len", lenFunc)
-	registerBuiltin(builtins, "mod", modFunc)
+
 	registerBuiltin(builtins, "numberp", numberpFunc)
 	registerBuiltin(builtins, "stringp", stringpFunc)
 	registerBuiltin(builtins, "tablep", tablepFunc)
 	registerBuiltin(builtins, "functionp", functionpFunc)
+
+	registerBuiltin(builtins, "mod", modFunc)
 	registerBuiltin(builtins, "push", pushFunc)
 	registerBuiltin(builtins, "pop", popFunc)
 	registerBuiltin(builtins, "car", carFunc)

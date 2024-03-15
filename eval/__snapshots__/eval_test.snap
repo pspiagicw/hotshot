@@ -1,0 +1,743 @@
+
+[TestEval/(let_name_"hotshot")_name - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"name"},
+            Value: &ast.StringStatement{Value:"hotshot"},
+        },
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_false_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(>_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(if_true_5_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.BoolStatement{Value:true},
+            Body:      &ast.IntStatement{Value:5},
+            Else:      &ast.IntStatement{Value:2},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_hello_()_"Hello,_World") - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.StringStatement{Value:"Hello, World"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/1 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:1},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_number_5)_number - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"number"},
+            Value: &ast.IntStatement{Value:5},
+        },
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"number"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(or_true_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"or"},
+            Args: {
+                &ast.BoolStatement{Value:true},
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(or_true_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"or"},
+            Args: {
+                &ast.BoolStatement{Value:true},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(if_(=_1_2)_5_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.IntStatement{Value:5},
+            Else: &ast.IntStatement{Value:2},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_a_{})_(push_a_2)_(pop_a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.TableStatement{
+                Elements: {
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"push"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"pop"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_false_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(not_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"not"},
+            Args: {
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(or_false_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"or"},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(+_5_(-_4_5)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:5},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+                    Args: {
+                        &ast.IntStatement{Value:4},
+                        &ast.IntStatement{Value:5},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(and_false_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"and"},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(+_1_(+_1_2)_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(*_5_6) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:5},
+                &ast.IntStatement{Value:6},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_"some"_"some") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.StringStatement{Value:"some"},
+                &ast.StringStatement{Value:"some"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_"some"_"else") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.StringStatement{Value:"some"},
+                &ast.StringStatement{Value:"else"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(<_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(not_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"not"},
+            Args: {
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/() - 1]
+&ast.Program{
+    Statements: {
+        &ast.EmptyStatement{},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/;_this_is_a_simple_comment_; - 1]
+&ast.Program{
+    Statements: {
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_arithmetic(op_x_y)_(op_x_y))_____________(arithmetic_(lambda_(x_y)_(+_x_y))_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"arithmetic"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"op"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"IDENT", TokenValue:"op"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"arithmetic"},
+            Args: {
+                &ast.LambdaStatement{
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                        },
+                    },
+                    Body: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                            },
+                        },
+                    },
+                },
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(<_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(if_(=_1_1)_7_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:1},
+                },
+            },
+            Body: &ast.IntStatement{Value:7},
+            Else: &ast.IntStatement{Value:2},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_add_(x_y)_(+_x_y))_(add_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"add"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"add"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(+_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(>_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(and_true_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"and"},
+            Args: {
+                &ast.BoolStatement{Value:true},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(if_false_5_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.BoolStatement{},
+            Body:      &ast.IntStatement{Value:5},
+            Else:      &ast.IntStatement{Value:2},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_hello_()_"Hello,_World")_(hello) - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+            },
+            Body: &ast.StringStatement{Value:"Hello, World"},
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_a_(lambda_()_4))_(a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: &ast.IntStatement{Value:4},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/23234 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:23234},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(=_true_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.BoolStatement{Value:true},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(and_false_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"and"},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/"someString" - 1]
+&ast.Program{
+    Statements: {
+        &ast.StringStatement{Value:"someString"},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(fn_hello_(name)_(echo_"Hello"_name))_(hello_"pspiagicw") - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+                },
+            },
+            Body: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                Args: {
+                    &ast.StringStatement{Value:"Hello"},
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"hello"},
+            Args: {
+                &ast.StringStatement{Value:"pspiagicw"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(-_2_1_) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(+_-5_(*_4_5)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:-5},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+                    Args: {
+                        &ast.IntStatement{Value:4},
+                        &ast.IntStatement{Value:5},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
