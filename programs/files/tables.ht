@@ -15,32 +15,5 @@
 (echo (reverse arr1))
 (echo (last arr1))
 (echo (count arr1 1))
-(echo (sort arr1))
-
-(put arr1 2 1) ; Should put 1 in index 2 ; 
-
-(map (lambda (x) (echo "Element:" x)) arr1); Should print element on newlines, Return null; 
-
-(echo arr1)
-
-(echo (nth arr2 0)); Should print 5; 
-
-(let names {})
-(sethash names "pspiagicw" "coder")
-(gethash names "pspiagicw")
-
-; Same table has separate place for hash ; 
-(push names "pspiagicw")
-(sethash names 1 "Max")
-
-(echo (gethash names 1)) ; Prints "Max"; 
-(echo (nth names 1)); Prints "pspiagicw" ;
-
-(maphash (lambda (key value) (echo "Key:" key "Value:" value)) names)
 
 
-(echo (min arr1))
-(echo (max arr1))
-
-(echo (apply (lambda (x) (* x x)) arr1)) ; Prints [1 4 9 16] ;
-(echo (reduce (lambda (x y) (+ x y)) arr1)) ; Prints sum of array ;

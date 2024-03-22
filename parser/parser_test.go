@@ -85,6 +85,7 @@ func TestTableStatement(t *testing.T) {
 	}
 	checkTree(t, input, expectedTree)
 }
+
 func TestComments(t *testing.T) {
 	input := `; some comments about you ;
     69

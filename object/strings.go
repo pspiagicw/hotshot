@@ -3,8 +3,7 @@ package object
 import "strings"
 
 func concatFunc(args []Object) Object {
-	err := assertArgs("CONCAT", args)
-	if err != nil {
+	if err := assertArgs("CONCAT", args); err != nil {
 		return err
 	}
 
@@ -28,22 +27,34 @@ func stringFunc(args []Object) Object {
 		Value: args[0].String(),
 	}
 }
+func validateString(obj Object) Object {
+	if obj.Type() != STRING_OBJ {
+		return createError("Object not a string: %v", obj.Type())
+	}
+	return nil
+}
+func validateInteger(obj Object) Object {
+	if obj.Type() != INTEGER_OBJ {
+		return createError("Object not an integer: %v", obj.Type())
+	}
+	return nil
+}
+
 func getCharFunc(args []Object) Object {
-	err := assertArity("GETCHAR", args, 2)
-	if err != nil {
+	if err := assertArity("GETCHAR", args, 2); err != nil {
 		return err
 	}
 
-	strValue, ok := args[0].(*String)
-
-	if !ok {
-		return createError("GETCHAR expected string, got %v", args[0].Type())
+	if err := validateString(args[0]); err != nil {
+		return err
+	}
+	if err := validateInteger(args[1]); err != nil {
+		return err
 	}
 
-	indexValue, ok := args[1].(*Integer)
-	if !ok {
-		return createError("GETCHAR expected int as index, got %v", args[1].Type())
-	}
+	strValue := args[0].(*String)
+
+	indexValue := args[1].(*Integer)
 
 	if indexValue.Value >= len(strValue.Value) {
 		return createError("Index out of bounds")
