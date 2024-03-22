@@ -141,3 +141,41 @@ func popFromTable(t *Table) Object {
 	t.Elements = t.Elements[:count-1]
 	return value
 }
+func countFunc(args []Object) Object {
+	if err := assertArity("COUNT", args, 2); err != nil {
+		return err
+	}
+
+	if err := validateTable(args[0]); err != nil {
+		return err
+	}
+
+	table := args[0]
+
+	t := table.(*Table)
+
+	count := 0
+
+	value := args[1]
+
+	for _, element := range t.Elements {
+		if isObjectEqual(element, value) {
+			count++
+		}
+	}
+
+	return &Integer{
+		Value: count,
+	}
+}
+func isObjectEqual(left Object, right Object) bool {
+	if left.Type() != right.Type() {
+		return false
+	}
+
+	if left.String() != right.String() {
+		return false
+	}
+
+	return true
+}

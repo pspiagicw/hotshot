@@ -48,5 +48,11 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "string", stringFunc)
 	registerBuiltin(builtins, "last", lastFunc)
 	registerBuiltin(builtins, "getchar", getCharFunc)
+	registerBuiltin(builtins, "substring", subStringFunc)
+	registerBuiltin(builtins, "lowercase", lowerFunc)
+	registerBuiltin(builtins, "uppercase", upperFunc)
+
+	registerBuiltin(builtins, "count", countFunc)
+
 	return builtins
 }
