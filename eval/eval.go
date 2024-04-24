@@ -49,8 +49,13 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalCondStatement(node, env)
 	case *ast.AssertStatement:
 		return e.evalAssertStatement(node, env)
+	case *ast.ImportStatement:
+		return e.evalImportStatement(node, env)
 	}
 	return e.createError("Evaluation for statement can't be done!")
+}
+func (e *Evaluator) evalImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
+	return object.Null{}
 }
 
 func (e *Evaluator) evalAssertStatement(node *ast.AssertStatement, env *object.Environment) object.Object {
@@ -118,6 +123,8 @@ func (e *Evaluator) evalFunctionStatement(node *ast.FunctionStatement, env *obje
 	fn.Args = args
 
 	fn.Body = &node.Body
+
+	fn.Env = env
 
 	env.Set(name, fn)
 
@@ -243,10 +250,11 @@ func (e *Evaluator) applyFunction(v *object.Function, args []object.Object, env 
 		return e.createError("Function expects %d argument, given %d", len(v.Args), len(args))
 	}
 
-	newEnv := extendEnvironment(v.Args, args, env)
+	newEnv := extendEnvironment(v, args, env)
 	return e.Eval(*v.Body, newEnv)
 }
-func extendEnvironment(declaredArgs []*ast.IdentStatement, givenArgs []object.Object, env *object.Environment) *object.Environment {
+func extendEnvironment(f *object.Function, givenArgs []object.Object, env *object.Environment) *object.Environment {
+	declaredArgs := f.Args
 	newEnv := object.NewEnvironment()
 	newEnv.Outer = env
 	for i, darg := range declaredArgs {

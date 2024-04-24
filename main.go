@@ -2,9 +2,10 @@ package main
 
 import (
 	"github.com/pspiagicw/hotshot/argparse"
+	"github.com/pspiagicw/hotshot/handle"
 )
 
 func main() {
 	opts := argparse.ParseArguments()
-	argparse.HandleOpts(opts)
+	handle.Handle(opts)
 }

@@ -67,6 +67,22 @@ func (a AssignmentStatement) Children() []tree.Node {
 	}
 }
 
+type ImportStatement struct {
+	Package string
+}
+
+func (i ImportStatement) String() string {
+	return tree.SprintHrn(i)
+}
+
+func (i ImportStatement) Data() interface{} {
+	return fmt.Sprintf("import(%s)", i.Package)
+}
+
+func (i ImportStatement) Children() []tree.Node {
+	return []tree.Node{}
+}
+
 type FunctionStatement struct {
 	Name *token.Token
 	Args []Statement

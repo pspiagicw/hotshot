@@ -1,31 +1,23 @@
 package argparse
 
 import "flag"
-import "github.com/pspiagicw/hotshot/interpreter"
 
-type Options struct {
-	Debug bool
-	Args  []string
+type Opts struct {
+	AST  bool
+	Args []string
+
+	Token bool
 }
 
-func ParseArguments() *Options {
-	o := new(Options)
+func ParseArguments() *Opts {
+	o := new(Opts)
 
-	flag.BoolVar(&o.Debug, "debug", false, "Enable debug mode.")
+	flag.BoolVar(&o.AST, "print-ast", false, "Print AST")
+	flag.BoolVar(&o.Token, "print-tokens", false, "Print Tokens")
 
 	flag.Parse()
 
 	o.Args = flag.Args()
 
 	return o
-}
-
-func HandleOpts(opts *Options) {
-	if len(opts.Args) == 0 {
-		interpreter.StartREPL()
-	} else {
-		for _, arg := range opts.Args {
-			interpreter.ExecuteFile(arg, opts.Debug)
-		}
-	}
 }

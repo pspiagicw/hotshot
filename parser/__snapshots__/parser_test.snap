@@ -476,3 +476,26 @@
     },
 }
 ---
+
+[TestValidStatement/(imoprt_"somepackage") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"imoprt"},
+            Args: {
+                &ast.StringStatement{Value:"somepackage"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestValidStatement/(import_"somepackage") - 1]
+&ast.Program{
+    Statements: {
+        &ast.ImportStatement{Package:"somepackage"},
+        &ast.EmptyStatement{},
+    },
+}
+---

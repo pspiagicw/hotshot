@@ -50,4 +50,5 @@ const (
 	COND   = "COND"
 	LET    = "LET"
 	ASSERT = "ASSERT"
+	IMPORT = "IMPORT"
 )

@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/token"
@@ -12,18 +14,23 @@ type Parser struct {
 	curToken     *token.Token
 	peekToken    *token.Token
 	nilStatement ast.Statement
+	printTokens  bool
 }
 
-func NewParser(l *lexer.Lexer) *Parser {
+func NewParser(l *lexer.Lexer, printTokens bool) *Parser {
 	return &Parser{
 		l:            l,
 		errors:       []error{},
 		peekToken:    l.Next(),
 		nilStatement: &ast.EmptyStatement{},
+		printTokens:  printTokens,
 	}
 }
 func (p *Parser) advance() {
 	p.curToken = p.peekToken
+	if p.printTokens {
+		fmt.Println(p.curToken)
+	}
 	p.peekToken = p.l.Next()
 }
 
@@ -226,6 +233,17 @@ func (p *Parser) parseAssertStatement() ast.Statement {
 	return st
 
 }
+func (p *Parser) parseImportStatement() ast.Statement {
+	st := &ast.ImportStatement{}
+
+	p.expectedTokenIs(token.STRING)
+
+	st.Package = p.curToken.TokenValue
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+}
 
 func (p *Parser) parseComplexStatement() ast.Statement {
 	p.advance()
@@ -246,6 +264,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseCondStatement()
 	case token.ASSERT:
 		return p.parseAssertStatement()
+	case token.IMPORT:
+		return p.parseImportStatement()
 	default:
 		return p.parseFunctionCall()
 	}

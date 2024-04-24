@@ -2,10 +2,10 @@ package interpreter
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/chzyer/readline"
 	"github.com/pspiagicw/goreland"
+	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
@@ -14,7 +14,7 @@ import (
 	"github.com/pspiagicw/hotshot/printer"
 )
 
-func StartREPL() {
+func StartREPL(opts *argparse.Opts) {
 	env := object.NewEnvironment()
 
 	errorHandler := func(message string) {
@@ -25,7 +25,7 @@ func StartREPL() {
 	for true {
 		prompt := getInput(">>> ")
 
-		program, errors := parseCode(prompt)
+		program, errors := parseCode(prompt, opts)
 
 		if handleErrors(errors, false) != 0 {
 			continue
@@ -34,7 +34,10 @@ func StartREPL() {
 		// A extra empty statement is added by the parser at the end.
 		program.Statements = program.Statements[:len(program.Statements)-1]
 
-		fmt.Println(printer.PrintAST(program))
+		if opts.AST {
+			fmt.Println(printer.PrintAST(program))
+
+		}
 
 		result := e.Eval(program, env)
 		fmt.Print("=> ")
@@ -66,9 +69,9 @@ func handleErrors(errors []error, exit bool) int {
 	return 0
 }
 
-func parseCode(code string) (*ast.Program, []error) {
+func parseCode(code string, opts *argparse.Opts) (*ast.Program, []error) {
 	l := lexer.NewLexer(code)
-	p := parser.NewParser(l)
+	p := parser.NewParser(l, opts.Token)
 
 	program := p.Parse()
 	return program, p.Errors()

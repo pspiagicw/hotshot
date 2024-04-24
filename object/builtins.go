@@ -36,7 +36,7 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "car", carFunc)
 	registerBuiltin(builtins, "cdr", cdrFunc)
 	registerBuiltin(builtins, "list", listFunc)
-	registerBuiltin(builtins, "extend", listFunc)
+	registerBuiltin(builtins, "extend", extendFunc)
 	registerBuiltin(builtins, "reverse", reverseFunc)
 
 	registerBuiltin(builtins, "sqrt", sqrtFunc)

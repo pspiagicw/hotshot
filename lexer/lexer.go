@@ -209,6 +209,8 @@ func (l *Lexer) parseKeyword(identifier string) *token.Token {
 		keyword.TokenType = token.LET
 	case "assert":
 		keyword.TokenType = token.ASSERT
+	case "import":
+		keyword.TokenType = token.IMPORT
 	}
 	return &keyword
 }

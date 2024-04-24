@@ -741,3 +741,12 @@
     },
 }
 ---
+
+[TestEval/(import_"somepackage") - 1]
+&ast.Program{
+    Statements: {
+        &ast.ImportStatement{Package:"somepackage"},
+        &ast.EmptyStatement{},
+    },
+}
+---

@@ -168,6 +168,36 @@ func countFunc(args []Object) Object {
 		Value: count,
 	}
 }
+func extendFunc(args []Object) Object {
+	if err := assertArity("EXTEND", args, 2); err != nil {
+		return err
+	}
+
+	if err := validateTable(args[0]); err != nil {
+		return err
+	}
+
+	if err := validateTable(args[1]); err != nil {
+		return err
+	}
+
+	finalTable := &Table{
+		Elements: []Object{},
+	}
+
+	table := args[0].(*Table)
+	otherTable := args[1].(*Table)
+
+	for _, element := range table.Elements {
+		addToTable(finalTable, element)
+	}
+
+	for _, element := range otherTable.Elements {
+		addToTable(finalTable, element)
+	}
+
+	return finalTable
+}
 func isObjectEqual(left Object, right Object) bool {
 	if left.Type() != right.Type() {
 		return false

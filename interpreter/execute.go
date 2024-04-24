@@ -5,16 +5,17 @@ import (
 	"os"
 
 	"github.com/pspiagicw/goreland"
+	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/printer"
 )
 
-func ExecuteFile(file string, debug bool) {
+func ExecuteFile(file string, opts *argparse.Opts) {
 
 	code := readFile(file)
 
-	program, errors := parseCode(code)
+	program, errors := parseCode(code, opts)
 
 	errorHandler := func(message string) {
 		goreland.LogFatal("Runtime Error: %s", message)
@@ -24,7 +25,7 @@ func ExecuteFile(file string, debug bool) {
 
 	handleErrors(errors, true)
 
-	if debug {
+	if opts.AST {
 		fmt.Println(printer.PrintAST(program))
 	}
 
