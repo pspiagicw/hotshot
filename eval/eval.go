@@ -55,6 +55,14 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 	return e.createError("Evaluation for statement can't be done!")
 }
 func (e *Evaluator) evalImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
+	name := node.Package
+
+	file := resolveImport(name)
+
+	ienv := resolveEnvironment(file, e.ErrorHandler)
+
+	applyEnvironment(ienv, env)
+
 	return object.Null{}
 }
 
