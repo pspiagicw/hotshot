@@ -238,7 +238,7 @@ func TestValidStatement(t *testing.T) {
 		`(cond ((= 1 1) "1 is equal")
     ((< 2 1) "2 is smaller than 1")
     (true "Always true"))`: true,
-		`(import "somepackage")`: true,
+		`(import "somepackage" sp)`: true,
 	}
 
 	for input, expectedResult := range tt {
@@ -254,7 +254,7 @@ func checkTree(t *testing.T, input string, expectedTree []ast.Statement) {
 	t.Helper()
 
 	lexer := lexer.NewLexer(input)
-	parser := NewParser(lexer)
+	parser := NewParser(lexer, false)
 
 	actualTree := parser.Parse()
 	if len(parser.Errors()) != 0 {
@@ -365,7 +365,7 @@ func validStatement(t *testing.T, input string) bool {
 	t.Helper()
 
 	lexer := lexer.NewLexer(input)
-	parser := NewParser(lexer)
+	parser := NewParser(lexer, false)
 
 	program := parser.Parse()
 	if len(parser.Errors()) != 0 {

@@ -750,3 +750,15 @@
     },
 }
 ---
+
+[TestEval/(import_"somepackage"_sp) - 1]
+&ast.Program{
+    Statements: {
+        &ast.ImportStatement{
+            Package:   "somepackage",
+            Namespace: &token.Token{TokenType:"IDENT", TokenValue:"sp"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

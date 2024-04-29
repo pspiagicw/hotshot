@@ -71,7 +71,7 @@ func TestEval(t *testing.T) {
 
 		`(let a {}) (push a 2) (pop a)`: createInt(2),
 
-		`(import "somepackage")`: createNull(),
+		`(import "somepackage" sp)`: createNull(),
 	}
 
 	for input, expectedResult := range tt {
@@ -104,7 +104,7 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 	t.Helper()
 
 	lexer := lexer.NewLexer(input)
-	parser := parser.NewParser(lexer)
+	parser := parser.NewParser(lexer, false)
 	e := NewEvaluator(func(message string) {})
 
 	ast := parser.Parse()

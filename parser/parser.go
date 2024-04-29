@@ -240,6 +240,10 @@ func (p *Parser) parseImportStatement() ast.Statement {
 
 	st.Package = p.curToken.TokenValue
 
+	p.expectedTokenIs(token.IDENT)
+
+	st.Namespace = p.curToken
+
 	p.expectedTokenIs(token.RPAREN)
 
 	return st
