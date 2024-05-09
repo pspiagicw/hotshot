@@ -238,7 +238,7 @@ func TestValidStatement(t *testing.T) {
 		`(cond ((= 1 1) "1 is equal")
     ((< 2 1) "2 is smaller than 1")
     (true "Always true"))`: true,
-		`(import "somepackage" sp)`: true,
+		`(import "somepackage")`: true,
 	}
 
 	for input, expectedResult := range tt {

@@ -68,8 +68,7 @@ func (a AssignmentStatement) Children() []tree.Node {
 }
 
 type ImportStatement struct {
-	Package   string
-	Namespace *token.Token
+	Package string
 }
 
 func (i ImportStatement) String() string {
@@ -77,7 +76,7 @@ func (i ImportStatement) String() string {
 }
 
 func (i ImportStatement) Data() interface{} {
-	return fmt.Sprintf("import(%s)[%s]", i.Package, i.Namespace.TokenValue)
+	return fmt.Sprintf("import(%s)", i.Package)
 }
 
 func (i ImportStatement) Children() []tree.Node {

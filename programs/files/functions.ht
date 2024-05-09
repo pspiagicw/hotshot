@@ -9,9 +9,9 @@
 ; Functions can have arguments ;
 
 (fn helloName (name) 
-    (echo "Hello " name))
+    (concat "Hello " name))
 
-(assert "Hello pspiagicw" (helloName "pspiagicw") "function with argument failed")
+(assert "Hello pspiagicw" (helloName "pspiagicw") "Function with argument failed")
 
 ; use 'lambda' to declare a lambda. Meaning, functions are 'first-class'!;
 
