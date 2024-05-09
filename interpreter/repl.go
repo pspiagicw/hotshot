@@ -2,6 +2,7 @@ package interpreter
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/chzyer/readline"
 	"github.com/pspiagicw/goreland"
@@ -11,48 +12,77 @@ import (
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
-	"github.com/pspiagicw/hotshot/printer"
 )
 
-func StartREPL(opts *argparse.Opts) {
-	env := object.NewEnvironment()
+func printHeader() {
+	fmt.Println("Welcome to hotshot!")
+	fmt.Println("Use `(exit)` to exit the REPL")
+}
 
-	errorHandler := func(message string) {
+func StartREPL(opts *argparse.Opts) {
+
+	printHeader()
+
+	env := object.NewEnvironment()
+	e := eval.NewEvaluator(func(message string) {
 		goreland.LogError("Runtime Error: %s\n", message)
+	})
+
+	rl := initREPL()
+	defer rl.Close()
+
+	for {
+		input := getInput(rl)
+
+		program, errors := parseCode(input, opts)
+		handleErrors(errors, false)
+		result := e.Eval(program, env)
+		if result.Type() != object.NULL_OBJ {
+			fmt.Print("=> ")
+			fmt.Print(result.String())
+			fmt.Println()
+		}
 	}
 
-	e := eval.NewEvaluator(errorHandler)
-	for true {
-		prompt := getInput(">>> ")
+}
 
-		program, errors := parseCode(prompt, opts)
+func initREPL() *readline.Instance {
+	r, err := readline.NewEx(&readline.Config{
+		Prompt:          ">>> ",
+		HistoryFile:     "/tmp/readline.tmp",
+		InterruptPrompt: "^D",
+	})
 
-		if handleErrors(errors, false) != 0 {
+	if err != nil {
+		goreland.LogFatal("Error initalizing readline: %v", err)
+	}
+
+	return r
+}
+
+func getInput(r *readline.Instance) string {
+	var cmds []string
+
+	parenScore := 0
+	for {
+		line, err := r.Readline()
+		if err != nil {
+			goreland.LogFatal("Error reading input from prompt: %v", err)
+		}
+		line = strings.TrimSpace(line)
+		if len(line) == 0 {
 			continue
 		}
-
-		// A extra empty statement is added by the parser at the end.
-		program.Statements = program.Statements[:len(program.Statements)-1]
-
-		if opts.AST {
-			fmt.Println(printer.PrintAST(program))
-
+		cmds = append(cmds, line)
+		parenScore += strings.Count(line, "(") - strings.Count(line, ")")
+		if parenScore == 0 {
+			break
 		}
-
-		result := e.Eval(program, env)
-		fmt.Print("=> ")
-		// fmt.Printf("%s(%s)", result.Type(), result.String())
-		fmt.Print(result.String())
-		fmt.Println()
+		r.SetPrompt("... ")
 	}
-}
-func getInput(prompt string) string {
-	input, err := readline.Line(prompt)
-	if err != nil {
-		goreland.LogFatal("Error scanning input: %v", err)
-	}
-	return input
+	r.SetPrompt(">>> ")
 
+	return strings.Join(cmds, "\n")
 }
 
 func handleErrors(errors []error, exit bool) int {
@@ -75,5 +105,6 @@ func parseCode(code string, opts *argparse.Opts) (*ast.Program, []error) {
 	p := parser.NewParser(l, opts.Token)
 
 	program := p.Parse()
+	program.Statements = program.Statements[:len(program.Statements)-1]
 	return program, p.Errors()
 }

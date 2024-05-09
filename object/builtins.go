@@ -54,6 +54,7 @@ func getBuiltins() map[string]*Builtin {
 
 	registerBuiltin(builtins, "count", countFunc)
 	registerBuiltin(builtins, "type", typeFunc)
+	registerBuiltin(builtins, "exit", exitFunc)
 
 	return builtins
 }

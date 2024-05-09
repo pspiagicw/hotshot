@@ -1,6 +1,10 @@
 package argparse
 
-import "flag"
+import (
+	"flag"
+
+	"github.com/pspiagicw/hotshot/help"
+)
 
 type Opts struct {
 	AST  bool
@@ -11,6 +15,7 @@ type Opts struct {
 
 func ParseArguments() *Opts {
 	o := new(Opts)
+	flag.Usage = help.Help
 
 	flag.BoolVar(&o.AST, "print-ast", false, "Print AST")
 	flag.BoolVar(&o.Token, "print-tokens", false, "Print Tokens")
