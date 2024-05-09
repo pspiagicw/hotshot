@@ -1,5 +1,18 @@
 package object
 
+import "fmt"
+
+func typeFunc(args []Object) Object {
+	if len(args) != 1 {
+		return createError("TYPE function expects 1 argument.")
+	}
+
+	value := args[0]
+
+	return &String{
+		Value: fmt.Sprintf("%s", value.Type()),
+	}
+}
 func numberpFunc(args []Object) Object {
 	if len(args) != 1 {
 		return createError("NUMBERP function expects 2 arguments.")

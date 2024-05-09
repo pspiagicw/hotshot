@@ -1,12 +1,15 @@
 ; Declare a function using 'fn' ; 
 
-(fn hello () "Hello, hotshooter!")
+(fn hello () 
+    "Hello, hotshooter!")
+
 
 (assert (hello) "Hello, hotshooter!" "function failed!")
 
 ; Functions can have arguments ;
 
-(fn helloName (name) (concat "Hello " name))
+(fn helloName (name) 
+    (echo "Hello " name))
 
 (assert "Hello pspiagicw" (helloName "pspiagicw") "function with argument failed")
 

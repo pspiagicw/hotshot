@@ -41,7 +41,8 @@ func StartREPL(opts *argparse.Opts) {
 
 		result := e.Eval(program, env)
 		fmt.Print("=> ")
-		fmt.Print(result)
+		// fmt.Printf("%s(%s)", result.Type(), result.String())
+		fmt.Print(result.String())
 		fmt.Println()
 	}
 }

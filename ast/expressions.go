@@ -56,7 +56,7 @@ func (b BoolStatement) String() string {
 	return fmt.Sprintf("Bool(%t)", b.Value)
 }
 func (b BoolStatement) Data() interface{} {
-	return b.Value
+	return b.String()
 }
 func (b BoolStatement) Children() []tree.Node {
 	return []tree.Node{}

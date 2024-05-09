@@ -53,6 +53,7 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "uppercase", upperFunc)
 
 	registerBuiltin(builtins, "count", countFunc)
+	registerBuiltin(builtins, "type", typeFunc)
 
 	return builtins
 }
