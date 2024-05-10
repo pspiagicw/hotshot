@@ -209,7 +209,12 @@ func (e *Evaluator) evalStatements(args []ast.Statement, env *object.Environment
 	evals := []object.Object{}
 
 	for _, arg := range args {
-		evals = append(evals, e.Eval(arg, env))
+		value := e.Eval(arg, env)
+		if value.Type() == object.RETURN_OBJ {
+			evals = append(evals, &object.Null{})
+			break
+		}
+		evals = append(evals, value)
 	}
 	return evals
 }

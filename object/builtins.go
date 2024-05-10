@@ -59,6 +59,7 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "inc", incFunc)
 	registerBuiltin(builtins, "dec", decFunc)
 	registerBuiltin(builtins, "input", inputFunc)
+	registerBuiltin(builtins, "return", returnFunc)
 
 	return builtins
 }

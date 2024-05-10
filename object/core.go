@@ -5,6 +5,15 @@ import (
 	"strings"
 )
 
+func returnFunc(args []Object) Object {
+	err := assertArity("RETURN", args, 0)
+	if err != nil {
+		return err
+	}
+
+	return &Return{}
+}
+
 func doFunc(args []Object) Object {
 	length := len(args)
 

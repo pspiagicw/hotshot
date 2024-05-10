@@ -24,6 +24,7 @@ const (
 	FUNCTION_OBJ = "FUNCTION"
 	BUILTIN_OBJ  = "BUILTIN"
 	ERROR_OBJ    = "ERROR"
+	RETURN_OBJ   = "RETURN"
 )
 
 type Function struct {
@@ -131,4 +132,14 @@ func (t Table) String() string {
 	output.WriteString(strings.Join(elements, " "))
 	output.WriteString("]")
 	return output.String()
+}
+
+type Return struct {
+}
+
+func (r Return) Type() ObjectType {
+	return RETURN_OBJ
+}
+func (r Return) String() string {
+	return "RETURN"
 }
