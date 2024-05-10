@@ -34,7 +34,7 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 	case *ast.BoolStatement:
 		return &object.Boolean{Value: node.Value}
 	case *ast.IdentStatement:
-		return evalIdent(node, env)
+		return e.evalIdent(node, env)
 	case *ast.IfStatement:
 		return e.evalIfStatement(node, env)
 	case *ast.WhileStatement:
@@ -176,8 +176,12 @@ func (e *Evaluator) isTrue(value object.Object) bool {
 
 	return value.String() == "true"
 }
-func evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
 	val := env.Get(node.Value.TokenValue)
+
+	if val.Type() == object.ERROR_OBJ {
+		e.ErrorHandler(val.String())
+	}
 
 	return val
 }
