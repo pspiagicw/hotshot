@@ -108,6 +108,8 @@ func (e *Evaluator) evalLambdaStatement(node *ast.LambdaStatement, env *object.E
 
 	fn.Args = args
 
+	fn.Env = env
+
 	fn.Body = &node.Body
 
 	return fn
@@ -257,18 +259,18 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 	return value
 
 }
-func (e *Evaluator) applyFunction(v *object.Function, args []object.Object, env *object.Environment) object.Object {
-	if len(v.Args) != len(args) {
-		return e.createError("Function expects %d argument, given %d", len(v.Args), len(args))
+func (e *Evaluator) applyFunction(f *object.Function, args []object.Object, env *object.Environment) object.Object {
+	if len(f.Args) != len(args) {
+		return e.createError("Function expects %d argument, given %d", len(f.Args), len(args))
 	}
 
-	newEnv := extendEnvironment(v, args, env)
-	return e.Eval(*v.Body, newEnv)
+	newEnv := extendEnvironment(f, args)
+	return e.Eval(*f.Body, newEnv)
 }
-func extendEnvironment(f *object.Function, givenArgs []object.Object, env *object.Environment) *object.Environment {
+func extendEnvironment(f *object.Function, givenArgs []object.Object) *object.Environment {
 	declaredArgs := f.Args
 	newEnv := object.NewEnvironment()
-	newEnv.Outer = env
+	newEnv.Outer = f.Env
 	for i, darg := range declaredArgs {
 		newEnv.Set(darg.Value.TokenValue, givenArgs[i])
 	}
