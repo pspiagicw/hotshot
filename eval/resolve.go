@@ -1,7 +1,8 @@
 package eval
 
 import (
-	"github.com/pspiagicw/fs"
+	"os"
+
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
@@ -15,7 +16,11 @@ func resolveEnvironment(file string, errorHandler func(string)) *object.Environm
 
 	env := object.NewEnvironment()
 
-	contents := fs.ReadFile(file)
+	contents, err := os.ReadFile(file)
+
+	if err != nil {
+		errorHandler("Error reading file: " + file)
+	}
 
 	l := lexer.NewLexer(string(contents))
 	p := parser.NewParser(l, false)
