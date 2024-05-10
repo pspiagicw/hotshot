@@ -37,7 +37,7 @@ func StartREPL(opts *argparse.Opts) {
 		program, errors := parseCode(input, opts)
 		handleErrors(errors, false)
 		result := e.Eval(program, env)
-		if result.Type() != object.NULL_OBJ {
+		if opts.Null || result.Type() != object.NULL_OBJ {
 			fmt.Print("=> ")
 			fmt.Print(result.String())
 			fmt.Println()

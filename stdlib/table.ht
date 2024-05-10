@@ -1,0 +1,5 @@
+(fn contains (list element)
+    (cond
+    ((= (len list) 0) false)
+    ((= element (pop list)) true)
+    (true (linearSearch list element))))

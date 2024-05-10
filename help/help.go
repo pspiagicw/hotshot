@@ -7,7 +7,7 @@ func Help() {
 	pelp.HeaderWithDescription("Usage", []string{"hotshot [flags] [file]"})
 	pelp.Flags(
 		"flags",
-		[]string{"help", "print-ast", "print-tokens"},
-		[]string{"Prints this help message", "Prints the AST of the program", "Prints the tokens of the program"},
+		[]string{"help", "print-ast", "print-tokens", "null"},
+		[]string{"Prints this help message", "Prints the AST of the program", "Prints the tokens of the program", "Print NULL in REPL"},
 	)
 }

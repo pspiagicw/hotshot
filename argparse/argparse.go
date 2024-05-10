@@ -11,6 +11,7 @@ type Opts struct {
 	Args []string
 
 	Token bool
+	Null  bool
 }
 
 func ParseArguments() *Opts {
@@ -19,6 +20,7 @@ func ParseArguments() *Opts {
 
 	flag.BoolVar(&o.AST, "print-ast", false, "Print AST")
 	flag.BoolVar(&o.Token, "print-tokens", false, "Print Tokens")
+	flag.BoolVar(&o.Null, "null", false, "Print Null in REPL")
 
 	flag.Parse()
 
