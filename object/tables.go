@@ -1,5 +1,21 @@
 package object
 
+// func consFunc(args []Object) Object {
+// 	if err := assertArity("CONS", args, 2); err != nil {
+// 		return err
+// 	}
+// 	if err := validateTable(args[1]); err != nil {
+// 		return err
+// 	}
+//
+// 	t := args[1].(*Table)
+// 	value := args[0]
+//
+// 	insertIntoTable(t, 0, value)
+//
+// 	return t
+// }
+
 func pushFunc(args []Object) Object {
 	if err := assertArity("PUSH", args, 2); err != nil {
 		return err
@@ -120,6 +136,10 @@ func lastFunc(args []Object) Object {
 
 	return table.Elements[length-1]
 }
+
+//	func insertintotable(t *table, index int, value object) object {
+//		return append(t.elements[:index], append([]object{value}, t.elements[index:]...)...)
+//	}
 func addToTable(t *Table, value Object) {
 	t.Elements = append(t.Elements, value)
 }

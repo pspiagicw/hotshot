@@ -2,11 +2,40 @@ package object
 
 import (
 	"math"
-
-	"github.com/pspiagicw/hotshot/ast"
 )
 
-type EvalFunc func(ast.Statement) Object
+func incFunc(args []Object) Object {
+	err := assertArity("INC", args, 1)
+	if err != nil {
+		return err
+	}
+
+	v, ok := args[0].(*Integer)
+
+	if !ok {
+		return createError("INC function expects Integer, found %v", args[0].Type())
+	}
+
+	v.Value++
+
+	return &Null{}
+}
+func decFunc(args []Object) Object {
+	err := assertArity("DEC", args, 1)
+	if err != nil {
+		return err
+	}
+
+	v, ok := args[0].(*Integer)
+
+	if !ok {
+		return createError("DEC function expects Integer, found %v", args[0].Type())
+	}
+
+	v.Value--
+
+	return &Null{}
+}
 
 func multiplyFunc(args []Object) Object {
 

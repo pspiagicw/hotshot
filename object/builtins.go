@@ -32,6 +32,7 @@ func getBuiltins() map[string]*Builtin {
 
 	registerBuiltin(builtins, "mod", modFunc)
 	registerBuiltin(builtins, "push", pushFunc)
+	registerBuiltin(builtins, "cons", pushFunc)
 	registerBuiltin(builtins, "pop", popFunc)
 	registerBuiltin(builtins, "car", carFunc)
 	registerBuiltin(builtins, "cdr", cdrFunc)
@@ -55,6 +56,8 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "count", countFunc)
 	registerBuiltin(builtins, "type", typeFunc)
 	registerBuiltin(builtins, "exit", exitFunc)
+	registerBuiltin(builtins, "inc", incFunc)
+	registerBuiltin(builtins, "dec", decFunc)
 
 	return builtins
 }
