@@ -79,7 +79,9 @@
             Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
             Args: {
             },
-            Body: &ast.StringStatement{Value:"Hello, World"},
+            Body: {
+                &ast.StringStatement{Value:"Hello, World"},
+            },
         },
         &ast.EmptyStatement{},
     },
@@ -400,14 +402,16 @@
                     Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
                 },
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"IDENT", TokenValue:"op"},
-                Args: {
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                    },
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"op"},
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                        },
                     },
                 },
             },
@@ -424,14 +428,16 @@
                             Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
                         },
                     },
-                    Body: &ast.CallStatement{
-                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
-                        Args: {
-                            &ast.IdentStatement{
-                                Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                            },
-                            &ast.IdentStatement{
-                                Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                    Body: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                            Args: {
+                                &ast.IdentStatement{
+                                    Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                                },
+                                &ast.IdentStatement{
+                                    Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                                },
                             },
                         },
                     },
@@ -492,14 +498,16 @@
                     Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
                 },
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
-                Args: {
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                    },
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                        },
                     },
                 },
             },
@@ -596,7 +604,9 @@
             Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
             Args: {
             },
-            Body: &ast.StringStatement{Value:"Hello, World"},
+            Body: {
+                &ast.StringStatement{Value:"Hello, World"},
+            },
         },
         &ast.CallStatement{
             Op:   &token.Token{TokenType:"IDENT", TokenValue:"hello"},
@@ -615,7 +625,9 @@
             Value: &ast.LambdaStatement{
                 Args: {
                 },
-                Body: &ast.IntStatement{Value:4},
+                Body: {
+                    &ast.IntStatement{Value:4},
+                },
             },
         },
         &ast.CallStatement{
@@ -685,12 +697,14 @@
                     Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
                 },
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
-                Args: {
-                    &ast.StringStatement{Value:"Hello"},
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                    Args: {
+                        &ast.StringStatement{Value:"Hello"},
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"name"},
+                        },
                     },
                 },
             },

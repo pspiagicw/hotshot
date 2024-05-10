@@ -402,10 +402,12 @@
             Name: &token.Token{TokenType:"IDENT", TokenValue:"hello"},
             Args: {
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
-                Args: {
-                    &ast.StringStatement{Value:"Hello, World"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                    Args: {
+                        &ast.StringStatement{Value:"Hello, World"},
+                    },
                 },
             },
         },
@@ -442,14 +444,16 @@
                     Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
                 },
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
-                Args: {
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
-                    },
-                    &ast.IdentStatement{
-                        Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"x"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"y"},
+                        },
                     },
                 },
             },
@@ -465,10 +469,12 @@
         &ast.LambdaStatement{
             Args: {
             },
-            Body: &ast.CallStatement{
-                Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
-                Args: {
-                    &ast.StringStatement{Value:"Hello, World"},
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"echo"},
+                    Args: {
+                        &ast.StringStatement{Value:"Hello, World"},
+                    },
                 },
             },
         },
