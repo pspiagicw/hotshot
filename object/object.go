@@ -28,7 +28,7 @@ const (
 
 type Function struct {
 	Args []*ast.IdentStatement
-	Body *ast.Statement
+	Body []ast.Statement
 	Env  *Environment
 }
 

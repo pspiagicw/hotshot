@@ -86,7 +86,7 @@ func (i ImportStatement) Children() []tree.Node {
 type FunctionStatement struct {
 	Name *token.Token
 	Args []Statement
-	Body Statement
+	Body []Statement
 }
 
 func (f FunctionStatement) String() string {
@@ -102,14 +102,12 @@ func (f FunctionStatement) Data() interface{} {
 	return fmt.Sprintf("fn(%s[%s])", f.Name.TokenValue, strings.Join(strArgs, ","))
 }
 func (f FunctionStatement) Children() []tree.Node {
-	return []tree.Node{
-		f.Body,
-	}
+	return []tree.Node{}
 }
 
 type LambdaStatement struct {
 	Args []Statement
-	Body Statement
+	Body []Statement
 }
 
 func (l LambdaStatement) String() string {
@@ -124,7 +122,5 @@ func (l LambdaStatement) Data() interface{} {
 	return fmt.Sprintf("lambda([%s])", strings.Join(strArgs, ","))
 }
 func (l LambdaStatement) Children() []tree.Node {
-	return []tree.Node{
-		l.Body,
-	}
+	return []tree.Node{}
 }

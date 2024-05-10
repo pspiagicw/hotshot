@@ -110,7 +110,7 @@ func (e *Evaluator) evalLambdaStatement(node *ast.LambdaStatement, env *object.E
 
 	fn.Env = env
 
-	fn.Body = &node.Body
+	fn.Body = node.Body
 
 	return fn
 }
@@ -132,7 +132,7 @@ func (e *Evaluator) evalFunctionStatement(node *ast.FunctionStatement, env *obje
 
 	fn.Args = args
 
-	fn.Body = &node.Body
+	fn.Body = node.Body
 
 	fn.Env = env
 
@@ -265,7 +265,8 @@ func (e *Evaluator) applyFunction(f *object.Function, args []object.Object, env 
 	}
 
 	newEnv := extendEnvironment(f, args)
-	return e.Eval(*f.Body, newEnv)
+	results := e.evalStatements(f.Body, newEnv)
+	return results[len(results)-1]
 }
 func extendEnvironment(f *object.Function, givenArgs []object.Object) *object.Environment {
 	declaredArgs := f.Args

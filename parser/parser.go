@@ -132,7 +132,10 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 
 	p.expectedTokenIs(token.RPAREN)
 
-	st.Body = p.parseStatement()
+	st.Body = []ast.Statement{}
+	for !p.peekTokenIs(token.RPAREN) {
+		st.Body = append(st.Body, p.parseStatement())
+	}
 
 	p.expectedTokenIs(token.RPAREN)
 
@@ -190,7 +193,12 @@ func (p *Parser) parseLambdaStatement() ast.Statement {
 
 	p.expectedTokenIs(token.RPAREN)
 
-	st.Body = p.parseStatement()
+	// st.Body = p.parseStatement()
+	st.Body = []ast.Statement{}
+
+	for !p.peekTokenIs(token.RPAREN) {
+		st.Body = append(st.Body, p.parseStatement())
+	}
 
 	p.expectedTokenIs(token.RPAREN)
 
