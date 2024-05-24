@@ -124,3 +124,17 @@ func (l LambdaStatement) Data() interface{} {
 func (l LambdaStatement) Children() []tree.Node {
 	return []tree.Node{}
 }
+
+type QuoteStatement struct {
+	Body *token.Token
+}
+
+func (q QuoteStatement) String() string {
+	return fmt.Sprintf("quote(%s)", q.Body.TokenValue)
+}
+func (q QuoteStatement) Data() interface{} {
+	return q.Body.TokenValue
+}
+func (q QuoteStatement) Children() []tree.Node {
+	return []tree.Node{}
+}

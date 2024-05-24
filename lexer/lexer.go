@@ -74,6 +74,9 @@ func (l *Lexer) Next() *token.Token {
 	}
 
 	switch l.currentChar {
+	case "'":
+		returnToken.TokenType = token.QUOTE
+		returnToken.TokenValue = l.currentChar
 	case "(":
 		returnToken.TokenType = token.LPAREN
 		returnToken.TokenValue = l.currentChar

@@ -26,6 +26,16 @@ func (p *Parser) parseStringStatement() *ast.StringStatement {
 		Value: p.curToken.TokenValue,
 	}
 }
+func (p *Parser) parseQuoteStatement() *ast.QuoteStatement {
+	p.advance()
+	if p.curToken.TokenType == token.EOF {
+		p.registerError("Expected valid token after quote, got EOF")
+		return nil
+	}
+	return &ast.QuoteStatement{
+		Body: p.curToken,
+	}
+}
 
 func (p *Parser) parseIntStatement() *ast.IntStatement {
 	value, err := strconv.Atoi(p.curToken.TokenValue)

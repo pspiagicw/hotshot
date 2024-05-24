@@ -51,4 +51,6 @@ const (
 	LET    = "LET"
 	ASSERT = "ASSERT"
 	IMPORT = "IMPORT"
+
+	QUOTE = "QUOTE"
 )

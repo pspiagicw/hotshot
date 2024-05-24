@@ -776,3 +776,30 @@
     },
 }
 ---
+
+[TestEval/'something - 1]
+&ast.Program{
+    Statements: {
+        &ast.QuoteStatement{
+            Body: &token.Token{TokenType:"IDENT", TokenValue:"something"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(type_'something) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"type"},
+            Args: {
+                &ast.QuoteStatement{
+                    Body: &token.Token{TokenType:"IDENT", TokenValue:"something"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

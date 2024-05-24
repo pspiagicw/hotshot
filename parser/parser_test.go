@@ -9,6 +9,22 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
+func TestQuoteStatement(t *testing.T) {
+	input := `'something`
+
+	expectedTree := []ast.Statement{
+		&ast.QuoteStatement{
+			Body: &token.Token{
+				TokenType:  token.IDENT,
+				TokenValue: "something",
+			},
+		},
+	}
+
+	checkTree(t, input, expectedTree)
+
+}
+
 func TestEmptyStatement(t *testing.T) {
 	input := "()"
 
@@ -239,6 +255,8 @@ func TestValidStatement(t *testing.T) {
     ((< 2 1) "2 is smaller than 1")
     (true "Always true"))`: true,
 		`(import "somepackage")`: true,
+		`'something`:             true,
+		`(echo 'something)`:      true,
 	}
 
 	for input, expectedResult := range tt {
@@ -303,6 +321,17 @@ func matchBoolStatement(t *testing.T, expectedStatement ast.Statement, actualSta
 	}
 	return e.Value == a.Value
 }
+func matchQuoteStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.QuoteStatement)
+	if !ok {
+		t.Fatalf("Expected quote statement, got others")
+	}
+	a, ok := actualStatement.(*ast.QuoteStatement)
+	if !ok {
+		t.Fatalf("Expected quote statement, got others")
+	}
+	return a.Body.TokenValue == e.Body.TokenValue && a.Body.TokenType == e.Body.TokenType
+}
 func matchTableStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
 	e, ok := expectedStatement.(*ast.TableStatement)
 	if !ok {
@@ -344,6 +373,8 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			return matchBoolStatement(t, expectedStatement, actualStatement)
 		case *ast.TableStatement:
 			return matchTableStatement(t, expectedStatement, actualStatement)
+		case *ast.QuoteStatement:
+			return matchQuoteStatement(t, expectedStatement, actualStatement)
 		default:
 			t.Fatalf("Some bloody type found!: %v", s)
 		}

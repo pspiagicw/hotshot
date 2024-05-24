@@ -62,6 +62,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	case token.IDENT:
 		return p.parseIdentStatement()
+	case token.QUOTE:
+		return p.parseQuoteStatement()
 	case token.EOF:
 		return p.nilStatement
 	default:

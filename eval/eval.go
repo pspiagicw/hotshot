@@ -19,6 +19,8 @@ func NewEvaluator(handler func(string)) *Evaluator {
 
 func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Object {
 	switch node := node.(type) {
+	case *ast.QuoteStatement:
+		return e.evalQuoteStatement(node, env)
 	case *ast.IntStatement:
 		return &object.Integer{Value: node.Value}
 	case *ast.StringStatement:
@@ -289,4 +291,9 @@ func (e *Evaluator) createError(message string, v ...interface{}) *object.Error 
 		Message: message,
 	}
 
+}
+func (e *Evaluator) evalQuoteStatement(node *ast.QuoteStatement, env *object.Environment) object.Object {
+	return &object.String{
+		Value: node.Body.TokenValue,
+	}
 }

@@ -6,6 +6,25 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
+func TestQuote(t *testing.T) {
+	input := `
+    'something
+    (type 'something)
+    `
+
+	expectedTokens := []token.Token{
+		{TokenType: token.QUOTE, TokenValue: "'"},
+		{TokenType: token.IDENT, TokenValue: "something"},
+		{TokenType: token.LPAREN, TokenValue: "("},
+		{TokenType: token.IDENT, TokenValue: "type"},
+		{TokenType: token.QUOTE, TokenValue: "'"},
+		{TokenType: token.IDENT, TokenValue: "something"},
+		{TokenType: token.RPAREN, TokenValue: ")"},
+		{TokenType: token.EOF, TokenValue: " "},
+	}
+
+	checkTokens(t, expectedTokens, input)
+}
 func TestIdent(t *testing.T) {
 
 	input := "(+ one two)"
