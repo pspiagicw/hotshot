@@ -1,0 +1,11 @@
+(fn isOdd (n) 
+    (cond 
+        ((not (numberp n)) false)
+        ((= 0 (mod n 2)) false)
+        (true true)))
+
+(fn isEven (n) 
+    (cond 
+        ((not (numberp n)) false)
+        (true (not (isOdd n)))))
+

@@ -1,6 +1,8 @@
 package eval
 
 import (
+	"embed"
+	"fmt"
 	"os"
 
 	"github.com/pspiagicw/hotshot/lexer"
@@ -8,32 +10,49 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
-func resolveImport(name string) string {
+//go:embed stdlib
+var STD_LIB embed.FS
+
+func (e *Evaluator) getImportPath(name string) string {
+	if name == "math" {
+		return "math"
+	}
 	return name
 }
 
-func resolveEnvironment(file string, errorHandler func(string)) *object.Environment {
-
-	env := object.NewEnvironment()
-
-	contents, err := os.ReadFile(file)
+func (e *Evaluator) getImportContent(name string) string {
+	if name == "math" {
+		content, err := STD_LIB.ReadFile("stdlib/math.ht")
+		if err != nil {
+			fmt.Println(err)
+			e.ErrorHandler("Error reading file: , " + name)
+		}
+		return string(content)
+	}
+	contents, err := os.ReadFile(name)
 
 	if err != nil {
-		errorHandler("Error reading file: " + file)
+		e.ErrorHandler("Error reading file: " + name)
 	}
 
-	l := lexer.NewLexer(string(contents))
+	return string(contents)
+}
+
+func (e *Evaluator) resolveImport(contents string, env *object.Environment) *object.Environment {
+
+	l := lexer.NewLexer(contents)
 	p := parser.NewParser(l, false)
 
 	program := p.Parse()
 
 	if len(p.Errors()) > 0 {
-		errorHandler("Error parsing file: " + file)
+		e.ErrorHandler("Error parsing file! ")
+		return nil
 	}
 
-	e := NewEvaluator(errorHandler)
+	newEval := NewEvaluator(e.ErrorHandler)
 
-	e.Eval(program, env)
+	newEval.Eval(program, env)
 
 	return env
 }

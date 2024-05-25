@@ -59,11 +59,15 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 func (e *Evaluator) evalImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
 	name := node.Package
 
-	file := resolveImport(name)
+	file := e.getImportPath(name)
 
-	ienv := resolveEnvironment(file, e.ErrorHandler)
+	contents := e.getImportContent(file)
 
-	applyEnvironment(ienv, env)
+	ienv := e.resolveImport(contents, env)
+
+	if ienv == nil {
+		applyEnvironment(ienv, env)
+	}
 
 	return object.Null{}
 }

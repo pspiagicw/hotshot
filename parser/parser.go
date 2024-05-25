@@ -243,6 +243,19 @@ func (p *Parser) parseAssertStatement() ast.Statement {
 	return st
 
 }
+
+//	func (p *Parser) expectedTokenIsMultiple(ex ...token.TokenType) {
+//		correct := false
+//		for _, t := range ex {
+//			if p.peekToken.TokenType == t {
+//				correct = true
+//			}
+//		}
+//		if !correct {
+//			p.registerError("Expected one of %v, got %s", ex, p.curToken.TokenType)
+//		}
+//		p.advance()
+//	}
 func (p *Parser) parseImportStatement() ast.Statement {
 	st := &ast.ImportStatement{}
 
