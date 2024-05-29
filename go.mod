@@ -5,9 +5,9 @@ go 1.21.4
 require (
 	github.com/chzyer/readline v1.5.1
 	github.com/gkampitakis/go-snaps v0.5.2
-	github.com/pspiagicw/fs v0.0.0-20240412121613-8ee8dca61a16
 	github.com/pspiagicw/goreland v0.0.0-20231129143657-4b9ff8ac7ad5
 	github.com/pspiagicw/pelp v0.0.0-20240318161701-7448ea2e376e
+	github.com/pspiagicw/regolith v0.0.0-20240529080134-2bef52bba263
 	github.com/shivamMg/ppds v0.0.1
 )
 

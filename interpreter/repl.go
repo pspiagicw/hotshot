@@ -2,9 +2,7 @@ package interpreter
 
 import (
 	"fmt"
-	"strings"
 
-	"github.com/chzyer/readline"
 	"github.com/pspiagicw/goreland"
 	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/ast"
@@ -12,6 +10,7 @@ import (
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
+	"github.com/pspiagicw/regolith"
 )
 
 func printHeader() {
@@ -28,11 +27,21 @@ func StartREPL(opts *argparse.Opts) {
 		goreland.LogError("Runtime Error: %s\n", message)
 	})
 
-	rl := initREPL()
-	defer rl.Close()
+	rg, err := regolith.New(&regolith.Config{
+		StartWords: []string{"(", "["},
+		EndWords:   []string{")", "]"},
+	})
+
+	if err != nil {
+		goreland.LogFatal("Error initializing regolith: %v", err)
+	}
 
 	for {
-		input := getInput(rl)
+		input, err := rg.Input()
+
+		if err != nil {
+			goreland.LogFatal("Error reading input from prompt: %v", err)
+		}
 
 		program, errors := parseCode(input, opts)
 		if handleErrors(errors, false) != 0 {
@@ -49,45 +58,6 @@ func StartREPL(opts *argparse.Opts) {
 		}
 	}
 
-}
-
-func initREPL() *readline.Instance {
-	r, err := readline.NewEx(&readline.Config{
-		Prompt:          ">>> ",
-		HistoryFile:     "/tmp/readline.tmp",
-		InterruptPrompt: "^D",
-	})
-
-	if err != nil {
-		goreland.LogFatal("Error initalizing readline: %v", err)
-	}
-
-	return r
-}
-
-func getInput(r *readline.Instance) string {
-	var cmds []string
-
-	parenScore := 0
-	for {
-		line, err := r.Readline()
-		if err != nil {
-			goreland.LogFatal("Error reading input from prompt: %v", err)
-		}
-		line = strings.TrimSpace(line)
-		if len(line) == 0 {
-			continue
-		}
-		cmds = append(cmds, line)
-		parenScore += strings.Count(line, "(") - strings.Count(line, ")")
-		if parenScore == 0 {
-			break
-		}
-		r.SetPrompt("... ")
-	}
-	r.SetPrompt(">>> ")
-
-	return strings.Join(cmds, "\n")
 }
 
 func handleErrors(errors []error, exit bool) int {

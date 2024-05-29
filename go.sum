@@ -35,12 +35,12 @@ github.com/muesli/reflow v0.3.0/go.mod h1:pbwTDkVPibjO2kyvBQRBxTWEEGDGq0FlB1BIKt
 github.com/muesli/termenv v0.15.2 h1:GohcuySI0QmI3wN8Ok9PtKGkgkFIk7y6Vpb5PvrY+Wo=
 github.com/muesli/termenv v0.15.2/go.mod h1:Epx+iuz8sNs7mNKhxzH4fWXGNpZwUaJKRS1noLXviQ8=
 github.com/pkg/diff v0.0.0-20210226163009-20ebb0f2a09e/go.mod h1:pJLUxLENpZxwdsKMEsNbx1VGcRFpLqf3715MtcvvzbA=
-github.com/pspiagicw/fs v0.0.0-20240412121613-8ee8dca61a16 h1:W1/3ulX2DtiyIEIG7Ov6rJdcBHJMYvZ6RR56r+ED+qk=
-github.com/pspiagicw/fs v0.0.0-20240412121613-8ee8dca61a16/go.mod h1:36S2s+6McEuewyXRbbkbbyOR4zSdzpmv12PD+NJrKyQ=
 github.com/pspiagicw/goreland v0.0.0-20231129143657-4b9ff8ac7ad5 h1:vtXgJQnlbnQLdA2FvtdZ5CEeex9+oj8Db5SgcZW807c=
 github.com/pspiagicw/goreland v0.0.0-20231129143657-4b9ff8ac7ad5/go.mod h1:w9C97TNLperGU930lN/hc2XuWUlYzPbBUW1OA1ka4DM=
 github.com/pspiagicw/pelp v0.0.0-20240318161701-7448ea2e376e h1:N0ZhzS8AdPstCIV7eti5BOXhen73DjGj0+d393GXWcU=
 github.com/pspiagicw/pelp v0.0.0-20240318161701-7448ea2e376e/go.mod h1:HSSd41FYDxcdCZvXRKUlh9Uh9PaXzdX2vTnwhHkgN0Q=
+github.com/pspiagicw/regolith v0.0.0-20240529080134-2bef52bba263 h1:6ijio2/SKDp37hMhWPxUiQGCaY2CauFHWBBWvN8zmyc=
+github.com/pspiagicw/regolith v0.0.0-20240529080134-2bef52bba263/go.mod h1:kipuq1zkCkFmTu5W71/8CNkouSFFtcEDmY9l8NaqCBU=
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=
