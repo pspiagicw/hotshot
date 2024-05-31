@@ -133,6 +133,17 @@ func (t Table) String() string {
 	output.WriteString("]")
 	return output.String()
 }
+func (t Table) Slice(key Object) Object {
+	switch key := key.(type) {
+	case *Integer:
+		if key.Value < 0 || key.Value >= len(t.Elements) {
+			return Error{Message: "Index out of range"}
+		}
+		return t.Elements[key.Value]
+	default:
+		return Error{Message: fmt.Sprintf("Invalid type of key received %T", key)}
+	}
+}
 
 type Return struct {
 }

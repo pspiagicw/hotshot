@@ -19,6 +19,8 @@ func NewEvaluator(handler func(string)) *Evaluator {
 
 func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Object {
 	switch node := node.(type) {
+	case *ast.SliceStatement:
+		return e.evalSliceStatement(node, env)
 	case *ast.QuoteStatement:
 		return e.evalQuoteStatement(node, env)
 	case *ast.IntStatement:
@@ -55,6 +57,50 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 		return e.evalImportStatement(node, env)
 	}
 	return e.createError("Evaluation for statement can't be done!")
+}
+func (e *Evaluator) evalSliceStatement(node *ast.SliceStatement, env *object.Environment) object.Object {
+	key := e.Eval(node.Key, env)
+
+	if key.Type() != object.INTEGER_OBJ && key.Type() != object.STRING_OBJ {
+		e.ErrorHandler("Key must be an integer or a string!")
+	}
+
+	target := e.Eval(node.Target, env)
+
+	return e.slice(target, key)
+}
+func (e *Evaluator) slice(target object.Object, key object.Object) object.Object {
+	switch target := target.(type) {
+	case *object.String:
+		return e.stringSlice(target, key)
+	case *object.Table:
+		return e.tableSlice(target, key)
+	default:
+		e.ErrorHandler(fmt.Sprintf("Can't slice object of type %s", target.Type()))
+		return e.createError("Can't slice object of type %s", target.Type())
+	}
+}
+func (e *Evaluator) tableSlice(target *object.Table, key object.Object) object.Object {
+	value := target.Slice(key)
+
+	if value.Type() == object.ERROR_OBJ {
+		e.ErrorHandler(value.String())
+	}
+
+	return value
+}
+func (e *Evaluator) stringSlice(target *object.String, key object.Object) object.Object {
+	switch key := key.(type) {
+	case *object.Integer:
+		if len(target.Value) <= key.Value {
+			e.ErrorHandler("Index out of range!")
+			return &object.Error{Message: "Index out of range!"}
+		}
+		return &object.String{Value: string(target.Value[key.Value])}
+	default:
+		e.ErrorHandler("For string slicing key must be an integer!")
+		return e.createError("For string slicing key must be an integer!")
+	}
 }
 func (e *Evaluator) evalImportStatement(node *ast.ImportStatement, env *object.Environment) object.Object {
 	name := node.Package

@@ -71,8 +71,12 @@ func TestEval(t *testing.T) {
 
 		`(let a {}) (push a 2) (pop a)`: createInt(2),
 
-		`'something`:        createString("something"),
-		`(type 'something)`: createString("STRING"),
+		`'something`:             createString("something"),
+		`(type 'something)`:      createString("STRING"),
+		`[0]{1 2 3 4}`:           createInt(1),
+		`(let a {2 3 4 5}) [2]a`: createInt(4),
+		`[0]"hello"`:             createString("h"),
+		`[7]"hello"`:             createError("Index out of range!"),
 	}
 
 	for input, expectedResult := range tt {
@@ -99,6 +103,9 @@ func createInt(val int) *object.Integer {
 	return &object.Integer{
 		Value: val,
 	}
+}
+func createError(message string) *object.Error {
+	return &object.Error{Message: message}
 }
 func checkResult(t *testing.T, input string, expected object.Object) {
 

@@ -14,10 +14,12 @@ func (t *Token) String() string {
 }
 
 const (
-	LPAREN = "LPAREN"
-	RPAREN = "RPAREN"
-	LBRACE = "LBRACE"
-	RBRACE = "RBRACE"
+	LPAREN  = "LPAREN"
+	RPAREN  = "RPAREN"
+	LBRACE  = "LBRACE"
+	RBRACE  = "RBRACE"
+	LSQUARE = "LSQUARE"
+	RSQUARE = "RSQUARE"
 
 	PLUS     = "PLUS"
 	MINUS    = "MINUS"

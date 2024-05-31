@@ -803,3 +803,71 @@
     },
 }
 ---
+
+[TestEval/[0]{1_2_3_4} - 1]
+&ast.Program{
+    Statements: {
+        &ast.SliceStatement{
+            Key:    &ast.IntStatement{},
+            Target: &ast.TableStatement{
+                Elements: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                    &ast.IntStatement{Value:3},
+                    &ast.IntStatement{Value:4},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/(let_a_{2_3_4_5})_[2]a - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.TableStatement{
+                Elements: {
+                    &ast.IntStatement{Value:2},
+                    &ast.IntStatement{Value:3},
+                    &ast.IntStatement{Value:4},
+                    &ast.IntStatement{Value:5},
+                },
+            },
+        },
+        &ast.SliceStatement{
+            Key:    &ast.IntStatement{Value:2},
+            Target: &ast.IdentStatement{
+                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/[0]"hello" - 1]
+&ast.Program{
+    Statements: {
+        &ast.SliceStatement{
+            Key:    &ast.IntStatement{},
+            Target: &ast.StringStatement{Value:"hello"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestEval/[7]"hello" - 1]
+&ast.Program{
+    Statements: {
+        &ast.SliceStatement{
+            Key:    &ast.IntStatement{Value:7},
+            Target: &ast.StringStatement{Value:"hello"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

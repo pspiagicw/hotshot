@@ -53,13 +53,15 @@ func TestIdent2(t *testing.T) {
 }
 
 func TestParen(t *testing.T) {
-	input := "(){}"
+	input := "(){}[]"
 
 	expectedTokens := []token.Token{
 		{TokenType: token.LPAREN, TokenValue: "("},
 		{TokenType: token.RPAREN, TokenValue: ")"},
 		{TokenType: token.LBRACE, TokenValue: "{"},
 		{TokenType: token.RBRACE, TokenValue: "}"},
+		{TokenType: token.LSQUARE, TokenValue: "["},
+		{TokenType: token.RSQUARE, TokenValue: "]"},
 		{TokenType: token.EOF, TokenValue: " "},
 	}
 	checkTokens(t, expectedTokens, input)

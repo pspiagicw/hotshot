@@ -9,6 +9,23 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
+func TestSliceStatement(t *testing.T) {
+	input := `[0]something`
+
+	expectedTree := []ast.Statement{
+		&ast.SliceStatement{
+			Key: &ast.IntStatement{
+				Value: 0,
+			},
+			Target: &ast.IdentStatement{
+				Value: &token.Token{TokenType: token.IDENT, TokenValue: "something"},
+			},
+		},
+	}
+
+	checkTree(t, input, expectedTree)
+}
+
 func TestQuoteStatement(t *testing.T) {
 	input := `'something`
 
@@ -310,6 +327,17 @@ func matchStringStatement(t *testing.T, expectedStatement ast.Statement, actualS
 	}
 	return e.Value == a.Value
 }
+func matchIdentStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.IdentStatement)
+	if !ok {
+		t.Fatalf("Expected ident statement, got others")
+	}
+	a, ok := actualStatement.(*ast.IdentStatement)
+	if !ok {
+		t.Fatalf("Expected ident statement, got: %v", actualStatement)
+	}
+	return a.Value.TokenValue == e.Value.TokenValue && a.Value.TokenType == e.Value.TokenType
+}
 func matchBoolStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
 	e, ok := expectedStatement.(*ast.BoolStatement)
 	if !ok {
@@ -331,6 +359,18 @@ func matchQuoteStatement(t *testing.T, expectedStatement ast.Statement, actualSt
 		t.Fatalf("Expected quote statement, got others")
 	}
 	return a.Body.TokenValue == e.Body.TokenValue && a.Body.TokenType == e.Body.TokenType
+}
+func matchSliceStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.SliceStatement)
+	if !ok {
+		t.Fatalf("Expected slice statement, got others")
+	}
+	a, ok := actualStatement.(*ast.SliceStatement)
+	if !ok {
+		t.Fatalf("Expected slice statement, got others")
+	}
+
+	return matchStatement(t, e.Key, a.Key) && matchStatement(t, e.Target, a.Target)
 }
 func matchTableStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
 	e, ok := expectedStatement.(*ast.TableStatement)
@@ -375,6 +415,10 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			return matchTableStatement(t, expectedStatement, actualStatement)
 		case *ast.QuoteStatement:
 			return matchQuoteStatement(t, expectedStatement, actualStatement)
+		case *ast.SliceStatement:
+			return matchSliceStatement(t, expectedStatement, actualStatement)
+		case *ast.IdentStatement:
+			return matchIdentStatement(t, expectedStatement, actualStatement)
 		default:
 			t.Fatalf("Some bloody type found!: %v", s)
 		}

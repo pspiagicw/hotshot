@@ -58,6 +58,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseBoolStatement()
 	case token.LBRACE:
 		return p.parseTableStatement()
+	case token.LSQUARE:
+		return p.parseSliceStatement()
 	case token.ILLEGAL:
 		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	case token.IDENT:
@@ -70,6 +72,18 @@ func (p *Parser) parseStatement() ast.Statement {
 		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	}
 	return p.nilStatement
+}
+func (p *Parser) parseSliceStatement() ast.Statement {
+	st := &ast.SliceStatement{}
+
+	st.Key = p.parseStatement()
+
+	p.expectedTokenIs(token.RSQUARE)
+
+	st.Target = p.parseStatement()
+
+	return st
+
 }
 func (p *Parser) parseTableStatement() ast.Statement {
 	st := &ast.TableStatement{}

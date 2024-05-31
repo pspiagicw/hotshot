@@ -138,3 +138,21 @@ func (q QuoteStatement) Data() interface{} {
 func (q QuoteStatement) Children() []tree.Node {
 	return []tree.Node{}
 }
+
+type SliceStatement struct {
+	Key    Statement
+	Target Statement
+}
+
+func (s SliceStatement) String() string {
+	return tree.SprintHrn(s)
+}
+func (s SliceStatement) Data() interface{} {
+	return "slice"
+}
+func (s SliceStatement) Children() []tree.Node {
+	return []tree.Node{
+		s.Key,
+		s.Target,
+	}
+}

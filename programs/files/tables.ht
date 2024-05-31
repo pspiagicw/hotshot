@@ -16,6 +16,8 @@
 (assert (last arr1) 5 "Last failed!")
 (assert (count arr1 1) 1 "Count failed!")
 
+(assert [0]arr1 1 "Access failed!")
+
 
 
 
