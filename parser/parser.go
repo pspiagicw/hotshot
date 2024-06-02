@@ -59,7 +59,7 @@ func (p *Parser) parseStatement() ast.Statement {
 	case token.LBRACE:
 		return p.parseTableStatement()
 	case token.LSQUARE:
-		return p.parseSliceStatement()
+		return p.parseIndexStatement()
 	case token.ILLEGAL:
 		p.registerError("Expected a token for a statement, found: %v", p.curToken.String())
 	case token.IDENT:
@@ -73,8 +73,8 @@ func (p *Parser) parseStatement() ast.Statement {
 	}
 	return p.nilStatement
 }
-func (p *Parser) parseSliceStatement() ast.Statement {
-	st := &ast.SliceStatement{}
+func (p *Parser) parseIndexStatement() ast.Statement {
+	st := &ast.IndexStatement{}
 
 	st.Key = p.parseStatement()
 
@@ -140,7 +140,7 @@ func (p *Parser) parseFunctionDec() ast.Statement {
 
 		if !ok {
 			p.registerError("Expected a ident, got %v", arg)
-			return nil
+			return st
 		}
 
 		st.Args = append(st.Args, arg)
@@ -201,7 +201,7 @@ func (p *Parser) parseLambdaStatement() ast.Statement {
 
 		if !ok {
 			p.registerError("Expected a ident, got %v", arg)
-			return nil
+			return st
 		}
 
 		st.Args = append(st.Args, arg)
@@ -258,18 +258,29 @@ func (p *Parser) parseAssertStatement() ast.Statement {
 
 }
 
-//	func (p *Parser) expectedTokenIsMultiple(ex ...token.TokenType) {
-//		correct := false
-//		for _, t := range ex {
-//			if p.peekToken.TokenType == t {
-//				correct = true
-//			}
-//		}
-//		if !correct {
-//			p.registerError("Expected one of %v, got %s", ex, p.curToken.TokenType)
-//		}
-//		p.advance()
-//	}
+func (p *Parser) parseSetStatement() ast.Statement {
+	st := &ast.SetStatement{}
+
+	p.advance()
+
+	slice := p.parseIndexStatement()
+
+	s, ok := slice.(*ast.IndexStatement)
+
+	if !ok {
+		p.registerError("Expected a slice, got %v", slice)
+		return st
+	}
+
+	st.Target = s
+
+	st.Value = p.parseStatement()
+
+	p.expectedTokenIs(token.RPAREN)
+
+	return st
+
+}
 func (p *Parser) parseImportStatement() ast.Statement {
 	st := &ast.ImportStatement{}
 
@@ -303,6 +314,8 @@ func (p *Parser) parseComplexStatement() ast.Statement {
 		return p.parseAssertStatement()
 	case token.IMPORT:
 		return p.parseImportStatement()
+	case token.SET:
+		return p.parseSetStatement()
 	default:
 		return p.parseFunctionCall()
 	}

@@ -24,7 +24,7 @@ func StartREPL(opts *argparse.Opts) {
 
 	env := object.NewEnvironment()
 	e := eval.NewEvaluator(func(message string) {
-		goreland.LogError("Runtime Error: %s\n", message)
+		goreland.LogError("Runtime Error: %s", message)
 	})
 
 	rg, err := regolith.New(&regolith.Config{
@@ -53,8 +53,7 @@ func StartREPL(opts *argparse.Opts) {
 		result := e.Eval(program, env)
 		if opts.Null || result.Type() != object.NULL_OBJ {
 			fmt.Print("=> ")
-			fmt.Print(result.String())
-			fmt.Println()
+			fmt.Println(result.String())
 		}
 	}
 

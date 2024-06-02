@@ -2,7 +2,6 @@ package eval
 
 import (
 	"embed"
-	"fmt"
 	"os"
 
 	"github.com/pspiagicw/hotshot/lexer"
@@ -24,7 +23,6 @@ func (e *Evaluator) getImportContent(name string) string {
 	if name == "math" {
 		content, err := STD_LIB.ReadFile("stdlib/math.ht")
 		if err != nil {
-			fmt.Println(err)
 			e.ErrorHandler("Error reading file: , " + name)
 		}
 		return string(content)

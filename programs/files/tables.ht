@@ -18,8 +18,8 @@
 
 (assert [0]arr1 1 "Access failed!")
 
+(let employee {})
+(set ['name]employee "Hotshooter")
+(set ['age]employee 21)
 
-
-
-
-
+(assert ['age]employee 21 "Hash access failed!")

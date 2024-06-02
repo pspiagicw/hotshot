@@ -19,8 +19,10 @@ func NewEvaluator(handler func(string)) *Evaluator {
 
 func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Object {
 	switch node := node.(type) {
-	case *ast.SliceStatement:
-		return e.evalSliceStatement(node, env)
+	case *ast.SetStatement:
+		return e.evalSetStatement(node, env)
+	case *ast.IndexStatement:
+		return e.evalIndexStatement(node, env)
 	case *ast.QuoteStatement:
 		return e.evalQuoteStatement(node, env)
 	case *ast.IntStatement:
@@ -58,11 +60,30 @@ func (e *Evaluator) Eval(node ast.Statement, env *object.Environment) object.Obj
 	}
 	return e.createError("Evaluation for statement can't be done!")
 }
-func (e *Evaluator) evalSliceStatement(node *ast.SliceStatement, env *object.Environment) object.Object {
+func (e *Evaluator) evalSetStatement(node *ast.SetStatement, env *object.Environment) object.Object {
+	key := e.Eval(node.Target.Key, env)
+
+	table := e.Eval(node.Target.Target, env)
+
+	if table.Type() != object.TABLE_OBJ {
+		return e.createError("Target must be a table!")
+	}
+
+	value := e.Eval(node.Value, env)
+
+	t, ok := table.(*object.Table)
+
+	if !ok {
+		return e.createError("(INTERNAL) Couldn't cast table object")
+	}
+
+	return t.Set(key, value)
+}
+func (e *Evaluator) evalIndexStatement(node *ast.IndexStatement, env *object.Environment) object.Object {
 	key := e.Eval(node.Key, env)
 
 	if key.Type() != object.INTEGER_OBJ && key.Type() != object.STRING_OBJ {
-		e.ErrorHandler("Key must be an integer or a string!")
+		return e.createError("Key must be an integer or a string!")
 	}
 
 	target := e.Eval(node.Target, env)
@@ -76,15 +97,14 @@ func (e *Evaluator) slice(target object.Object, key object.Object) object.Object
 	case *object.Table:
 		return e.tableSlice(target, key)
 	default:
-		e.ErrorHandler(fmt.Sprintf("Can't slice object of type %s", target.Type()))
 		return e.createError("Can't slice object of type %s", target.Type())
 	}
 }
 func (e *Evaluator) tableSlice(target *object.Table, key object.Object) object.Object {
-	value := target.Slice(key)
+	value := target.Index(key)
 
 	if value.Type() == object.ERROR_OBJ {
-		e.ErrorHandler(value.String())
+		return e.createError(value.String())
 	}
 
 	return value
@@ -93,12 +113,10 @@ func (e *Evaluator) stringSlice(target *object.String, key object.Object) object
 	switch key := key.(type) {
 	case *object.Integer:
 		if len(target.Value) <= key.Value {
-			e.ErrorHandler("Index out of range!")
-			return &object.Error{Message: "Index out of range!"}
+			return e.createError("Index out of range!")
 		}
 		return &object.String{Value: string(target.Value[key.Value])}
 	default:
-		e.ErrorHandler("For string slicing key must be an integer!")
 		return e.createError("For string slicing key must be an integer!")
 	}
 }
@@ -142,6 +160,8 @@ func (e *Evaluator) evalTableStatement(node *ast.TableStatement, env *object.Env
 	fn := &object.Table{}
 
 	fn.Elements = e.evalStatements(node.Elements, env)
+
+	fn.Hash = make(map[object.Object]object.Object)
 
 	return fn
 }
@@ -234,7 +254,7 @@ func (e *Evaluator) evalIdent(node *ast.IdentStatement, env *object.Environment)
 	val := env.Get(node.Value.TokenValue)
 
 	if val.Type() == object.ERROR_OBJ {
-		e.ErrorHandler(val.String())
+		return e.createError(val.String())
 	}
 
 	return val
@@ -279,7 +299,7 @@ func (e *Evaluator) evalUserFunc(node *ast.CallStatement, env *object.Environmen
 
 	v, ok := fn.(*object.Function)
 	if !ok {
-		return e.createError("INTERNAL: Couldn't initialize user function!")
+		return e.createError("(INTERNAL) Couldn't initialize user function!")
 	}
 
 	evals := e.evalStatements(node.Args, env)
@@ -299,7 +319,7 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 	v, ok := fn.(*object.Builtin)
 
 	if !ok {
-		return e.createError("INTERNAL: Could't initalize builtin function")
+		return e.createError("(INTERNAL) Could't initalize builtin function")
 	}
 
 	value := v.Fn(evals)
@@ -307,7 +327,7 @@ func (e *Evaluator) evalFunction(node *ast.CallStatement, env *object.Environmen
 	if value.Type() == object.ERROR_OBJ {
 		v, ok := value.(*object.Error)
 		if !ok {
-			return e.createError("INTERNAL: Couldn't cast error value")
+			return e.createError("(INTERNAL) Couldn't cast error value")
 
 		}
 		e.createError(v.Message)

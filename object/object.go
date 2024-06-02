@@ -114,6 +114,7 @@ func (b Boolean) String() string {
 
 type Table struct {
 	Elements []Object
+	Hash     map[Object]Object
 }
 
 func (t Table) Type() ObjectType {
@@ -133,7 +134,7 @@ func (t Table) String() string {
 	output.WriteString("]")
 	return output.String()
 }
-func (t Table) Slice(key Object) Object {
+func (t Table) Index(key Object) Object {
 	switch key := key.(type) {
 	case *Integer:
 		if key.Value < 0 || key.Value >= len(t.Elements) {
@@ -143,6 +144,10 @@ func (t Table) Slice(key Object) Object {
 	default:
 		return Error{Message: fmt.Sprintf("Invalid type of key received %T", key)}
 	}
+}
+func (t Table) Set(key Object, value Object) Object {
+	t.Hash[key] = value
+	return Null{}
 }
 
 type Return struct {

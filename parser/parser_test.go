@@ -9,11 +9,33 @@ import (
 	"github.com/pspiagicw/hotshot/token"
 )
 
+func TestSetStatement(t *testing.T) {
+	input := `(set ["name"]something 1)`
+
+	expectedTree := []ast.Statement{
+		&ast.SetStatement{
+			Target: &ast.IndexStatement{
+				Key: &ast.StringStatement{
+					Value: "name",
+				},
+				Target: &ast.IdentStatement{
+					Value: &token.Token{TokenType: token.IDENT, TokenValue: "something"},
+				},
+			},
+			Value: &ast.IntStatement{
+				Value: 1,
+			},
+		},
+	}
+
+	checkTree(t, input, expectedTree)
+}
+
 func TestSliceStatement(t *testing.T) {
 	input := `[0]something`
 
 	expectedTree := []ast.Statement{
-		&ast.SliceStatement{
+		&ast.IndexStatement{
 			Key: &ast.IntStatement{
 				Value: 0,
 			},
@@ -360,12 +382,24 @@ func matchQuoteStatement(t *testing.T, expectedStatement ast.Statement, actualSt
 	}
 	return a.Body.TokenValue == e.Body.TokenValue && a.Body.TokenType == e.Body.TokenType
 }
+func matchSetStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
+	e, ok := expectedStatement.(*ast.SetStatement)
+	if !ok {
+		t.Fatalf("Expected set statement, got others")
+	}
+	a, ok := actualStatement.(*ast.SetStatement)
+	if !ok {
+		t.Fatalf("Expected set statement, got others")
+	}
+	return matchSliceStatement(t, e.Target, a.Target) && matchStatement(t, e.Value, a.Value)
+}
+
 func matchSliceStatement(t *testing.T, expectedStatement ast.Statement, actualStatement ast.Statement) bool {
-	e, ok := expectedStatement.(*ast.SliceStatement)
+	e, ok := expectedStatement.(*ast.IndexStatement)
 	if !ok {
 		t.Fatalf("Expected slice statement, got others")
 	}
-	a, ok := actualStatement.(*ast.SliceStatement)
+	a, ok := actualStatement.(*ast.IndexStatement)
 	if !ok {
 		t.Fatalf("Expected slice statement, got others")
 	}
@@ -415,10 +449,12 @@ func matchStatement(t *testing.T, expectedStatement ast.Statement, actualStateme
 			return matchTableStatement(t, expectedStatement, actualStatement)
 		case *ast.QuoteStatement:
 			return matchQuoteStatement(t, expectedStatement, actualStatement)
-		case *ast.SliceStatement:
+		case *ast.IndexStatement:
 			return matchSliceStatement(t, expectedStatement, actualStatement)
 		case *ast.IdentStatement:
 			return matchIdentStatement(t, expectedStatement, actualStatement)
+		case *ast.SetStatement:
+			return matchSetStatement(t, expectedStatement, actualStatement)
 		default:
 			t.Fatalf("Some bloody type found!: %v", s)
 		}

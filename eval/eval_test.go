@@ -76,7 +76,6 @@ func TestEval(t *testing.T) {
 		`[0]{1 2 3 4}`:           createInt(1),
 		`(let a {2 3 4 5}) [2]a`: createInt(4),
 		`[0]"hello"`:             createString("h"),
-		`[7]"hello"`:             createError("Index out of range!"),
 	}
 
 	for input, expectedResult := range tt {

@@ -139,20 +139,38 @@ func (q QuoteStatement) Children() []tree.Node {
 	return []tree.Node{}
 }
 
-type SliceStatement struct {
+type IndexStatement struct {
 	Key    Statement
 	Target Statement
 }
 
-func (s SliceStatement) String() string {
+func (s IndexStatement) String() string {
 	return tree.SprintHrn(s)
 }
-func (s SliceStatement) Data() interface{} {
+func (s IndexStatement) Data() interface{} {
 	return "slice"
 }
-func (s SliceStatement) Children() []tree.Node {
+func (s IndexStatement) Children() []tree.Node {
 	return []tree.Node{
 		s.Key,
 		s.Target,
+	}
+}
+
+type SetStatement struct {
+	Target *IndexStatement
+	Value  Statement
+}
+
+func (s SetStatement) String() string {
+	return tree.SprintHrn(s)
+}
+func (s SetStatement) Data() interface{} {
+	return "set"
+}
+func (s SetStatement) Children() []tree.Node {
+	return []tree.Node{
+		s.Target,
+		s.Value,
 	}
 }

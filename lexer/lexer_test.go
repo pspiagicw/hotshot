@@ -96,7 +96,7 @@ func TestComment(t *testing.T) {
 }
 func TestKeywords(t *testing.T) {
 
-	input := "if true false while case fn lambda cond let assert import"
+	input := "if true false while case fn lambda cond let assert import set"
 
 	expectedTokens := []token.Token{
 		{TokenType: token.IF, TokenValue: "if"},
@@ -110,6 +110,7 @@ func TestKeywords(t *testing.T) {
 		{TokenType: token.LET, TokenValue: "let"},
 		{TokenType: token.ASSERT, TokenValue: "assert"},
 		{TokenType: token.IMPORT, TokenValue: "import"},
+		{TokenType: token.SET, TokenValue: "set"},
 		{TokenType: token.EOF, TokenValue: " "},
 	}
 	checkTokens(t, expectedTokens, input)

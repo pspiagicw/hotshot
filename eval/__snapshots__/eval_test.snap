@@ -807,7 +807,7 @@
 [TestEval/[0]{1_2_3_4} - 1]
 &ast.Program{
     Statements: {
-        &ast.SliceStatement{
+        &ast.IndexStatement{
             Key:    &ast.IntStatement{},
             Target: &ast.TableStatement{
                 Elements: {
@@ -837,7 +837,7 @@
                 },
             },
         },
-        &ast.SliceStatement{
+        &ast.IndexStatement{
             Key:    &ast.IntStatement{Value:2},
             Target: &ast.IdentStatement{
                 Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
@@ -851,7 +851,7 @@
 [TestEval/[0]"hello" - 1]
 &ast.Program{
     Statements: {
-        &ast.SliceStatement{
+        &ast.IndexStatement{
             Key:    &ast.IntStatement{},
             Target: &ast.StringStatement{Value:"hello"},
         },
