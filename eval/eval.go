@@ -161,7 +161,7 @@ func (e *Evaluator) evalTableStatement(node *ast.TableStatement, env *object.Env
 
 	fn.Elements = e.evalStatements(node.Elements, env)
 
-	fn.Hash = make(map[object.Object]object.Object)
+	fn.Hash = make(map[string]object.Object)
 
 	return fn
 }
@@ -248,7 +248,12 @@ func (e *Evaluator) isTrue(value object.Object) bool {
 		e.createError("Condition doesn't evaluate to true/false!")
 	}
 
-	return value.String() == "true"
+	b, ok := value.(*object.Boolean)
+	if !ok {
+		e.createError("(INTERNAL) Couldn't cast boolean object")
+	}
+
+	return b.Value
 }
 func (e *Evaluator) evalIdent(node *ast.IdentStatement, env *object.Environment) object.Object {
 	val := env.Get(node.Value.TokenValue)

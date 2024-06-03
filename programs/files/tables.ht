@@ -21,5 +21,10 @@
 (let employee {})
 (set ['name]employee "Hotshooter")
 (set ['age]employee 21)
+(set [1]employee 'something)
+(set ['1]employee 'something-else)
+
 
 (assert ['age]employee 21 "Hash access failed!")
+(assert [1]employee 'something "Numerical access failed!")
+(assert ['1]employee 'something-else "String access failed!")

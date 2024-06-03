@@ -12,6 +12,7 @@ type ObjectType string
 type Object interface {
 	Type() ObjectType
 	String() string
+	Content() string
 }
 
 const (
@@ -36,8 +37,12 @@ type Function struct {
 func (f Function) Type() ObjectType {
 	return FUNCTION_OBJ
 }
+func (f Function) Content() string {
+	return "function"
+}
 func (f Function) String() string {
-	return "fn()"
+	args := len(f.Args)
+	return fmt.Sprintf("(fn with %d args at %p)", args, &f)
 }
 
 type Null struct {
@@ -47,7 +52,10 @@ func (n Null) Type() ObjectType {
 	return NULL_OBJ
 }
 func (n Null) String() string {
-	return "NULL"
+	return "null"
+}
+func (n Null) Content() string {
+	return "null"
 }
 
 type Integer struct {
@@ -59,6 +67,9 @@ func (i Integer) Type() ObjectType {
 }
 
 func (i Integer) String() string {
+	return fmt.Sprintf("(int %d)", i.Value)
+}
+func (i Integer) Content() string {
 	return fmt.Sprintf("%d", i.Value)
 }
 
@@ -71,6 +82,9 @@ func (s String) Type() ObjectType {
 }
 
 func (s String) String() string {
+	return fmt.Sprintf("(str %s)", s.Value)
+}
+func (s String) Content() string {
 	return s.Value
 }
 
@@ -86,6 +100,9 @@ func (s Builtin) Type() ObjectType {
 func (s Builtin) String() string {
 	return "builtin function"
 }
+func (s Builtin) Content() string {
+	return "builtin function"
+}
 
 type Error struct {
 	Message string
@@ -95,6 +112,9 @@ func (e Error) Type() ObjectType {
 	return ERROR_OBJ
 }
 func (e Error) String() string {
+	return e.Message
+}
+func (e Error) Content() string {
 	return e.Message
 }
 
@@ -107,14 +127,18 @@ func (b Boolean) Type() ObjectType {
 }
 func (b Boolean) String() string {
 	if b.Value {
-		return "true"
+		return "(bool true)"
 	}
-	return "false"
+	return "(bool false)"
+}
+func (b Boolean) Content() string {
+	return fmt.Sprintf("%t", b.Value)
 }
 
 type Table struct {
-	Elements []Object
-	Hash     map[Object]Object
+	Elements  []Object
+	Hash      map[string]Object
+	arrLength int
 }
 
 func (t Table) Type() ObjectType {
@@ -134,19 +158,42 @@ func (t Table) String() string {
 	output.WriteString("]")
 	return output.String()
 }
-func (t Table) Index(key Object) Object {
+func (t Table) Content() string {
+	var output strings.Builder
+
+	output.WriteString("[")
+
+	elements := []string{}
+	for _, element := range t.Elements {
+		elements = append(elements, element.Content())
+	}
+
+	output.WriteString(strings.Join(elements, " "))
+	output.WriteString("]")
+	return output.String()
+}
+func (t *Table) Index(key Object) Object {
 	switch key := key.(type) {
 	case *Integer:
 		if key.Value < 0 || key.Value >= len(t.Elements) {
-			return Error{Message: "Index out of range"}
+			val, ok := t.Hash[key.String()]
+			if !ok {
+				return Error{Message: "Index out of range!"}
+			}
+			return val
 		}
 		return t.Elements[key.Value]
+	case *String:
+		if value, ok := t.Hash[key.String()]; ok {
+			return value
+		}
+		return Error{Message: fmt.Sprintf("Key not found: %s", key.Value)}
 	default:
 		return Error{Message: fmt.Sprintf("Invalid type of key received %T", key)}
 	}
 }
-func (t Table) Set(key Object, value Object) Object {
-	t.Hash[key] = value
+func (t *Table) Set(key Object, value Object) Object {
+	t.Hash[key.String()] = value
 	return Null{}
 }
 
@@ -157,5 +204,8 @@ func (r Return) Type() ObjectType {
 	return RETURN_OBJ
 }
 func (r Return) String() string {
+	return "RETURN"
+}
+func (r Return) Content() string {
 	return "RETURN"
 }

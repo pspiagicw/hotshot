@@ -10,7 +10,12 @@ func concatFunc(args []Object) Object {
 	var out strings.Builder
 
 	for _, arg := range args {
-		out.WriteString(arg.String())
+		s, ok := arg.(*String)
+
+		if !ok {
+			return createError("Argument is not a string")
+		}
+		out.WriteString(s.Value)
 	}
 
 	return &String{
@@ -24,7 +29,7 @@ func stringFunc(args []Object) Object {
 	}
 
 	return &String{
-		Value: args[0].String(),
+		Value: args[0].Content(),
 	}
 }
 func validateString(obj Object) Object {
