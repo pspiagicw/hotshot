@@ -9,6 +9,6 @@
 - [ ] Think about support for '<=' and '>='
 - [ ] Think about multi-argument '>', '<', etc. Just like Common Lisp
 - [ ] Think about mutli-argument '='
-- [ ] Add 'minusp' and 'plusp', 'evenp' and 'oddp'. Preferably add as stdlib!
+- [x] Add 'minusp' and 'plusp', 'evenp' and 'oddp'. Preferably add as stdlib!
 - [x] Think about implementing quote-strings. Basically `'hello-world` would be parsed as `"hello-world"`. Basically any identifier( or maybe number ?) prefixed by a quote!. Useful for hashes and other stuff.
 

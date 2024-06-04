@@ -13,27 +13,34 @@ import (
 var STD_LIB embed.FS
 
 func (e *Evaluator) getImportPath(name string) string {
-	if name == "math" {
-		return "math"
-	}
 	return name
 }
-
-func (e *Evaluator) getImportContent(name string) string {
-	if name == "math" {
-		content, err := STD_LIB.ReadFile("stdlib/math.ht")
-		if err != nil {
-			e.ErrorHandler("Error reading file: , " + name)
-		}
-		return string(content)
-	}
-	contents, err := os.ReadFile(name)
+func readStdFile(name string) string {
+	contents, err := STD_LIB.ReadFile(name)
 
 	if err != nil {
-		e.ErrorHandler("Error reading file: " + name)
+		panic("Error reading file: " + name)
 	}
 
 	return string(contents)
+}
+func readFile(name string) string {
+	contents, err := os.ReadFile(name)
+
+	if err != nil {
+		panic("Error reading file: " + name)
+	}
+
+	return string(contents)
+}
+
+func (e *Evaluator) getImportContent(name string) string {
+	switch name {
+	case "math":
+		return readStdFile("stdlib/math.ht")
+	default:
+		return readFile(name)
+	}
 }
 
 func (e *Evaluator) resolveImport(contents string, env *object.Environment) *object.Environment {

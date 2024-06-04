@@ -9,3 +9,14 @@
         ((not (numberp n)) false)
         (true (not (isOdd n)))))
 
+(fn isMinus (n)
+    (cond
+        ((not (numberp n)) false)
+        ((< n 0) true)
+        (true false)))
+
+(fn isPlus (n)
+    (cond
+        ((not (numberp n)) false)
+        ((> n 0) true)
+        (true false)))
