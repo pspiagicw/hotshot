@@ -156,6 +156,14 @@ func (t Table) String() string {
 
 	output.WriteString(strings.Join(elements, " "))
 	output.WriteString("]")
+	output.WriteString(" + ")
+	output.WriteString("{")
+	elements = []string{}
+	for key, value := range t.Hash {
+		elements = append(elements, fmt.Sprintf("%s: %s", key, value.Content()))
+	}
+	output.WriteString(strings.Join(elements, ", "))
+	output.WriteString("}")
 	return output.String()
 }
 func (t Table) Content() string {
