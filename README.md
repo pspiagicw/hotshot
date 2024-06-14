@@ -1,7 +1,3 @@
-+++
-title = "Hotshot"
-+++
-
 This documentation is available on [GitHub](https://github.com/pspiagicw/hotshot) or [my website](https://falconite.xyz/hotshot)
 
 # Contents
