@@ -16,11 +16,16 @@ func _() {
 	_ = x[SUB-5]
 	_ = x[TRUE-6]
 	_ = x[FALSE-7]
+	_ = x[GT-8]
+	_ = x[LT-9]
+	_ = x[EQ-10]
+	_ = x[JCMP-11]
+	_ = x[JMP-12]
 }
 
-const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSE"
+const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSEGTLTEQJCMPJMP"
 
-var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31}
+var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31, 33, 35, 37, 41, 44}
 
 func (i Op) String() string {
 	if i < 0 || i >= Op(len(_Op_index)-1) {

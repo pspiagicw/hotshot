@@ -16,6 +16,8 @@ const (
 	GT
 	LT
 	EQ
+	JCMP
+	JMP
 )
 
 type Instruction struct {
