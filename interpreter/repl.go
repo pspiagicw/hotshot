@@ -6,6 +6,8 @@ import (
 	"github.com/pspiagicw/goreland"
 	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/ast"
+	"github.com/pspiagicw/hotshot/compiler"
+	"github.com/pspiagicw/hotshot/decompiler"
 	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
@@ -55,6 +57,13 @@ func StartREPL(opts *argparse.Opts) {
 			fmt.Print("=> ")
 			fmt.Println(result.String())
 		}
+		c := compiler.NewCompiler()
+		err = c.Compile(program)
+
+		if err != nil {
+			goreland.LogError("Error compiling the program: %v", err)
+		}
+		decompiler.Print(c.Bytecode())
 	}
 
 }

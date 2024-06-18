@@ -1,6 +1,9 @@
 This documentation is available on [GitHub](https://github.com/pspiagicw/hotshot) or [my website](https://falconite.xyz/hotshot)
 
-# Contents
+# hotshot
+
+`hotshot` is a LISP interpreter, borrowing features from Lua.
+
 
  - [Hotshot](#hotshot)
     - [status](#status)
@@ -22,8 +25,6 @@ This documentation is available on [GitHub](https://github.com/pspiagicw/hotshot
     - [import](#import)
     - [stdlib](#stdlib)
  - [Internals]()
-
-# hotshot
 
 This is `hotshot`. A LISP based language written in Golang.
 
