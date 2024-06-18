@@ -18,11 +18,14 @@ const (
 	EQ
 	JCMP
 	JMP
+	SET
+	GET
 
 	JT
 )
 
 type Instruction struct {
-	OpCode Op
-	Args   int16
+	OpCode  Op
+	Args    int16
+	Comment string
 }

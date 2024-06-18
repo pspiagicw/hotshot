@@ -32,6 +32,13 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 	env := object.NewEnvironment()
 
 	_ = e.Eval(program, env)
+
+	// c := compiler.NewCompiler()
+	// err := c.Compile(program)
+	// if err != nil {
+	// 	goreland.LogFatal("Error while compiling program: %v", err)
+	// }
+	// decompiler.Print(c.Bytecode())
 }
 func readFile(file string) string {
 

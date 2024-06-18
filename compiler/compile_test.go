@@ -8,6 +8,74 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestCondStatements(t *testing.T) {
+	input := `
+    (cond ((> 10 20) 10) ((= 1 2) 2310) (true false))
+    `
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.GT, Args: 2},
+		{OpCode: code.JCMP, Args: 2},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.JMP, Args: 1},
+		{OpCode: code.JT, Args: 2},
+		{OpCode: code.PUSH, Args: 3},
+		{OpCode: code.PUSH, Args: 4},
+		{OpCode: code.EQ, Args: 2},
+		{OpCode: code.JCMP, Args: 3},
+		{OpCode: code.PUSH, Args: 5},
+		{OpCode: code.JMP, Args: 1},
+		{OpCode: code.JT, Args: 3},
+		{OpCode: code.TRUE, Args: -1},
+		{OpCode: code.JCMP, Args: 4},
+		{OpCode: code.FALSE, Args: -1},
+		{OpCode: code.JMP, Args: 1},
+		{OpCode: code.JT, Args: 4},
+		{OpCode: code.JT, Args: 1},
+		// {OpCode: code.PUSH, Args: 0},
+		// {OpCode: code.PUSH, Args: 1},
+		// {OpCode: code.GT, Args: 2},
+		// {OpCode: code.JCMP, Args: 1},
+		// {OpCode: code.PUSH, Args: 2},
+	}
+
+	checkBytecode(t, input, bytecode)
+}
+func TestWhileStatements(t *testing.T) {
+	input := `(while (< 10 20) 10)`
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.JT, Args: 1},
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.LT, Args: 2},
+		{OpCode: code.JCMP, Args: 2},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.JMP, Args: 1},
+		{OpCode: code.JT, Args: 2},
+	}
+
+	checkBytecode(t, input, bytecode)
+}
+
+func TestLetStatement(t *testing.T) {
+	input := `(let a 3) (let b 4) (+ a b)`
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.SET, Args: 1},
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.GET, Args: 1},
+		{OpCode: code.ADD, Args: 2},
+	}
+
+	checkBytecode(t, input, bytecode)
+}
+
 func TestIfElse(t *testing.T) {
 	input := `(if true 10 20)`
 

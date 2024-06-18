@@ -21,12 +21,14 @@ func _() {
 	_ = x[EQ-10]
 	_ = x[JCMP-11]
 	_ = x[JMP-12]
-	_ = x[JT-13]
+	_ = x[SET-13]
+	_ = x[GET-14]
+	_ = x[JT-15]
 }
 
-const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSEGTLTEQJCMPJMPJT"
+const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSEGTLTEQJCMPJMPSETGETJT"
 
-var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31, 33, 35, 37, 41, 44, 46}
+var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31, 33, 35, 37, 41, 44, 47, 50, 52}
 
 func (i Op) String() string {
 	if i < 0 || i >= Op(len(_Op_index)-1) {

@@ -17,14 +17,24 @@ type Compiler struct {
 	instructions []*code.Instruction
 	constants    []object.Object
 	jid          int16
+	symbols      *SymbolTable
 }
 
-func (c *Compiler) JumpID() int16 {
-	c.jid++
-	return c.jid
+func NewCompiler() *Compiler {
+	return &Compiler{
+		instructions: []*code.Instruction{},
+		constants:    []object.Object{},
+		jid:          0,
+		symbols:      NewSymbolTable(),
+	}
 }
-
-func (c *Compiler) conditionalsPass() {
+func NewWithState(symbols *SymbolTable, constants []object.Object) *Compiler {
+	return &Compiler{
+		instructions: []*code.Instruction{},
+		constants:    constants,
+		jid:          0,
+		symbols:      symbols,
+	}
 }
 
 func (c *Compiler) Bytecode() *Bytecode {
@@ -34,10 +44,14 @@ func (c *Compiler) Bytecode() *Bytecode {
 		Instructions: c.instructions,
 	}
 }
-
-func NewCompiler() *Compiler {
-	return &Compiler{}
+func (c *Compiler) JumpID() int16 {
+	c.jid++
+	return c.jid
 }
+
+func (c *Compiler) conditionalsPass() {
+}
+
 func (c *Compiler) emit(op code.Op, arg int16) {
 	c.instructions = append(c.instructions, &code.Instruction{OpCode: op, Args: arg})
 }
@@ -90,11 +104,79 @@ func (c *Compiler) Compile(node ast.Statement) error {
 		}
 	case *ast.IfStatement:
 		return c.compileIfStatement(node)
-
+	case *ast.AssignmentStatement:
+		return c.compileAssignmentStatement(node)
+	case *ast.IdentStatement:
+		return c.compileIdentStatement(node)
+	case *ast.WhileStatement:
+		return c.compileWhileStatement(node)
+	case *ast.CondStatement:
+		return c.compileCondStatement(node)
 	case *ast.EmptyStatement:
 	default:
 		return fmt.Errorf("Unknown node type %T", node)
 	}
+	return nil
+}
+func (c *Compiler) compileCondStatement(node *ast.CondStatement) error {
+	endID := c.JumpID()
+	for _, cond := range node.Expressions {
+		condID := c.JumpID()
+
+		err := c.Compile(cond.Condition)
+		if err != nil {
+			return err
+		}
+		c.emit(code.JCMP, condID)
+		err = c.Compile(cond.Body)
+		if err != nil {
+			return err
+		}
+		c.emit(code.JMP, endID)
+		c.emit(code.JT, condID)
+	}
+	c.emit(code.JT, endID)
+	return nil
+}
+func (c *Compiler) compileWhileStatement(node *ast.WhileStatement) error {
+	condID := c.JumpID()
+	c.emit(code.JT, condID)
+	err := c.Compile(node.Condition)
+
+	if err != nil {
+		return err
+	}
+
+	bodyID := c.JumpID()
+	c.emit(code.JCMP, bodyID)
+
+	err = c.Compile(node.Body)
+
+	if err != nil {
+		return err
+	}
+
+	c.emit(code.JMP, condID)
+	c.emit(code.JT, bodyID)
+	return nil
+
+}
+func (c *Compiler) compileIdentStatement(node *ast.IdentStatement) error {
+	symbol, ok := c.symbols.Resolve(node.Value.TokenValue)
+	if !ok {
+		return fmt.Errorf("Undefined variable %s", node.Value.TokenValue)
+	}
+
+	c.emit(code.GET, int16(symbol.Index))
+	return nil
+}
+func (c *Compiler) compileAssignmentStatement(node *ast.AssignmentStatement) error {
+	err := c.Compile(node.Value)
+	if err != nil {
+		return err
+	}
+	symbol := c.symbols.Define(node.Name.TokenValue)
+	c.emit(code.SET, int16(symbol.Index))
 	return nil
 }
 func (c *Compiler) compileIfStatement(node *ast.IfStatement) error {

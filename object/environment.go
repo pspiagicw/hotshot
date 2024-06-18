@@ -20,7 +20,7 @@ func (e *Environment) Get(name string) Object {
 		if e.Outer != nil {
 			return e.Outer.Get(name)
 		}
-		return createError("No such variable or function!")
+		return createError("'%s': No such variable or function!", name)
 	}
 
 	return value

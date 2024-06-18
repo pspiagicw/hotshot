@@ -246,11 +246,13 @@ func (e *Evaluator) evalIfStatement(node *ast.IfStatement, env *object.Environme
 func (e *Evaluator) isTrue(value object.Object) bool {
 	if value.Type() != object.BOOLEAN_OBJ {
 		e.createError("Condition doesn't evaluate to true/false!")
+		return false
 	}
 
 	b, ok := value.(*object.Boolean)
 	if !ok {
 		e.createError("(INTERNAL) Couldn't cast boolean object")
+		return false
 	}
 
 	return b.Value
@@ -360,7 +362,7 @@ func extendEnvironment(f *object.Function, givenArgs []object.Object) *object.En
 	return newEnv
 }
 func (e *Evaluator) createError(message string, v ...interface{}) *object.Error {
-	message = fmt.Sprintf("ERROR: %s\n", fmt.Sprintf(message, v...))
+	message = fmt.Sprintf("ERROR: %s", fmt.Sprintf(message, v...))
 	e.ErrorHandler(message)
 	return &object.Error{
 		Message: message,
