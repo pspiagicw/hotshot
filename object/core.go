@@ -45,7 +45,7 @@ func printFunc(args []Object) Object {
 	output.WriteString(" ")
 
 	for _, arg := range args {
-		output.WriteString(arg.String())
+		output.WriteString(arg.Content())
 		output.WriteString(" ")
 	}
 

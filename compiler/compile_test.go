@@ -13,11 +13,14 @@ func TestIfElse(t *testing.T) {
 
 	bytecode := []*code.Instruction{
 		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.JCMP, Args: 2},
+		{OpCode: code.JCMP, Args: 1},
 		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.JMP, Args: 1},
+		{OpCode: code.JMP, Args: 2},
+		{OpCode: code.JT, Args: 1},
 		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.JT, Args: 2},
 	}
+
 	checkBytecode(t, input, bytecode)
 }
 
@@ -28,6 +31,7 @@ func TestIf(t *testing.T) {
 		{OpCode: code.TRUE, Args: -1},
 		{OpCode: code.JCMP, Args: 1},
 		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.JT, Args: 1},
 	}
 
 	checkBytecode(t, input, bytecode)
@@ -40,11 +44,11 @@ func TestComparison(t *testing.T) {
 		{OpCode: code.PUSH, Args: 0},
 		{OpCode: code.PUSH, Args: 1},
 		{OpCode: code.GT, Args: 2},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.PUSH, Args: 3},
 		{OpCode: code.LT, Args: 2},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Args: 4},
+		{OpCode: code.PUSH, Args: 5},
 		{OpCode: code.EQ, Args: 2},
 	}
 	checkBytecode(t, input, bytecode)
@@ -206,12 +210,16 @@ func checkBytecode(t *testing.T, input string, expected []*code.Instruction) {
 
 	bytecode := compiler.Bytecode()
 
+	if len(bytecode.Instructions) != len(expected) {
+		t.Fatalf("Expected %d instructions, got %d", len(expected), len(bytecode.Instructions))
+	}
+
 	for i, instr := range bytecode.Instructions {
 		if instr.OpCode != expected[i].OpCode {
 			t.Fatalf("Expected OpCode %s, got %s", expected[i].OpCode, instr.OpCode)
 		}
 		if instr.Args != expected[i].Args {
-			t.Fatalf("Expected Args %d, got %d", expected[i].Args, instr.Args)
+			t.Fatalf("Expected Args %d, got %d for instruction %s", expected[i].Args, instr.Args, instr.OpCode)
 		}
 	}
 }

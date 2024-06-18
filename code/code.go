@@ -18,6 +18,8 @@ const (
 	EQ
 	JCMP
 	JMP
+
+	JT
 )
 
 type Instruction struct {

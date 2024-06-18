@@ -16,9 +16,20 @@ type Bytecode struct {
 type Compiler struct {
 	instructions []*code.Instruction
 	constants    []object.Object
+	jid          int16
+}
+
+func (c *Compiler) JumpID() int16 {
+	c.jid++
+	return c.jid
+}
+
+func (c *Compiler) conditionalsPass() {
 }
 
 func (c *Compiler) Bytecode() *Bytecode {
+	// c.constantPass()
+	c.conditionalsPass()
 	return &Bytecode{
 		Instructions: c.instructions,
 	}
@@ -77,9 +88,44 @@ func (c *Compiler) Compile(node ast.Statement) error {
 		} else {
 			c.emit(code.FALSE, -1)
 		}
+	case *ast.IfStatement:
+		return c.compileIfStatement(node)
+
 	case *ast.EmptyStatement:
 	default:
 		return fmt.Errorf("Unknown node type %T", node)
+	}
+	return nil
+}
+func (c *Compiler) compileIfStatement(node *ast.IfStatement) error {
+
+	err := c.Compile(node.Condition)
+
+	if err != nil {
+		return err
+	}
+
+	consequenceID := c.JumpID()
+
+	c.emit(code.JCMP, consequenceID)
+
+	err = c.Compile(node.Body)
+
+	if err != nil {
+		return err
+	}
+
+	if node.Else != nil {
+		elseID := c.JumpID()
+		c.emit(code.JMP, elseID)
+		c.emit(code.JT, consequenceID)
+		err = c.Compile(node.Else)
+		if err != nil {
+			return err
+		}
+		c.emit(code.JT, elseID)
+	} else {
+		c.emit(code.JT, consequenceID)
 	}
 	return nil
 }
