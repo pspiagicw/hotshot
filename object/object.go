@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/pspiagicw/hotshot/ast"
+	"github.com/pspiagicw/hotshot/code"
 )
 
 type ObjectType string
@@ -26,6 +27,8 @@ const (
 	BUILTIN_OBJ  = "BUILTIN"
 	ERROR_OBJ    = "ERROR"
 	RETURN_OBJ   = "RETURN"
+
+	COMPILED_FUNCTION_OBJ = "COMPILED_FUNCTION"
 )
 
 type Function struct {
@@ -216,4 +219,19 @@ func (r Return) String() string {
 }
 func (r Return) Content() string {
 	return "RETURN"
+}
+
+type CompiledFunction struct {
+	Instructions []*code.Instruction
+}
+
+func (c CompiledFunction) Type() ObjectType {
+	return COMPILED_FUNCTION_OBJ
+}
+
+func (c CompiledFunction) String() string {
+	return "(compiled function)"
+}
+func (c CompiledFunction) Content() string {
+	return "(compiled function)"
 }

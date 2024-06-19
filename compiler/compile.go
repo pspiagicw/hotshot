@@ -11,6 +11,7 @@ import (
 
 type Bytecode struct {
 	Instructions []*code.Instruction
+	Constants    []object.Object
 }
 
 type Compiler struct {
@@ -42,6 +43,7 @@ func (c *Compiler) Bytecode() *Bytecode {
 	c.conditionalsPass()
 	return &Bytecode{
 		Instructions: c.instructions,
+		Constants:    c.constants,
 	}
 }
 func (c *Compiler) JumpID() int16 {
@@ -84,6 +86,8 @@ func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 
 func (c *Compiler) Compile(node ast.Statement) error {
 	switch node := node.(type) {
+	case *ast.LambdaStatement:
+		return c.compileLambdaStatement(node)
 	case *ast.Program:
 		for _, statement := range node.Statements {
 			err := c.Compile(statement)

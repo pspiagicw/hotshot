@@ -22,6 +22,7 @@ const (
 	GET
 
 	JT
+	CALL
 )
 
 type Instruction struct {

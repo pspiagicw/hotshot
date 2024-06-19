@@ -5,14 +5,52 @@ import (
 
 	"github.com/pspiagicw/hotshot/code"
 	"github.com/pspiagicw/hotshot/lexer"
+	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
 )
+
+func TestFunction(t *testing.T) {
+	input := `(lambda () 25)`
+
+	constants := []interface{}{
+		24,
+		[]*code.Instruction{
+			{OpCode: code.PUSH, Args: 0},
+		},
+	}
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+
+// func TestLambda(t *testing.T) {
+// 	input := `(let a (lambda () 25)) (a)`
+//
+// 	constants := []interface{}{
+// 		25,
+// 		[]*code.Instruction{
+// 			{OpCode: code.PUSH, Args: 0}, // The 25
+// 		},
+// 	}
+//
+// 	bytecode := []*code.Instruction{
+// 		{OpCode: code.PUSH, Args: 1},  // The compiled function
+// 		{OpCode: code.SET, Args: 0},   // The variable
+// 		{OpCode: code.GET, Args: 0},   // The variable
+// 		{OpCode: code.CALL, Args: -1}, // The call
+// 	}
+//
+// 	checkBytecode(t, input, bytecode, constants)
+// }
 
 func TestCondStatements(t *testing.T) {
 	input := `
     (cond ((> 10 20) 10) ((= 1 2) 2310) (true false))
     `
 
+	constants := []interface{}{10, 20, 10, 1, 2, 2310}
 	bytecode := []*code.Instruction{
 		{OpCode: code.PUSH, Args: 0},
 		{OpCode: code.PUSH, Args: 1},
@@ -34,14 +72,9 @@ func TestCondStatements(t *testing.T) {
 		{OpCode: code.JMP, Args: 1},
 		{OpCode: code.JT, Args: 4},
 		{OpCode: code.JT, Args: 1},
-		// {OpCode: code.PUSH, Args: 0},
-		// {OpCode: code.PUSH, Args: 1},
-		// {OpCode: code.GT, Args: 2},
-		// {OpCode: code.JCMP, Args: 1},
-		// {OpCode: code.PUSH, Args: 2},
 	}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 func TestWhileStatements(t *testing.T) {
 	input := `(while (< 10 20) 10)`
@@ -56,8 +89,9 @@ func TestWhileStatements(t *testing.T) {
 		{OpCode: code.JMP, Args: 1},
 		{OpCode: code.JT, Args: 2},
 	}
+	constants := []interface{}{10, 20, 10}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 
 func TestLetStatement(t *testing.T) {
@@ -72,8 +106,9 @@ func TestLetStatement(t *testing.T) {
 		{OpCode: code.GET, Args: 1},
 		{OpCode: code.ADD, Args: 2},
 	}
+	constants := []interface{}{3, 4}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 
 func TestIfElse(t *testing.T) {
@@ -88,8 +123,9 @@ func TestIfElse(t *testing.T) {
 		{OpCode: code.PUSH, Args: 1},
 		{OpCode: code.JT, Args: 2},
 	}
+	constants := []interface{}{10, 20}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 
 func TestIf(t *testing.T) {
@@ -101,8 +137,9 @@ func TestIf(t *testing.T) {
 		{OpCode: code.PUSH, Args: 0},
 		{OpCode: code.JT, Args: 1},
 	}
+	constants := []interface{}{10}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 
 func TestComparison(t *testing.T) {
@@ -119,7 +156,8 @@ func TestComparison(t *testing.T) {
 		{OpCode: code.PUSH, Args: 5},
 		{OpCode: code.EQ, Args: 2},
 	}
-	checkBytecode(t, input, bytecode)
+	constants := []interface{}{1, 2, 1, 2, 1, 2}
+	checkBytecode(t, input, bytecode, constants)
 }
 func TestBoolean(t *testing.T) {
 	input := `true false`
@@ -128,8 +166,9 @@ func TestBoolean(t *testing.T) {
 		{OpCode: code.TRUE, Args: -1},
 		{OpCode: code.FALSE, Args: -1},
 	}
+	constants := []interface{}{}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 
 }
 
@@ -160,7 +199,9 @@ func TestArithmetic(t *testing.T) {
 		{OpCode: code.MUL, Args: 2},
 		{OpCode: code.ADD, Args: 4},
 	}
-	checkBytecode(t, input, bytecode)
+
+	constants := []interface{}{1, 2, 3, 4, 5, 6, 3}
+	checkBytecode(t, input, bytecode, constants)
 }
 
 func TestPush(t *testing.T) {
@@ -170,7 +211,8 @@ func TestPush(t *testing.T) {
 		{OpCode: code.PUSH, Args: 0},
 	}
 
-	checkBytecode(t, input, bytecode)
+	constants := []interface{}{1}
+	checkBytecode(t, input, bytecode, constants)
 }
 func TestAdd(t *testing.T) {
 	input := `(+ 1 2)`
@@ -190,7 +232,8 @@ func TestAdd(t *testing.T) {
 		},
 	}
 
-	checkBytecode(t, input, bytecode)
+	constants := []interface{}{1, 2}
+	checkBytecode(t, input, bytecode, constants)
 }
 func TestSubtract(t *testing.T) {
 	input := `(- 1 2)`
@@ -209,8 +252,9 @@ func TestSubtract(t *testing.T) {
 			Args:   2,
 		},
 	}
+	constants := []interface{}{1, 2}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 }
 func TestMultiply(t *testing.T) {
 	input := `(* 1 2)`
@@ -229,8 +273,9 @@ func TestMultiply(t *testing.T) {
 			Args:   2,
 		},
 	}
+	constants := []interface{}{1, 2}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 
 }
 func TestDivide(t *testing.T) {
@@ -254,12 +299,13 @@ func TestDivide(t *testing.T) {
 			Args:   3,
 		},
 	}
+	constants := []interface{}{1, 2, 3}
 
-	checkBytecode(t, input, bytecode)
+	checkBytecode(t, input, bytecode, constants)
 
 }
 
-func checkBytecode(t *testing.T, input string, expected []*code.Instruction) {
+func checkBytecode(t *testing.T, input string, expected []*code.Instruction, constants []interface{}) {
 	t.Helper()
 
 	lexer := lexer.NewLexer(input)
@@ -278,11 +324,78 @@ func checkBytecode(t *testing.T, input string, expected []*code.Instruction) {
 
 	bytecode := compiler.Bytecode()
 
-	if len(bytecode.Instructions) != len(expected) {
-		t.Fatalf("Expected %d instructions, got %d", len(expected), len(bytecode.Instructions))
+	checkInstructions(t, bytecode.Instructions, expected)
+	checkConstants(t, bytecode.Constants, constants)
+}
+func checkConstants(t *testing.T, constants []object.Object, expected []interface{}) {
+	t.Helper()
+
+	if len(constants) != len(expected) {
+		t.Fatalf("Expected %d constants, got %d", len(expected), len(constants))
 	}
 
-	for i, instr := range bytecode.Instructions {
+	for i, constant := range expected {
+		switch constant := constant.(type) {
+		case int:
+			checkInt(t, constants[i], constant)
+		case bool:
+			checkBool(t, constants[i], constant)
+		case []*code.Instruction:
+			checkCompiledFunction(t, constants[i], constant)
+		default:
+			t.Fatalf("Unknown type %T", constant)
+		}
+	}
+}
+func checkCompiledFunction(t *testing.T, obj object.Object, expected []*code.Instruction) {
+	t.Helper()
+
+	if obj.Type() != object.COMPILED_FUNCTION_OBJ {
+		t.Fatalf("Expected COMPILED_FUNCTION_OBJ, got %s", obj.Type())
+	}
+
+	fn, ok := obj.(*object.CompiledFunction)
+
+	if !ok {
+		t.Fatalf("Expected COMPILED_FUNCTION_OBJ, got %s", obj.Type())
+	}
+
+	checkInstructions(t, fn.Instructions, expected)
+}
+func checkBool(t *testing.T, obj object.Object, expected bool) {
+	t.Helper()
+
+	if obj.Type() != object.BOOLEAN_OBJ {
+		t.Fatalf("Expected BOOLEAN_OBJ, got %s", obj.Type())
+	}
+
+	value := obj.(*object.Boolean).Value
+
+	if value != expected {
+		t.Fatalf("Expected %t, got %t", expected, value)
+	}
+}
+func checkInt(t *testing.T, obj object.Object, expected int) {
+	t.Helper()
+
+	if obj.Type() != object.INTEGER_OBJ {
+		t.Fatalf("Expected INTEGER_OBJ, got %s", obj.Type())
+	}
+
+	value := obj.(*object.Integer).Value
+	if value != expected {
+		t.Fatalf("Expected %d, got %d", expected, value)
+	}
+}
+
+func checkInstructions(t *testing.T, bytecode []*code.Instruction, expected []*code.Instruction) {
+	t.Helper()
+
+	if len(bytecode) != len(expected) {
+		t.Fatalf("Expected %d instructions, got %d", len(expected), len(bytecode))
+	}
+
+	for i, instr := range bytecode {
 		if instr.OpCode != expected[i].OpCode {
 			t.Fatalf("Expected OpCode %s, got %s", expected[i].OpCode, instr.OpCode)
 		}
