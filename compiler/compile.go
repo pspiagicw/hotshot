@@ -14,35 +14,65 @@ type Bytecode struct {
 	Constants    []object.Object
 }
 
-type Compiler struct {
+type Scope struct {
 	instructions []*code.Instruction
-	constants    []object.Object
-	jid          int16
-	symbols      *SymbolTable
+}
+
+type Compiler struct {
+	constants  []object.Object
+	scopes     []Scope
+	scopeIndex int
+	jid        int16
+	symbols    *SymbolTable
+}
+
+func (c *Compiler) enterScope() {
+	scope := Scope{
+		instructions: []*code.Instruction{},
+	}
+	c.scopes = append(c.scopes, scope)
+	c.scopeIndex++
+}
+func (c *Compiler) leaveScope() []*code.Instruction {
+	instructions := c.currentInstructions()
+	c.scopes = c.scopes[:len(c.scopes)-1]
+	c.scopeIndex--
+	return instructions
 }
 
 func NewCompiler() *Compiler {
-	return &Compiler{
+	mainScope := Scope{
 		instructions: []*code.Instruction{},
-		constants:    []object.Object{},
-		jid:          0,
-		symbols:      NewSymbolTable(),
+	}
+	return &Compiler{
+		scopes:     []Scope{mainScope},
+		scopeIndex: 0,
+		constants:  []object.Object{},
+		jid:        0,
+		symbols:    NewSymbolTable(),
 	}
 }
 func NewWithState(symbols *SymbolTable, constants []object.Object) *Compiler {
-	return &Compiler{
+	mainScope := Scope{
 		instructions: []*code.Instruction{},
-		constants:    constants,
-		jid:          0,
-		symbols:      symbols,
 	}
+	return &Compiler{
+		scopeIndex: 0,
+		scopes:     []Scope{mainScope},
+		constants:  constants,
+		jid:        0,
+		symbols:    symbols,
+	}
+}
+func (c *Compiler) currentInstructions() []*code.Instruction {
+	return c.scopes[c.scopeIndex].instructions
 }
 
 func (c *Compiler) Bytecode() *Bytecode {
 	// c.constantPass()
 	c.conditionalsPass()
 	return &Bytecode{
-		Instructions: c.instructions,
+		Instructions: c.currentInstructions(),
 		Constants:    c.constants,
 	}
 }
@@ -55,7 +85,10 @@ func (c *Compiler) conditionalsPass() {
 }
 
 func (c *Compiler) emit(op code.Op, arg int16) {
-	c.instructions = append(c.instructions, &code.Instruction{OpCode: op, Args: arg})
+	ins := &code.Instruction{OpCode: op, Args: arg}
+	currentScope := c.scopes[c.scopeIndex]
+	currentScope.instructions = append(currentScope.instructions, ins)
+	c.scopes[c.scopeIndex] = currentScope
 }
 func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 	for _, arg := range node.Args {
@@ -81,6 +114,23 @@ func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 	default:
 		return fmt.Errorf("Unknown operator %s", node.Op.TokenType)
 	}
+	return nil
+}
+
+func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
+	c.enterScope()
+
+	for _, statement := range node.Body {
+		err := c.Compile(statement)
+
+		if err != nil {
+			return err
+		}
+	}
+	instructions := c.leaveScope()
+	compiledFn := &object.CompiledFunction{Instructions: instructions}
+	c.emit(code.PUSH, c.addConstant(compiledFn))
+
 	return nil
 }
 

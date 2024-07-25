@@ -108,6 +108,11 @@ go test ./lexer
 go test -v ./...
 ```
 
+# Development
+
+Anybody is free to develop `hotshot`. You will need knowledge of Go and preferably understanding of *Compiler Theory*
+. You will need knowledge of Go and preferably understanding of *Compiler Theory*.
+
 # Contribution
 
 This project is under heavy development and contributions are highly appreciated.

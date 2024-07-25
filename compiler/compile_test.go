@@ -9,11 +9,39 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestScopes(t *testing.T) {
+	compiler := NewCompiler()
+
+	if compiler.scopeIndex != 0 {
+		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
+	}
+	compiler.emit(code.ADD, -1)
+	compiler.enterScope()
+	if compiler.scopeIndex != 1 {
+		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
+	}
+
+	compiler.emit(code.SUB, -1)
+	if len(compiler.scopes[compiler.scopeIndex].instructions) != 1 {
+		t.Errorf("instructions length wrong. got=%d", len(compiler.scopes[compiler.scopeIndex].instructions))
+	}
+
+	compiler.leaveScope()
+	if compiler.scopeIndex != 0 {
+		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
+	}
+	compiler.emit(code.MUL, -1)
+
+	if len(compiler.scopes[compiler.scopeIndex].instructions) != 2 {
+		t.Errorf("instructions length wrong. got=%d", len(compiler.scopes[compiler.scopeIndex].instructions))
+	}
+}
+
 func TestFunction(t *testing.T) {
 	input := `(lambda () 25)`
 
 	constants := []interface{}{
-		24,
+		25,
 		[]*code.Instruction{
 			{OpCode: code.PUSH, Args: 0},
 		},
