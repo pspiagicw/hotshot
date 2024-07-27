@@ -214,6 +214,17 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 func (c *Compiler) compileAssertStatement(node *ast.AssertStatement) error {
 	return nil
 }
+func (c *Compiler) compileTableStatement(node *ast.TableStatement) error {
+	for _, element := range node.Elements {
+		err := c.Compile(element)
+
+		if err != nil {
+			return err
+		}
+	}
+	c.emit(code.TABLE, int16(len(node.Elements)))
+	return nil
+}
 
 func (c *Compiler) Compile(node ast.Statement) error {
 	switch node := node.(type) {
@@ -230,6 +241,8 @@ func (c *Compiler) Compile(node ast.Statement) error {
 				return err
 			}
 		}
+	case *ast.TableStatement:
+		return c.compileTableStatement(node)
 	case *ast.StringStatement:
 		constId := c.addConstant(&object.String{Value: node.Value})
 		c.emit(code.PUSH, constId)

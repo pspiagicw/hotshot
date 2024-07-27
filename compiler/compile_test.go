@@ -9,6 +9,62 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestTableEmpty(t *testing.T) {
+	input := `{}`
+
+	constants := []interface{}{}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.TABLE, Args: 0},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestTable(t *testing.T) {
+	input := `{1 2 3}`
+
+	constants := []interface{}{
+		1,
+		2,
+		3,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.TABLE, Args: 3},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestTableComplex(t *testing.T) {
+	input := `{ (+ 1 2) (- 3 4) (* 5 6) }`
+
+	constants := []interface{}{
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.ADD, Args: 2},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.PUSH, Args: 3},
+		{OpCode: code.SUB, Args: 2},
+		{OpCode: code.PUSH, Args: 4},
+		{OpCode: code.PUSH, Args: 5},
+		{OpCode: code.MUL, Args: 2},
+		{OpCode: code.TABLE, Args: 3},
+	}
+	checkBytecode(t, input, bytecode, constants)
+}
+
 func TestString(t *testing.T) {
 	input := `"hello world"`
 
