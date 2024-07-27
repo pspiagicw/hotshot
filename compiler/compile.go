@@ -96,7 +96,10 @@ func (c *Compiler) emit(op code.Op, arg int16) {
 }
 func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 	for _, arg := range node.Args {
-		c.Compile(arg)
+		err := c.Compile(arg)
+		if err != nil {
+			return err
+		}
 	}
 	argCount := int16(len(node.Args))
 
@@ -116,7 +119,6 @@ func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 	case token.LESSTHAN:
 		c.emit(code.LT, argCount)
 	case token.IDENT:
-		// c.emit(code.CALL, -1)
 		c.compileFunctionCall(node)
 	default:
 		return fmt.Errorf("Unknown operator %s", node.Op.TokenType)
@@ -132,13 +134,32 @@ func (c *Compiler) compileFunctionCall(node *ast.CallStatement) error {
 
 	c.emit(code.GET, int16(symbol.Index))
 
-	c.emit(code.CALL, -1)
+	c.emit(code.CALL, int16(len(node.Args)))
 
 	return nil
+}
+func toIdent(node ast.Statement) (*ast.IdentStatement, error) {
+	val, ok := node.(*ast.IdentStatement)
+
+	if !ok {
+		return nil, fmt.Errorf("Expected ident statement, got %T", node)
+	}
+
+	return val, nil
 }
 
 func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
 	c.enterScope()
+
+	for _, p := range node.Args {
+		ident, err := toIdent(p)
+
+		if err != nil {
+			return err
+		}
+
+		c.symbols.Define(ident.Value.TokenValue)
+	}
 
 	for _, statement := range node.Body {
 		err := c.Compile(statement)

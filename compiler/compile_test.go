@@ -9,6 +9,54 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestFunctionCalls(t *testing.T) {
+	input := `(let oneArg (lambda (x) x)) (oneArg 2)`
+
+	constants := []interface{}{
+		[]*code.Instruction{
+			{OpCode: code.LGET, Args: 0},
+		},
+		2,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.CALL, Args: 1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestFunctionWithArgs(t *testing.T) {
+	input := `(let multiArg (lambda (x y z) (+ x y z))) (multiArg 1 2 3)`
+
+	constants := []interface{}{
+		[]*code.Instruction{
+			{OpCode: code.LGET, Args: 0},
+			{OpCode: code.LGET, Args: 1},
+			{OpCode: code.LGET, Args: 2},
+			{OpCode: code.ADD, Args: 3},
+		},
+		1,
+		2,
+		3,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.PUSH, Args: 3},
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.CALL, Args: 3},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+
 func TestLocalScopes(t *testing.T) {
 	input := `(lambda () (let num 55) num)`
 
@@ -80,7 +128,7 @@ func TestCall(t *testing.T) {
 		{OpCode: code.PUSH, Args: 0},
 		{OpCode: code.SET, Args: 0},
 		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: -1},
+		{OpCode: code.CALL, Args: 0},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -101,7 +149,7 @@ func TestFunctionDec(t *testing.T) {
 		{OpCode: code.PUSH, Args: 1},
 		{OpCode: code.SET, Args: 0},
 		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: -1},
+		{OpCode: code.CALL, Args: 0},
 	}
 
 	checkBytecode(t, input, bytecode, contants)
@@ -134,10 +182,10 @@ func TestLambdaAssignment(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 1},  // The compiled function
-		{OpCode: code.SET, Args: 0},   // The variable
-		{OpCode: code.GET, Args: 0},   // The variable
-		{OpCode: code.CALL, Args: -1}, // The call
+		{OpCode: code.PUSH, Args: 1}, // The compiled function
+		{OpCode: code.SET, Args: 0},  // The variable
+		{OpCode: code.GET, Args: 0},  // The variable
+		{OpCode: code.CALL, Args: 0}, // The call
 	}
 
 	checkBytecode(t, input, bytecode, constants)
