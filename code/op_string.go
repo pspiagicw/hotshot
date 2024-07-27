@@ -29,11 +29,14 @@ func _() {
 	_ = x[CALL-18]
 	_ = x[BUILTIN-19]
 	_ = x[TABLE-20]
+	_ = x[ASSERT-21]
+	_ = x[INDEX-22]
+	_ = x[DICT-23]
 }
 
-const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSEGTLTEQJCMPJMPSETGETLSETLGETJTCALLBUILTINTABLE"
+const _Op_name = "RETURNPUSHDIVADDMULSUBTRUEFALSEGTLTEQJCMPJMPSETGETLSETLGETJTCALLBUILTINTABLEASSERTINDEXDICT"
 
-var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31, 33, 35, 37, 41, 44, 47, 50, 54, 58, 60, 64, 71, 76}
+var _Op_index = [...]uint8{0, 6, 10, 13, 16, 19, 22, 26, 31, 33, 35, 37, 41, 44, 47, 50, 54, 58, 60, 64, 71, 76, 82, 87, 91}
 
 func (i Op) String() string {
 	if i < 0 || i >= Op(len(_Op_index)-1) {

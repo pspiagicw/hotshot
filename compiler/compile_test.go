@@ -9,6 +9,65 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestSetStatement(t *testing.T) {
+	input := `(let a {}) (set [0]a "something")`
+
+	constants := []interface{}{
+		"something",
+		0,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.TABLE, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.PUSH, Args: 0}, // "something"
+		{OpCode: code.PUSH, Args: 1}, // 0
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.DICT, Args: -1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+
+func TestIndex(t *testing.T) {
+	input := `[0]{1 2 3}`
+
+	constants := []interface{}{
+		1,
+		2,
+		3,
+		0,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.TABLE, Args: 3},
+		{OpCode: code.PUSH, Args: 3},
+		{OpCode: code.INDEX, Args: -1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestAssert(t *testing.T) {
+	input := `(assert true true "This should run")`
+
+	constants := []interface{}{
+		"This should run",
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.TRUE, Args: -1},
+		{OpCode: code.TRUE, Args: -1},
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.ASSERT, Args: -1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+
+}
+
 func TestTableEmpty(t *testing.T) {
 	input := `{}`
 

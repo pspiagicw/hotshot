@@ -223,6 +223,20 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 
 }
 func (c *Compiler) compileAssertStatement(node *ast.AssertStatement) error {
+	err := c.Compile(node.Left)
+	if err != nil {
+		return err
+	}
+
+	err = c.Compile(node.Right)
+	if err != nil {
+		return err
+	}
+
+	c.emit(code.PUSH, c.addConstant(&object.String{Value: node.Message.TokenValue}))
+
+	c.emit(code.ASSERT, -1)
+
 	return nil
 }
 func (c *Compiler) compileTableStatement(node *ast.TableStatement) error {
@@ -236,9 +250,50 @@ func (c *Compiler) compileTableStatement(node *ast.TableStatement) error {
 	c.emit(code.TABLE, int16(len(node.Elements)))
 	return nil
 }
+func (c *Compiler) compileIndexStatement(node *ast.IndexStatement) error {
+	err := c.Compile(node.Target)
+	if err != nil {
+		return err
+	}
+	err = c.Compile(node.Key)
+	if err != nil {
+		return err
+	}
+	c.emit(code.INDEX, -1)
+	return nil
+}
+func (c *Compiler) compileSetStatement(node *ast.SetStatement) error {
+	err := c.Compile(node.Value)
+	if err != nil {
+		return err
+	}
+	err = c.Compile(node.Target.Key)
+	if err != nil {
+		return err
+	}
+	err = c.Compile(node.Target.Target)
+	if err != nil {
+		return err
+	}
+
+	c.emit(code.DICT, -1)
+	return nil
+}
+func (c *Compiler) compileQuoteStatement(node *ast.QuoteStatement) error {
+	str := &object.String{Value: node.Body.TokenValue}
+
+	c.emit(code.PUSH, c.addConstant(str))
+	return nil
+}
 
 func (c *Compiler) Compile(node ast.Statement) error {
 	switch node := node.(type) {
+	case *ast.QuoteStatement:
+		return c.compileQuoteStatement(node)
+	case *ast.SetStatement:
+		return c.compileSetStatement(node)
+	case *ast.IndexStatement:
+		return c.compileIndexStatement(node)
 	case *ast.AssertStatement:
 		return c.compileAssertStatement(node)
 	case *ast.FunctionStatement:

@@ -27,6 +27,9 @@ const (
 	CALL
 	BUILTIN
 	TABLE
+	ASSERT
+	INDEX
+	DICT
 )
 
 type Instruction struct {
