@@ -191,7 +191,20 @@ func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
 	return nil
 }
 func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
+	// For recursion this should be defined before the body, and obvously before entering scope
+	symbol := c.symbols.Define(node.Name.TokenValue)
+
 	c.enterScope()
+
+	for _, p := range node.Args {
+		ident, err := toIdent(p)
+
+		if err != nil {
+			return err
+		}
+
+		c.symbols.Define(ident.Value.TokenValue)
+	}
 
 	for _, statement := range node.Body {
 		err := c.Compile(statement)
@@ -203,8 +216,6 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 	instructions := c.leaveScope()
 	compiledFn := &object.CompiledFunction{Instructions: instructions}
 	c.emit(code.PUSH, c.addConstant(compiledFn))
-
-	symbol := c.symbols.Define(node.Name.TokenValue)
 
 	c.emit(code.SET, int16(symbol.Index))
 

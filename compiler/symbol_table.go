@@ -1,6 +1,8 @@
 package compiler
 
-import "github.com/pspiagicw/hotshot/object"
+import (
+	"github.com/pspiagicw/hotshot/object"
+)
 
 type SymbolScope string
 
