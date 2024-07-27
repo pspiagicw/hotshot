@@ -18,6 +18,11 @@ type Scope struct {
 	instructions []*code.Instruction
 }
 
+type Builtin struct {
+	id      int
+	builtin *object.Builtin
+}
+
 type Compiler struct {
 	constants  []object.Object
 	scopes     []Scope
@@ -35,6 +40,7 @@ func (c *Compiler) enterScope() {
 
 	c.symbols = NewEnclosedSymbolTable(c.symbols)
 }
+
 func (c *Compiler) leaveScope() []*code.Instruction {
 	instructions := c.currentInstructions()
 	c.scopes = c.scopes[:len(c.scopes)-1]
@@ -48,12 +54,13 @@ func NewCompiler() *Compiler {
 	mainScope := Scope{
 		instructions: []*code.Instruction{},
 	}
+	symbols := NewSymbolTable()
 	return &Compiler{
 		scopes:     []Scope{mainScope},
 		scopeIndex: 0,
 		constants:  []object.Object{},
 		jid:        0,
-		symbols:    NewSymbolTable(),
+		symbols:    symbols,
 	}
 }
 func NewWithState(symbols *SymbolTable, constants []object.Object) *Compiler {
@@ -119,7 +126,7 @@ func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 	case token.LESSTHAN:
 		c.emit(code.LT, argCount)
 	case token.IDENT:
-		c.compileFunctionCall(node)
+		return c.compileFunctionCall(node)
 	default:
 		return fmt.Errorf("Unknown operator %s", node.Op.TokenType)
 	}
@@ -132,11 +139,20 @@ func (c *Compiler) compileFunctionCall(node *ast.CallStatement) error {
 		return fmt.Errorf("Undefined function %s", node.Op.TokenValue)
 	}
 
-	c.emit(code.GET, int16(symbol.Index))
+	c.loadSymbol(symbol)
 
 	c.emit(code.CALL, int16(len(node.Args)))
 
 	return nil
+}
+func (c *Compiler) loadSymbol(symbol Symbol) {
+	if symbol.Scope == Global {
+		c.emit(code.GET, int16(symbol.Index))
+	} else if symbol.Scope == Local {
+		c.emit(code.LGET, int16(symbol.Index))
+	} else {
+		c.emit(code.BUILTIN, int16(symbol.Index))
+	}
 }
 func toIdent(node ast.Statement) (*ast.IdentStatement, error) {
 	val, ok := node.(*ast.IdentStatement)
@@ -285,11 +301,7 @@ func (c *Compiler) compileIdentStatement(node *ast.IdentStatement) error {
 		return fmt.Errorf("Undefined variable %s", node.Value.TokenValue)
 	}
 
-	if symbol.Scope == Global {
-		c.emit(code.GET, int16(symbol.Index))
-	} else {
-		c.emit(code.LGET, int16(symbol.Index))
-	}
+	c.loadSymbol(symbol)
 	return nil
 }
 func (c *Compiler) compileAssignmentStatement(node *ast.AssignmentStatement) error {

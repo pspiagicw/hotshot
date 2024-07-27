@@ -1,10 +1,13 @@
 package compiler
 
+import "github.com/pspiagicw/hotshot/object"
+
 type SymbolScope string
 
 const (
 	Global SymbolScope = "GLOBAL"
 	Local  SymbolScope = "LOCAL"
+	Built  SymbolScope = "BUILTIN"
 )
 
 type Symbol struct {
@@ -28,9 +31,20 @@ func NewEnclosedSymbolTable(outer *SymbolTable) *SymbolTable {
 
 func NewSymbolTable() *SymbolTable {
 	s := make(map[string]Symbol)
-	return &SymbolTable{store: s}
+	table := &SymbolTable{store: s}
+
+	for i, builtin := range object.BuiltinList() {
+		table.DefineBuiltin(i, builtin.Name)
+	}
+
+	return table
 }
 
+func (s *SymbolTable) DefineBuiltin(index int, name string) Symbol {
+	symbol := Symbol{Name: name, Scope: Built, Index: index}
+	s.store[name] = symbol
+	return symbol
+}
 func (s *SymbolTable) Define(name string) Symbol {
 	symbol := Symbol{Name: name, Index: s.numDefinitions, Scope: Global}
 	if s.Outer != nil {

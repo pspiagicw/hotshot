@@ -9,6 +9,22 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestBuiltins(t *testing.T) {
+	input := `(echo 2)`
+
+	constants := []interface{}{
+		2,
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.BUILTIN, Args: 0},
+		{OpCode: code.CALL, Args: 1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+
 func TestFunctionCalls(t *testing.T) {
 	input := `(let oneArg (lambda (x) x)) (oneArg 2)`
 

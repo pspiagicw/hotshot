@@ -6,6 +6,29 @@ func registerBuiltin(builtin map[string]*Builtin, name string, builtinFunc Built
 	}
 
 }
+
+type BuiltinIndex struct {
+	Name string
+	Func *Builtin
+}
+
+func BuiltinList() []BuiltinIndex {
+	list := []BuiltinIndex{}
+
+	builtins := getBuiltins()
+
+	list = appendBuiltin(list, "echo", builtins) // 0
+	list = appendBuiltin(list, "len", builtins)  // 0
+
+	return list
+}
+func appendBuiltin(list []BuiltinIndex, name string, table map[string]*Builtin) []BuiltinIndex {
+	return append(list, BuiltinIndex{
+		Name: name,
+		Func: table[name],
+	})
+}
+
 func getBuiltins() map[string]*Builtin {
 	builtins := map[string]*Builtin{}
 

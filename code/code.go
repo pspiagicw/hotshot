@@ -25,6 +25,7 @@ const (
 
 	JT
 	CALL
+	BUILTIN
 )
 
 type Instruction struct {
