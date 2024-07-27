@@ -18,7 +18,48 @@ func BuiltinList() []BuiltinIndex {
 	builtins := getBuiltins()
 
 	list = appendBuiltin(list, "echo", builtins) // 0
-	list = appendBuiltin(list, "len", builtins)  // 0
+	list = appendBuiltin(list, "len", builtins)
+	list = appendBuiltin(list, "do", builtins)
+
+	list = appendBuiltin(list, "not", builtins)
+	list = appendBuiltin(list, "and", builtins)
+	list = appendBuiltin(list, "or", builtins)
+
+	list = appendBuiltin(list, "numberp", builtins)
+	list = appendBuiltin(list, "stringp", builtins)
+	list = appendBuiltin(list, "tablep", builtins)
+	list = appendBuiltin(list, "functionp", builtins)
+
+	list = appendBuiltin(list, "mod", builtins)
+	list = appendBuiltin(list, "push", builtins)
+	list = appendBuiltin(list, "cons", builtins)
+	list = appendBuiltin(list, "pop", builtins)
+	list = appendBuiltin(list, "car", builtins)
+	list = appendBuiltin(list, "cdr", builtins)
+	list = appendBuiltin(list, "list", builtins)
+	list = appendBuiltin(list, "extend", builtins)
+	list = appendBuiltin(list, "reverse", builtins)
+
+	list = appendBuiltin(list, "sqrt", builtins)
+	list = appendBuiltin(list, "exp", builtins)
+	list = appendBuiltin(list, "min", builtins)
+	list = appendBuiltin(list, "max", builtins)
+
+	list = appendBuiltin(list, "concat", builtins)
+	list = appendBuiltin(list, "string", builtins)
+	list = appendBuiltin(list, "last", builtins)
+	list = appendBuiltin(list, "getchar", builtins)
+	list = appendBuiltin(list, "substring", builtins)
+	list = appendBuiltin(list, "lowercase", builtins)
+	list = appendBuiltin(list, "uppercase", builtins)
+
+	list = appendBuiltin(list, "count", builtins)
+	list = appendBuiltin(list, "type", builtins)
+	list = appendBuiltin(list, "exit", builtins)
+	list = appendBuiltin(list, "inc", builtins)
+	list = appendBuiltin(list, "dec", builtins)
+	list = appendBuiltin(list, "input", builtins)
+	list = appendBuiltin(list, "return", builtins)
 
 	return list
 }
@@ -40,13 +81,13 @@ func getBuiltins() map[string]*Builtin {
 	registerBuiltin(builtins, "<", ltFunc)
 	registerBuiltin(builtins, ">", gtFunc)
 
+	registerBuiltin(builtins, "echo", printFunc)
+	registerBuiltin(builtins, "len", lenFunc)
+	registerBuiltin(builtins, "do", doFunc)
+
 	registerBuiltin(builtins, "not", notFunc)
 	registerBuiltin(builtins, "and", andFunc)
 	registerBuiltin(builtins, "or", orFunc)
-
-	registerBuiltin(builtins, "do", doFunc)
-	registerBuiltin(builtins, "echo", printFunc)
-	registerBuiltin(builtins, "len", lenFunc)
 
 	registerBuiltin(builtins, "numberp", numberpFunc)
 	registerBuiltin(builtins, "stringp", stringpFunc)
