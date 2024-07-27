@@ -350,6 +350,9 @@ func (e *Evaluator) applyFunction(f *object.Function, args []object.Object, env 
 
 	newEnv := extendEnvironment(f, args)
 	results := e.evalStatements(f.Body, newEnv)
+	if len(results) == 0 {
+		return object.Null{}
+	}
 	return results[len(results)-1]
 }
 func extendEnvironment(f *object.Function, givenArgs []object.Object) *object.Environment {

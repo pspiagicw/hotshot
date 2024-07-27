@@ -32,11 +32,15 @@ func (c *Compiler) enterScope() {
 	}
 	c.scopes = append(c.scopes, scope)
 	c.scopeIndex++
+
+	c.symbols = NewEnclosedSymbolTable(c.symbols)
 }
 func (c *Compiler) leaveScope() []*code.Instruction {
 	instructions := c.currentInstructions()
 	c.scopes = c.scopes[:len(c.scopes)-1]
 	c.scopeIndex--
+
+	c.symbols = c.symbols.Outer
 	return instructions
 }
 
@@ -111,9 +115,25 @@ func (c *Compiler) compileCallStatement(node *ast.CallStatement) error {
 		c.emit(code.GT, argCount)
 	case token.LESSTHAN:
 		c.emit(code.LT, argCount)
+	case token.IDENT:
+		// c.emit(code.CALL, -1)
+		c.compileFunctionCall(node)
 	default:
 		return fmt.Errorf("Unknown operator %s", node.Op.TokenType)
 	}
+	return nil
+}
+func (c *Compiler) compileFunctionCall(node *ast.CallStatement) error {
+	symbol, ok := c.symbols.Resolve(node.Op.TokenValue)
+
+	if !ok {
+		return fmt.Errorf("Undefined function %s", node.Op.TokenValue)
+	}
+
+	c.emit(code.GET, int16(symbol.Index))
+
+	c.emit(code.CALL, -1)
+
 	return nil
 }
 
@@ -133,9 +153,32 @@ func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
 
 	return nil
 }
+func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
+	c.enterScope()
+
+	for _, statement := range node.Body {
+		err := c.Compile(statement)
+
+		if err != nil {
+			return err
+		}
+	}
+	instructions := c.leaveScope()
+	compiledFn := &object.CompiledFunction{Instructions: instructions}
+	c.emit(code.PUSH, c.addConstant(compiledFn))
+
+	symbol := c.symbols.Define(node.Name.TokenValue)
+
+	c.emit(code.SET, int16(symbol.Index))
+
+	return nil
+
+}
 
 func (c *Compiler) Compile(node ast.Statement) error {
 	switch node := node.(type) {
+	case *ast.FunctionStatement:
+		return c.compileFunctionStatement(node)
 	case *ast.LambdaStatement:
 		return c.compileLambdaStatement(node)
 	case *ast.Program:
@@ -221,7 +264,11 @@ func (c *Compiler) compileIdentStatement(node *ast.IdentStatement) error {
 		return fmt.Errorf("Undefined variable %s", node.Value.TokenValue)
 	}
 
-	c.emit(code.GET, int16(symbol.Index))
+	if symbol.Scope == Global {
+		c.emit(code.GET, int16(symbol.Index))
+	} else {
+		c.emit(code.LGET, int16(symbol.Index))
+	}
 	return nil
 }
 func (c *Compiler) compileAssignmentStatement(node *ast.AssignmentStatement) error {
@@ -230,7 +277,11 @@ func (c *Compiler) compileAssignmentStatement(node *ast.AssignmentStatement) err
 		return err
 	}
 	symbol := c.symbols.Define(node.Name.TokenValue)
-	c.emit(code.SET, int16(symbol.Index))
+	if symbol.Scope == Global {
+		c.emit(code.SET, int16(symbol.Index))
+	} else {
+		c.emit(code.LSET, int16(symbol.Index))
+	}
 	return nil
 }
 func (c *Compiler) compileIfStatement(node *ast.IfStatement) error {

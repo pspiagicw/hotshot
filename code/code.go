@@ -20,6 +20,8 @@ const (
 	JMP
 	SET
 	GET
+	LSET
+	LGET
 
 	JT
 	CALL

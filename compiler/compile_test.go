@@ -9,35 +9,105 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
-func TestScopes(t *testing.T) {
-	compiler := NewCompiler()
+func TestLocalScopes(t *testing.T) {
+	input := `(lambda () (let num 55) num)`
 
-	if compiler.scopeIndex != 0 {
-		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
-	}
-	compiler.emit(code.ADD, -1)
-	compiler.enterScope()
-	if compiler.scopeIndex != 1 {
-		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
-	}
-
-	compiler.emit(code.SUB, -1)
-	if len(compiler.scopes[compiler.scopeIndex].instructions) != 1 {
-		t.Errorf("instructions length wrong. got=%d", len(compiler.scopes[compiler.scopeIndex].instructions))
+	constants := []interface{}{
+		55,
+		[]*code.Instruction{
+			{OpCode: code.PUSH, Args: 0},
+			{OpCode: code.LSET, Args: 0},
+			{OpCode: code.LGET, Args: 0},
+		},
 	}
 
-	compiler.leaveScope()
-	if compiler.scopeIndex != 0 {
-		t.Errorf("scopeIndex wrong. got=%d", compiler.scopeIndex)
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 1},
 	}
-	compiler.emit(code.MUL, -1)
 
-	if len(compiler.scopes[compiler.scopeIndex].instructions) != 2 {
-		t.Errorf("instructions length wrong. got=%d", len(compiler.scopes[compiler.scopeIndex].instructions))
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestLocalStrict(t *testing.T) {
+	input := `(lambda () (let a 55) ( let b 77) (+ a b))`
+
+	constants := []interface{}{
+		55,
+		77,
+		[]*code.Instruction{
+			{OpCode: code.PUSH, Args: 0},
+			{OpCode: code.LSET, Args: 0},
+			{OpCode: code.PUSH, Args: 1},
+			{OpCode: code.LSET, Args: 1},
+			{OpCode: code.LGET, Args: 0},
+			{OpCode: code.LGET, Args: 1},
+			{OpCode: code.ADD, Args: 2},
+		},
 	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 2},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestLocals(t *testing.T) {
+	input := `(let num 55) (lambda () num)`
+
+	constants := []interface{}{
+		55,
+		[]*code.Instruction{
+			{OpCode: code.GET, Args: 0},
+		},
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.PUSH, Args: 1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
 }
 
-func TestFunction(t *testing.T) {
+func TestCall(t *testing.T) {
+	input := `(fn someFunc ()) (someFunc)`
+
+	constants := []interface{}{
+		[]*code.Instruction{},
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.CALL, Args: -1},
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
+func TestFunctionDec(t *testing.T) {
+	input := `(fn someFunc () (let a 25) a) (someFunc)`
+
+	contants := []interface{}{
+		25,
+		[]*code.Instruction{
+			{OpCode: code.PUSH, Args: 0},
+			{OpCode: code.LSET, Args: 0},
+			{OpCode: code.LGET, Args: 0},
+		},
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.SET, Args: 0},
+		{OpCode: code.GET, Args: 0},
+		{OpCode: code.CALL, Args: -1},
+	}
+
+	checkBytecode(t, input, bytecode, contants)
+}
+
+func TestLambda(t *testing.T) {
 	input := `(lambda () 25)`
 
 	constants := []interface{}{
@@ -53,25 +123,25 @@ func TestFunction(t *testing.T) {
 	checkBytecode(t, input, bytecode, constants)
 }
 
-// func TestLambda(t *testing.T) {
-// 	input := `(let a (lambda () 25)) (a)`
-//
-// 	constants := []interface{}{
-// 		25,
-// 		[]*code.Instruction{
-// 			{OpCode: code.PUSH, Args: 0}, // The 25
-// 		},
-// 	}
-//
-// 	bytecode := []*code.Instruction{
-// 		{OpCode: code.PUSH, Args: 1},  // The compiled function
-// 		{OpCode: code.SET, Args: 0},   // The variable
-// 		{OpCode: code.GET, Args: 0},   // The variable
-// 		{OpCode: code.CALL, Args: -1}, // The call
-// 	}
-//
-// 	checkBytecode(t, input, bytecode, constants)
-// }
+func TestLambdaAssignment(t *testing.T) {
+	input := `(let a (lambda () 25)) (a)`
+
+	constants := []interface{}{
+		25,
+		[]*code.Instruction{
+			{OpCode: code.PUSH, Args: 0}, // The 25
+		},
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 1},  // The compiled function
+		{OpCode: code.SET, Args: 0},   // The variable
+		{OpCode: code.GET, Args: 0},   // The variable
+		{OpCode: code.CALL, Args: -1}, // The call
+	}
+
+	checkBytecode(t, input, bytecode, constants)
+}
 
 func TestCondStatements(t *testing.T) {
 	input := `
