@@ -211,9 +211,14 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 	return nil
 
 }
+func (c *Compiler) compileAssertStatement(node *ast.AssertStatement) error {
+	return nil
+}
 
 func (c *Compiler) Compile(node ast.Statement) error {
 	switch node := node.(type) {
+	case *ast.AssertStatement:
+		return c.compileAssertStatement(node)
 	case *ast.FunctionStatement:
 		return c.compileFunctionStatement(node)
 	case *ast.LambdaStatement:
@@ -225,6 +230,9 @@ func (c *Compiler) Compile(node ast.Statement) error {
 				return err
 			}
 		}
+	case *ast.StringStatement:
+		constId := c.addConstant(&object.String{Value: node.Value})
+		c.emit(code.PUSH, constId)
 	case *ast.IntStatement:
 		constId := c.addConstant(toInteger(node))
 		c.emit(code.PUSH, constId)

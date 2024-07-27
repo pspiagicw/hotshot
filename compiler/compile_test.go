@@ -9,6 +9,19 @@ import (
 	"github.com/pspiagicw/hotshot/parser"
 )
 
+func TestString(t *testing.T) {
+	input := `"hello world"`
+
+	constants := []interface{}{
+		"hello world",
+	}
+
+	bytecode := []*code.Instruction{
+		{OpCode: code.PUSH, Args: 0},
+	}
+	checkBytecode(t, input, bytecode, constants)
+}
+
 func TestBuiltins(t *testing.T) {
 	input := `(echo 2)`
 
@@ -504,11 +517,27 @@ func checkConstants(t *testing.T, constants []object.Object, expected []interfac
 			checkBool(t, constants[i], constant)
 		case []*code.Instruction:
 			checkCompiledFunction(t, constants[i], constant)
+		case string:
+			checkString(t, constants[i], constant)
 		default:
 			t.Fatalf("Unknown type %T", constant)
 		}
 	}
 }
+func checkString(t *testing.T, obj object.Object, expected string) {
+	t.Helper()
+
+	if obj.Type() != object.STRING_OBJ {
+		t.Fatalf("Expected STRING_OBJ, got %s", obj.Type())
+	}
+
+	value := obj.(*object.String).Value
+
+	if value != expected {
+		t.Fatalf("Expected %s, got %s", expected, value)
+	}
+}
+
 func checkCompiledFunction(t *testing.T, obj object.Object, expected []*code.Instruction) {
 	t.Helper()
 
