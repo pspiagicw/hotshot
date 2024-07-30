@@ -2,6 +2,7 @@ package decompiler
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/charmbracelet/lipgloss"
 	"github.com/pspiagicw/hotshot/code"
@@ -9,27 +10,37 @@ import (
 	"github.com/pspiagicw/hotshot/object"
 )
 
+var compiledStyle lipgloss.Style = lipgloss.NewStyle().Border(lipgloss.NormalBorder())
+var constantStyle lipgloss.Style = lipgloss.NewStyle().Border(lipgloss.DoubleBorder()).Padding(1).MarginRight(1)
+var codeStyle lipgloss.Style = lipgloss.NewStyle().Padding(1).Border(lipgloss.NormalBorder())
+
 func Print(bytecode *compiler.Bytecode) {
-	printConstants(bytecode)
-	fmt.Println("=== BYTECODE ===")
-	printInstructions(bytecode.Instructions)
+	constants := constantStyle.Render(printConstants(bytecode))
+	code := codeStyle.Render(printInstructions(bytecode.Instructions))
+
+	fmt.Println(lipgloss.JoinHorizontal(lipgloss.Top, constants, code))
 }
-func printConstants(bytecode *compiler.Bytecode) {
-	if len(bytecode.Constants) != 0 {
-		fmt.Println("=== CONSTANT ===")
-	}
-	for _, constant := range bytecode.Constants {
+func printConstants(bytecode *compiler.Bytecode) string {
+	var buffer strings.Builder
+	for i, constant := range bytecode.Constants {
 		switch constant := constant.(type) {
 		case *object.CompiledFunction:
-			fmt.Println("-- COMPILED START ---")
-			printInstructions(constant.Instructions)
-			fmt.Println("--- COMPILED END ---")
+			if len(constant.Instructions) != 0 {
+				instructions := printInstructions(constant.Instructions)
+				content := compiledStyle.Render(fmt.Sprintf("--- %s ---\n%s", constant.Name, instructions))
+				buffer.WriteString(content)
+				buffer.WriteString("\n")
+			} else {
+				buffer.WriteString(compiledStyle.Render("VOID"))
+			}
 		default:
-			fmt.Printf("%s\n", constant)
+			buffer.WriteString(fmt.Sprintf("%02d. %s\n", i, constant))
 		}
 	}
+	return buffer.String()
 }
-func printInstructions(instructions []*code.Instruction) {
+func printInstructions(instructions []*code.Instruction) string {
+	var buffer strings.Builder
 	line := 0
 	for _, instruction := range instructions {
 		op := instruction.OpCode.String()
@@ -39,9 +50,10 @@ func printInstructions(instructions []*code.Instruction) {
 		if instruction.Args >= 0 {
 			argString = fmt.Sprintf("%d", instruction.Args)
 		}
-		fmt.Printf("%s %s %s\t%s\n", lineNumber, op, argString, instruction.Comment)
+		buffer.WriteString(fmt.Sprintf("%s %s %s\t%s\n", lineNumber, op, argString, instruction.Comment))
 		line++
 	}
+	return strings.TrimSpace(buffer.String())
 }
 
 func getLineNumber(line int) string {

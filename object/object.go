@@ -85,7 +85,7 @@ func (s String) Type() ObjectType {
 }
 
 func (s String) String() string {
-	return fmt.Sprintf("(str %s)", s.Value)
+	return fmt.Sprintf("(str '%s')", s.Value)
 }
 func (s String) Content() string {
 	return s.Value
@@ -223,6 +223,7 @@ func (r Return) Content() string {
 
 type CompiledFunction struct {
 	Instructions []*code.Instruction
+	Name         string
 }
 
 func (c CompiledFunction) Type() ObjectType {
