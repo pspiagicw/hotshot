@@ -1,0 +1,575 @@
+
+[TestVM/1 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:1},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/2 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:2},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/1+2 - 1]
+&ast.Program{
+    Statements: {
+        &ast.IntStatement{Value:1},
+        &ast.IntStatement{Value:2},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(+_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(-_2_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(*_2_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(/_4_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"SLASH", TokenValue:"/"},
+            Args: {
+                &ast.IntStatement{Value:4},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(-_(+_10_(*_2_(/_50_2)))_5) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IntStatement{Value:10},
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+                            Args: {
+                                &ast.IntStatement{Value:2},
+                                &ast.CallStatement{
+                                    Op:   &token.Token{TokenType:"SLASH", TokenValue:"/"},
+                                    Args: {
+                                        &!%v(DEPTH EXCEEDED),
+                                        &!%v(DEPTH EXCEEDED),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                &ast.IntStatement{Value:5},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(-_(+_5_5_5_5)_10) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IntStatement{Value:5},
+                        &ast.IntStatement{Value:5},
+                        &ast.IntStatement{Value:5},
+                        &ast.IntStatement{Value:5},
+                    },
+                },
+                &ast.IntStatement{Value:10},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(*_2_2_2_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(*_2_2_2_2_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(+_10_(*_5_2)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:10},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+                    Args: {
+                        &ast.IntStatement{Value:5},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(+_5_(*_2_10)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IntStatement{Value:5},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+                    Args: {
+                        &ast.IntStatement{Value:2},
+                        &ast.IntStatement{Value:10},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(*_5_(+_2_10)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"MULTIPLY", TokenValue:"*"},
+            Args: {
+                &ast.IntStatement{Value:5},
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IntStatement{Value:2},
+                        &ast.IntStatement{Value:10},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/true - 1]
+&ast.Program{
+    Statements: {
+        &ast.BoolStatement{Value:true},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/false - 1]
+&ast.Program{
+    Statements: {
+        &ast.BoolStatement{},
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(<_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(>_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(>_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(<_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_1_1) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:1},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_1_2) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_1_2)#01 - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_true_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.BoolStatement{Value:true},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_false_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.BoolStatement{},
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_(<_1_2)_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_(<_1_2)_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_(>_1_2)_true) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.BoolStatement{Value:true},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(=_(>_1_2)_false) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"EQ", TokenValue:"="},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.BoolStatement{},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_true_10) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.BoolStatement{Value:true},
+            Body:      &ast.IntStatement{Value:10},
+            Else:      nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_true_10_20) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.BoolStatement{Value:true},
+            Body:      &ast.IntStatement{Value:10},
+            Else:      &ast.IntStatement{Value:20},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_false_10_20) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.BoolStatement{},
+            Body:      &ast.IntStatement{Value:10},
+            Else:      &ast.IntStatement{Value:20},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_(<_1_2)_10) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.IntStatement{Value:10},
+            Else: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_(<_1_2)_10_20) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"LESSTHAN", TokenValue:"<"},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.IntStatement{Value:10},
+            Else: &ast.IntStatement{Value:20},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(if_(>_1_2)_10_20) - 1]
+&ast.Program{
+    Statements: {
+        &ast.IfStatement{
+            Condition: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"GREATERTHAN", TokenValue:">"},
+                Args: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                },
+            },
+            Body: &ast.IntStatement{Value:10},
+            Else: &ast.IntStatement{Value:20},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
