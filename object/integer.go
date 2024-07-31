@@ -5,53 +5,39 @@ import (
 )
 
 func incFunc(args []Object) Object {
-	err := assertArity("INC", args, 1)
+	err, values := assertArgsInteger("INC", args)
 	if err != nil {
 		return err
 	}
 
-	v, ok := args[0].(*Integer)
-
-	if !ok {
-		return createError("INC function expects Integer, found %v", args[0].Type())
+	for _, val := range values {
+		val.Value++
 	}
-
-	v.Value++
 
 	return &Null{}
 }
 func decFunc(args []Object) Object {
-	err := assertArity("DEC", args, 1)
+	err, values := assertArgsInteger("DEC", args)
 	if err != nil {
 		return err
 	}
 
-	v, ok := args[0].(*Integer)
-
-	if !ok {
-		return createError("DEC function expects Integer, found %v", args[0].Type())
+	for _, val := range values {
+		val.Value--
 	}
-
-	v.Value--
 
 	return &Null{}
 }
 
 func multiplyFunc(args []Object) Object {
-
-	err := assertArgs("MULTIPLY", args)
+	err, values := assertArgsInteger("MULTIPLY", args)
 	if err != nil {
 		return err
 	}
+
 	result := 1
-	for _, arg := range args {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("MULTIPLY function expects Integer, found %v", arg.Type())
-		}
-
-		result *= v.Value
+	for _, val := range values {
+		result *= val.Value
 	}
 
 	return &Integer{
@@ -61,28 +47,15 @@ func multiplyFunc(args []Object) Object {
 }
 func divideFunc(args []Object) Object {
 
-	err := assertArgs("MULTIPLY", args)
+	err, values := assertArgsInteger("DIVIDE", args)
 	if err != nil {
 		return err
 	}
 
-	first := args[0]
-
-	v, ok := first.(*Integer)
-
-	if !ok {
-		return createError("DIVIDE function expects Integer, found %v", first.Type())
-	}
-
-	result := v.Value
-	for _, arg := range args[1:] {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("DIVIDE function expects Integer, found %v", arg.Type())
-		}
-
-		result /= v.Value
+	first := values[0]
+	result := first.Value
+	for _, val := range values[1:] {
+		result /= val.Value
 	}
 
 	return &Integer{
@@ -91,27 +64,14 @@ func divideFunc(args []Object) Object {
 }
 func minusFunc(args []Object) Object {
 
-	if len(args) == 0 {
-		return createError("No arguments given to MINUS function!")
+	err, values := assertArgsInteger("MINUS", args)
+	if err != nil {
+		return err
 	}
 
-	first := args[0]
-
-	v, ok := first.(*Integer)
-
-	if !ok {
-		return createError("MINUS function expects Integer, found %v", first.Type())
-	}
-
-	result := v.Value
-	for _, arg := range args[1:] {
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("MINUS function expects Integer, found %v", arg.Type())
-		}
-
-		result -= v.Value
+	result := values[0].Value
+	for _, val := range values[1:] {
+		result -= val.Value
 	}
 
 	return &Integer{
@@ -121,20 +81,14 @@ func minusFunc(args []Object) Object {
 
 func addFunc(args []Object) Object {
 
-	if len(args) == 0 {
-		return createError("No arguments given to ADD function!")
+	err, values := assertArgsInteger("ADD", args)
+	if err != nil {
+		return err
 	}
 
 	result := 0
-	for _, arg := range args {
-
-		v, ok := arg.(*Integer)
-
-		if !ok {
-			return createError("ADD function expects Integer, found %v", arg.Type())
-		}
-
-		result += v.Value
+	for _, val := range values {
+		result += val.Value
 	}
 
 	return &Integer{
@@ -143,87 +97,73 @@ func addFunc(args []Object) Object {
 
 }
 func gtFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("GT function needs 2 arguments!")
+	err, values := assertArgsInteger("GT", args)
+
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	f, ok := left.(*Integer)
-	if !ok {
-		return createError("GT function expects Integer, found %v", left.Type())
-	}
-
-	right := args[1]
-	s, ok := right.(*Integer)
-	if !ok {
-		return createError("GT function expects Integer, found %v", right.Type())
+	cmp := math.MaxInt
+	result := true
+	for _, val := range values {
+		result = result && cmp > val.Value
+		cmp = val.Value
 	}
 
 	return &Boolean{
-		Value: f.Value > s.Value,
+		Value: result,
 	}
 
 }
 func ltFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("LT function needs 2 arguments!")
+	err, values := assertArgsInteger("LT", args)
+
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	f, ok := left.(*Integer)
-	if !ok {
-		return createError("LT function expects Integer, found %v", left.Type())
-	}
-
-	right := args[1]
-	s, ok := right.(*Integer)
-	if !ok {
-		return createError("LT function expects Integer, found %v", right.Type())
+	cmp := math.MinInt
+	result := true
+	for _, val := range values {
+		result = result && cmp < val.Value
+		cmp = val.Value
 	}
 
 	return &Boolean{
-		Value: f.Value < s.Value,
+		Value: result,
 	}
-
 }
 func equalFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("EQ function expects 2 arguments!")
+	err := assertArgs("EQUAL", args)
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	right := args[1]
-
-	if left.Type() == right.Type() && left.String() == right.String() {
-		return &Boolean{
-			Value: true,
-		}
+	result := true
+	var cmp Object = args[0]
+	for _, val := range args {
+		result = result && isObjectEqual(val, cmp)
+		cmp = val
 	}
 
 	return &Boolean{
-		Value: false,
+		Value: result,
 	}
 
 }
 func modFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("MOD function expects 2 arguments")
+	err, values := assertArgsInteger("MOD", args)
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	f, ok := left.(*Integer)
-	if !ok {
-		return createError("MOD function expects Integer, found %v", left.Type())
-	}
-
-	right := args[1]
-	s, ok := right.(*Integer)
-	if !ok {
-		return createError("MOD function expects Integer, found %v", right.Type())
+	result := values[0].Value
+	for _, val := range values[1:] {
+		result = result % val.Value
 	}
 
 	return &Integer{
-		Value: f.Value % s.Value,
+		Value: result,
 	}
 }
 func sqrtFunc(args []Object) Object {
@@ -262,40 +202,31 @@ func expFunc(args []Object) Object {
 	}
 }
 func minFunc(args []Object) Object {
-	err := assertArgs("MIN", args)
+	err, values := assertArgsInteger("MIN", args)
 	if err != nil {
 		return err
 	}
 
 	min := &Integer{Value: math.MaxInt}
-	for _, arg := range args {
-		i, ok := arg.(*Integer)
-		if !ok {
-			return createError("MIN expects Integer, got %v", arg.Type())
-		}
+	for _, val := range values {
 
-		if i.Value < min.Value {
-			min = i
+		if val.Value < min.Value {
+			min = val
 		}
 	}
 
 	return min
 }
 func maxFunc(args []Object) Object {
-	err := assertArgs("MAX", args)
+	err, values := assertArgsInteger("MAX", args)
 	if err != nil {
 		return err
 	}
 
 	max := &Integer{Value: math.MinInt}
-	for _, arg := range args {
-		i, ok := arg.(*Integer)
-		if !ok {
-			return createError("MAX expects Integer, got %v", arg.Type())
-		}
-
-		if i.Value > max.Value {
-			max = i
+	for _, val := range values {
+		if val.Value > max.Value {
+			max = val
 		}
 	}
 

@@ -5,17 +5,18 @@ import (
 	"strings"
 )
 
+// Immediatly returns from the function
 func returnFunc(args []Object) Object {
-	err := assertArity("RETURN", args, 0)
-	if err != nil {
-		return err
-	}
 
 	return &Return{}
 }
 
 func doFunc(args []Object) Object {
 	length := len(args)
+
+	if length == 0 {
+		return createError("DO function expects at least 1 argument")
+	}
 
 	return args[length-1]
 }
@@ -37,7 +38,7 @@ func lenFunc(args []Object) Object {
 		}
 	}
 
-	return createError("LEN function can't find length of that type!")
+	return createError("LEN function can't find length of type %T", value)
 }
 func printFunc(args []Object) Object {
 	var output strings.Builder

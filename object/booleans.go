@@ -1,61 +1,50 @@
 package object
 
 func orFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("OR function expects 2 arguments")
+	err, values := assertArgsBoolean("OR", args)
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	f, ok := left.(*Boolean)
-	if !ok {
-		return createError("OR function expects Boolean, found %v", left.Type())
-	}
-
-	right := args[1]
-	s, ok := right.(*Boolean)
-	if !ok {
-		return createError("OR function expects Boolean, found %v", right.Type())
+	result := false
+	for _, val := range values {
+		result = result || val.Value
 	}
 
 	return &Boolean{
-		Value: s.Value || f.Value,
+		Value: result,
 	}
 
 }
 func andFunc(args []Object) Object {
-	if len(args) != 2 {
-		return createError("AND function expects 2 arguments")
+	err, values := assertArgsBoolean("AND", args)
+	if err != nil {
+		return err
 	}
 
-	left := args[0]
-	f, ok := left.(*Boolean)
-	if !ok {
-		return createError("AND function expects Boolean, found %v", left.Type())
-	}
-
-	right := args[1]
-	s, ok := right.(*Boolean)
-	if !ok {
-		return createError("AND function expects Boolean, found %v", right.Type())
+	result := true
+	for _, val := range values {
+		result = result && val.Value
 	}
 
 	return &Boolean{
-		Value: s.Value && f.Value,
+		Value: result,
 	}
 
 }
 func notFunc(args []Object) Object {
-	if len(args) != 1 {
-		return createError("NOT function expects 1 argument")
+
+	err, values := assertArgsBoolean("NOT", args)
+	if err != nil {
+		return err
 	}
 
-	value := args[0]
-	v, ok := value.(*Boolean)
-	if !ok {
-		return createError("NOT function expects Boolean, found %v", value.Type())
+	result := !values[0].Value
+	for _, val := range values[1:] {
+		result = result && !val.Value
 	}
 
 	return &Boolean{
-		Value: !v.Value,
+		Value: result,
 	}
 }

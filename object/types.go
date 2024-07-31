@@ -14,48 +14,69 @@ func typeFunc(args []Object) Object {
 	}
 }
 func numberpFunc(args []Object) Object {
-	if len(args) != 1 {
-		return createError("NUMBERP function expects 2 arguments.")
+	err := assertArgs("NUMBERP", args)
+	if err != nil {
+		return err
 	}
 
-	value := args[0]
+	result := true
+	for _, arg := range args {
+		if arg.Type() != INTEGER_OBJ {
+			result = false
+		}
+	}
 
 	return &Boolean{
-		Value: value.Type() == INTEGER_OBJ,
+		Value: result,
 	}
 }
 
 func stringpFunc(args []Object) Object {
-	if len(args) != 1 {
-		return createError("STRINGP function expects 2 arguments.")
+	err := assertArgs("STRINGP", args)
+	if err != nil {
+		return err
 	}
 
-	value := args[0]
+	result := true
+	for _, arg := range args {
+		if arg.Type() != STRING_OBJ {
+			result = false
+		}
+	}
 
 	return &Boolean{
-		Value: value.Type() == STRING_OBJ,
+		Value: result,
 	}
 }
 
 func tablepFunc(args []Object) Object {
-	if len(args) != 1 {
-		return createError("TABLEP function expects 2 arguments.")
+	err := assertArgs("TABLEP", args)
+	if err != nil {
+		return err
 	}
 
-	value := args[0]
-
-	return &Boolean{
-		Value: value.Type() == TABLE_OBJ,
+	result := true
+	for _, arg := range args {
+		if arg.Type() != TABLE_OBJ {
+			result = false
+		}
 	}
+
+	return &Boolean{Value: result}
+
 }
 func functionpFunc(args []Object) Object {
-	if len(args) != 1 {
-		return createError("FUNCTIONP function expects 2 arguments.")
+	err := assertArgs("FUNCTIONP", args)
+	if err != nil {
+		return err
 	}
 
-	value := args[0]
-
-	return &Boolean{
-		Value: value.Type() == FUNCTION_OBJ,
+	result := true
+	for _, arg := range args {
+		if arg.Type() != FUNCTION_OBJ {
+			result = false
+		}
 	}
+
+	return &Boolean{Value: result}
 }
