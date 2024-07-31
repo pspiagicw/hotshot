@@ -6,6 +6,8 @@ import (
 
 	"github.com/pspiagicw/goreland"
 	"github.com/pspiagicw/hotshot/argparse"
+	"github.com/pspiagicw/hotshot/compiler"
+	"github.com/pspiagicw/hotshot/decompiler"
 	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/printer"
@@ -33,12 +35,15 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 
 	_ = e.Eval(program, env)
 
-	// c := compiler.NewCompiler()
-	// err := c.Compile(program)
-	// if err != nil {
-	// 	goreland.LogFatal("Error while compiling program: %v", err)
-	// }
-	// decompiler.Print(c.Bytecode())
+	c := compiler.NewCompiler()
+	err := c.Compile(program)
+	if err != nil {
+		goreland.LogFatal("Error while compiling program: %v", err)
+	}
+	bytecode := c.Bytecode()
+	bytecode = compiler.JumpPass(bytecode)
+
+	decompiler.Print(bytecode)
 }
 func readFile(file string) string {
 
