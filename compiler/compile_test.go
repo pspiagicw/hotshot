@@ -18,12 +18,12 @@ func TestSetStatement(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TABLE, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.PUSH, Args: 0}, // "something"
-		{OpCode: code.PUSH, Args: 1}, // 0
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.DICT, Args: -1},
+		{OpCode: code.TABLE, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.PUSH, Operand: 0}, // "something"
+		{OpCode: code.PUSH, Operand: 1}, // 0
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.DICT, Operand: -1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -40,12 +40,12 @@ func TestIndex(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.TABLE, Args: 3},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.INDEX, Args: -1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.TABLE, Operand: 3},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.INDEX, Operand: -1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -58,10 +58,10 @@ func TestAssert(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.ASSERT, Args: -1},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.ASSERT, Operand: -1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -74,7 +74,7 @@ func TestTableEmpty(t *testing.T) {
 	constants := []interface{}{}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TABLE, Args: 0},
+		{OpCode: code.TABLE, Operand: 0},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -89,10 +89,10 @@ func TestTable(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.TABLE, Args: 3},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.TABLE, Operand: 3},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -110,16 +110,16 @@ func TestTableComplex(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.ADD, Args: 2},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.SUB, Args: 2},
-		{OpCode: code.PUSH, Args: 4},
-		{OpCode: code.PUSH, Args: 5},
-		{OpCode: code.MUL, Args: 2},
-		{OpCode: code.TABLE, Args: 3},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.ADD, Operand: 2},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.SUB, Operand: 2},
+		{OpCode: code.PUSH, Operand: 4},
+		{OpCode: code.PUSH, Operand: 5},
+		{OpCode: code.MUL, Operand: 2},
+		{OpCode: code.TABLE, Operand: 3},
 	}
 	checkBytecode(t, input, bytecode, constants)
 }
@@ -132,7 +132,7 @@ func TestString(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Operand: 0},
 	}
 	checkBytecode(t, input, bytecode, constants)
 }
@@ -145,9 +145,9 @@ func TestBuiltins(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.BUILTIN, Args: 0},
-		{OpCode: code.CALL, Args: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.BUILTIN, Operand: 0},
+		{OpCode: code.CALL, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -158,17 +158,17 @@ func TestFunctionCalls(t *testing.T) {
 
 	constants := []interface{}{
 		[]*code.Instruction{
-			{OpCode: code.LGET, Args: 0},
+			{OpCode: code.LGET, Operand: 0},
 		},
 		2,
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.CALL, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -178,10 +178,10 @@ func TestFunctionWithArgs(t *testing.T) {
 
 	constants := []interface{}{
 		[]*code.Instruction{
-			{OpCode: code.LGET, Args: 0},
-			{OpCode: code.LGET, Args: 1},
-			{OpCode: code.LGET, Args: 2},
-			{OpCode: code.ADD, Args: 3},
+			{OpCode: code.LGET, Operand: 0},
+			{OpCode: code.LGET, Operand: 1},
+			{OpCode: code.LGET, Operand: 2},
+			{OpCode: code.ADD, Operand: 3},
 		},
 		1,
 		2,
@@ -189,13 +189,13 @@ func TestFunctionWithArgs(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: 3},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.CALL, Operand: 3},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -207,14 +207,14 @@ func TestLocalScopes(t *testing.T) {
 	constants := []interface{}{
 		55,
 		[]*code.Instruction{
-			{OpCode: code.PUSH, Args: 0},
-			{OpCode: code.LSET, Args: 0},
-			{OpCode: code.LGET, Args: 0},
+			{OpCode: code.PUSH, Operand: 0},
+			{OpCode: code.LSET, Operand: 0},
+			{OpCode: code.LGET, Operand: 0},
 		},
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -226,18 +226,18 @@ func TestLocalStrict(t *testing.T) {
 		55,
 		77,
 		[]*code.Instruction{
-			{OpCode: code.PUSH, Args: 0},
-			{OpCode: code.LSET, Args: 0},
-			{OpCode: code.PUSH, Args: 1},
-			{OpCode: code.LSET, Args: 1},
-			{OpCode: code.LGET, Args: 0},
-			{OpCode: code.LGET, Args: 1},
-			{OpCode: code.ADD, Args: 2},
+			{OpCode: code.PUSH, Operand: 0},
+			{OpCode: code.LSET, Operand: 0},
+			{OpCode: code.PUSH, Operand: 1},
+			{OpCode: code.LSET, Operand: 1},
+			{OpCode: code.LGET, Operand: 0},
+			{OpCode: code.LGET, Operand: 1},
+			{OpCode: code.ADD, Operand: 2},
 		},
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 2},
+		{OpCode: code.PUSH, Operand: 2},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -248,14 +248,14 @@ func TestLocals(t *testing.T) {
 	constants := []interface{}{
 		55,
 		[]*code.Instruction{
-			{OpCode: code.GET, Args: 0},
+			{OpCode: code.GET, Operand: 0},
 		},
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -269,10 +269,10 @@ func TestCall(t *testing.T) {
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: 0},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.CALL, Operand: 0},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -283,17 +283,17 @@ func TestFunctionDec(t *testing.T) {
 	contants := []interface{}{
 		25,
 		[]*code.Instruction{
-			{OpCode: code.PUSH, Args: 0},
-			{OpCode: code.LSET, Args: 0},
-			{OpCode: code.LGET, Args: 0},
+			{OpCode: code.PUSH, Operand: 0},
+			{OpCode: code.LSET, Operand: 0},
+			{OpCode: code.LGET, Operand: 0},
 		},
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.CALL, Args: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.CALL, Operand: 0},
 	}
 
 	checkBytecode(t, input, bytecode, contants)
@@ -305,11 +305,11 @@ func TestLambda(t *testing.T) {
 	constants := []interface{}{
 		25,
 		[]*code.Instruction{
-			{OpCode: code.PUSH, Args: 0},
+			{OpCode: code.PUSH, Operand: 0},
 		},
 	}
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 1},
+		{OpCode: code.PUSH, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -321,15 +321,15 @@ func TestLambdaAssignment(t *testing.T) {
 	constants := []interface{}{
 		25,
 		[]*code.Instruction{
-			{OpCode: code.PUSH, Args: 0}, // The 25
+			{OpCode: code.PUSH, Operand: 0}, // The 25
 		},
 	}
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 1}, // The compiled function
-		{OpCode: code.SET, Args: 0},  // The variable
-		{OpCode: code.GET, Args: 0},  // The variable
-		{OpCode: code.CALL, Args: 0}, // The call
+		{OpCode: code.PUSH, Operand: 1}, // The compiled function
+		{OpCode: code.SET, Operand: 0},  // The variable
+		{OpCode: code.GET, Operand: 0},  // The variable
+		{OpCode: code.CALL, Operand: 0}, // The call
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -342,26 +342,26 @@ func TestCondStatements(t *testing.T) {
 
 	constants := []interface{}{10, 20, 10, 1, 2, 2310}
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.GT, Args: 2},
-		{OpCode: code.JCMP, Args: 2},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.JMP, Args: 1},
-		{OpCode: code.JT, Args: 2},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.PUSH, Args: 4},
-		{OpCode: code.EQ, Args: 2},
-		{OpCode: code.JCMP, Args: 3},
-		{OpCode: code.PUSH, Args: 5},
-		{OpCode: code.JMP, Args: 1},
-		{OpCode: code.JT, Args: 3},
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.JCMP, Args: 4},
-		{OpCode: code.FALSE, Args: -1},
-		{OpCode: code.JMP, Args: 1},
-		{OpCode: code.JT, Args: 4},
-		{OpCode: code.JT, Args: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.GT, Operand: 2},
+		{OpCode: code.JCMP, Operand: 2},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.JMP, Operand: 1},
+		{OpCode: code.JT, Operand: 2},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.PUSH, Operand: 4},
+		{OpCode: code.EQ, Operand: 2},
+		{OpCode: code.JCMP, Operand: 3},
+		{OpCode: code.PUSH, Operand: 5},
+		{OpCode: code.JMP, Operand: 1},
+		{OpCode: code.JT, Operand: 3},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.JCMP, Operand: 4},
+		{OpCode: code.FALSE, Operand: -1},
+		{OpCode: code.JMP, Operand: 1},
+		{OpCode: code.JT, Operand: 4},
+		{OpCode: code.JT, Operand: 1},
 	}
 
 	checkBytecode(t, input, bytecode, constants)
@@ -370,14 +370,14 @@ func TestWhileStatements(t *testing.T) {
 	input := `(while (< 10 20) 10)`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.JT, Args: 1},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.LT, Args: 2},
-		{OpCode: code.JCMP, Args: 2},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.JMP, Args: 1},
-		{OpCode: code.JT, Args: 2},
+		{OpCode: code.JT, Operand: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.LT, Operand: 2},
+		{OpCode: code.JCMP, Operand: 2},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.JMP, Operand: 1},
+		{OpCode: code.JT, Operand: 2},
 	}
 	constants := []interface{}{10, 20, 10}
 
@@ -388,13 +388,13 @@ func TestLetStatement(t *testing.T) {
 	input := `(let a 3) (let b 4) (+ a b)`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.SET, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.SET, Args: 1},
-		{OpCode: code.GET, Args: 0},
-		{OpCode: code.GET, Args: 1},
-		{OpCode: code.ADD, Args: 2},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.SET, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.SET, Operand: 1},
+		{OpCode: code.GET, Operand: 0},
+		{OpCode: code.GET, Operand: 1},
+		{OpCode: code.ADD, Operand: 2},
 	}
 	constants := []interface{}{3, 4}
 
@@ -405,13 +405,13 @@ func TestIfElse(t *testing.T) {
 	input := `(if true 10 20)`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.JCMP, Args: 1},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.JMP, Args: 2},
-		{OpCode: code.JT, Args: 1},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.JT, Args: 2},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.JCMP, Operand: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.JMP, Operand: 2},
+		{OpCode: code.JT, Operand: 1},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.JT, Operand: 2},
 	}
 	constants := []interface{}{10, 20}
 
@@ -422,10 +422,10 @@ func TestIf(t *testing.T) {
 	input := `(if true 10)`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.JCMP, Args: 1},
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.JT, Args: 1},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.JCMP, Operand: 1},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.JT, Operand: 1},
 	}
 	constants := []interface{}{10}
 
@@ -436,15 +436,15 @@ func TestComparison(t *testing.T) {
 	input := `(> 1 2) (< 1 2) (= 1 2)`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.GT, Args: 2},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.LT, Args: 2},
-		{OpCode: code.PUSH, Args: 4},
-		{OpCode: code.PUSH, Args: 5},
-		{OpCode: code.EQ, Args: 2},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.GT, Operand: 2},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.LT, Operand: 2},
+		{OpCode: code.PUSH, Operand: 4},
+		{OpCode: code.PUSH, Operand: 5},
+		{OpCode: code.EQ, Operand: 2},
 	}
 	constants := []interface{}{1, 2, 1, 2, 1, 2}
 	checkBytecode(t, input, bytecode, constants)
@@ -453,8 +453,8 @@ func TestBoolean(t *testing.T) {
 	input := `true false`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.TRUE, Args: -1},
-		{OpCode: code.FALSE, Args: -1},
+		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.FALSE, Operand: -1},
 	}
 	constants := []interface{}{}
 
@@ -477,17 +477,17 @@ func TestArithmetic(t *testing.T) {
 	// 00009 MUL 2
 	// 00010 ADD 4
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
-		{OpCode: code.PUSH, Args: 1},
-		{OpCode: code.PUSH, Args: 2},
-		{OpCode: code.PUSH, Args: 3},
-		{OpCode: code.SUB, Args: 2},
-		{OpCode: code.PUSH, Args: 4},
-		{OpCode: code.PUSH, Args: 5},
-		{OpCode: code.PUSH, Args: 6},
-		{OpCode: code.DIV, Args: 2},
-		{OpCode: code.MUL, Args: 2},
-		{OpCode: code.ADD, Args: 4},
+		{OpCode: code.PUSH, Operand: 0},
+		{OpCode: code.PUSH, Operand: 1},
+		{OpCode: code.PUSH, Operand: 2},
+		{OpCode: code.PUSH, Operand: 3},
+		{OpCode: code.SUB, Operand: 2},
+		{OpCode: code.PUSH, Operand: 4},
+		{OpCode: code.PUSH, Operand: 5},
+		{OpCode: code.PUSH, Operand: 6},
+		{OpCode: code.DIV, Operand: 2},
+		{OpCode: code.MUL, Operand: 2},
+		{OpCode: code.ADD, Operand: 4},
 	}
 
 	constants := []interface{}{1, 2, 3, 4, 5, 6, 3}
@@ -498,7 +498,7 @@ func TestPush(t *testing.T) {
 	input := `1`
 
 	bytecode := []*code.Instruction{
-		{OpCode: code.PUSH, Args: 0},
+		{OpCode: code.PUSH, Operand: 0},
 	}
 
 	constants := []interface{}{1}
@@ -509,16 +509,16 @@ func TestAdd(t *testing.T) {
 
 	bytecode := []*code.Instruction{
 		{
-			OpCode: code.PUSH,
-			Args:   0,
+			OpCode:  code.PUSH,
+			Operand: 0,
 		},
 		{
-			OpCode: code.PUSH,
-			Args:   1,
+			OpCode:  code.PUSH,
+			Operand: 1,
 		},
 		{
-			OpCode: code.ADD,
-			Args:   2,
+			OpCode:  code.ADD,
+			Operand: 2,
 		},
 	}
 
@@ -530,16 +530,16 @@ func TestSubtract(t *testing.T) {
 
 	bytecode := []*code.Instruction{
 		{
-			OpCode: code.PUSH,
-			Args:   0,
+			OpCode:  code.PUSH,
+			Operand: 0,
 		},
 		{
-			OpCode: code.PUSH,
-			Args:   1,
+			OpCode:  code.PUSH,
+			Operand: 1,
 		},
 		{
-			OpCode: code.SUB,
-			Args:   2,
+			OpCode:  code.SUB,
+			Operand: 2,
 		},
 	}
 	constants := []interface{}{1, 2}
@@ -551,16 +551,16 @@ func TestMultiply(t *testing.T) {
 
 	bytecode := []*code.Instruction{
 		{
-			OpCode: code.PUSH,
-			Args:   0,
+			OpCode:  code.PUSH,
+			Operand: 0,
 		},
 		{
-			OpCode: code.PUSH,
-			Args:   1,
+			OpCode:  code.PUSH,
+			Operand: 1,
 		},
 		{
-			OpCode: code.MUL,
-			Args:   2,
+			OpCode:  code.MUL,
+			Operand: 2,
 		},
 	}
 	constants := []interface{}{1, 2}
@@ -573,20 +573,20 @@ func TestDivide(t *testing.T) {
 
 	bytecode := []*code.Instruction{
 		{
-			OpCode: code.PUSH,
-			Args:   0,
+			OpCode:  code.PUSH,
+			Operand: 0,
 		},
 		{
-			OpCode: code.PUSH,
-			Args:   1,
+			OpCode:  code.PUSH,
+			Operand: 1,
 		},
 		{
-			OpCode: code.PUSH,
-			Args:   2,
+			OpCode:  code.PUSH,
+			Operand: 2,
 		},
 		{
-			OpCode: code.DIV,
-			Args:   3,
+			OpCode:  code.DIV,
+			Operand: 3,
 		},
 	}
 	constants := []interface{}{1, 2, 3}
@@ -705,8 +705,8 @@ func checkInstructions(t *testing.T, bytecode []*code.Instruction, expected []*c
 		if instr.OpCode != expected[i].OpCode {
 			t.Fatalf("Expected OpCode %s, got %s", expected[i].OpCode, instr.OpCode)
 		}
-		if instr.Args != expected[i].Args {
-			t.Fatalf("Expected Args %d, got %d for instruction %s", expected[i].Args, instr.Args, instr.OpCode)
+		if instr.Operand != expected[i].Operand {
+			t.Fatalf("Expected Args %d, got %d for instruction %s", expected[i].Operand, instr.Operand, instr.OpCode)
 		}
 	}
 }

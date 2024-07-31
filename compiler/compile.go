@@ -96,7 +96,7 @@ func (c *Compiler) conditionalsPass() {
 }
 
 func (c *Compiler) emit(op code.Op, arg int16) {
-	ins := &code.Instruction{OpCode: op, Args: arg}
+	ins := &code.Instruction{OpCode: op, Operand: arg}
 	currentScope := c.scopes[c.scopeIndex]
 	currentScope.instructions = append(currentScope.instructions, ins)
 	c.scopes[c.scopeIndex] = currentScope

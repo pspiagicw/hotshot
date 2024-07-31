@@ -47,8 +47,8 @@ func printInstructions(instructions []*code.Instruction) string {
 
 		lineNumber := getLineNumber(line)
 		argString := ""
-		if instruction.Args >= 0 {
-			argString = fmt.Sprintf("%d", instruction.Args)
+		if instruction.Operand >= 0 {
+			argString = fmt.Sprintf("%d", instruction.Operand)
 		}
 		buffer.WriteString(fmt.Sprintf("%s %s %s\t%s\n", lineNumber, op, argString, instruction.Comment))
 		line++

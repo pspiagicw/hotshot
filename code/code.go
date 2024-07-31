@@ -11,11 +11,14 @@ const (
 	ADD
 	MUL
 	SUB
+
 	TRUE
 	FALSE
+
 	GT
 	LT
 	EQ
+
 	JCMP
 	JMP
 	SET
@@ -26,6 +29,7 @@ const (
 	JT
 	CALL
 	BUILTIN
+
 	TABLE
 	ASSERT
 	INDEX
@@ -34,6 +38,6 @@ const (
 
 type Instruction struct {
 	OpCode  Op
-	Args    int16
+	Operand int16
 	Comment string
 }

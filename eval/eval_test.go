@@ -112,7 +112,9 @@ func checkResult(t *testing.T, input string, expected object.Object) {
 
 	lexer := lexer.NewLexer(input)
 	parser := parser.NewParser(lexer, false)
-	e := NewEvaluator(func(message string) {})
+	e := NewEvaluator(func(message string) {
+		t.Fatalf(message)
+	})
 
 	ast := parser.Parse()
 	if len(parser.Errors()) != 0 {

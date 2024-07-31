@@ -61,6 +61,14 @@ func BuiltinList() []BuiltinIndex {
 	list = appendBuiltin(list, "input", builtins)
 	list = appendBuiltin(list, "return", builtins)
 
+	list = appendBuiltin(list, "+", builtins)
+	list = appendBuiltin(list, "-", builtins)
+	list = appendBuiltin(list, "*", builtins)
+	list = appendBuiltin(list, "/", builtins)
+	list = appendBuiltin(list, "=", builtins)
+	list = appendBuiltin(list, "<", builtins)
+	list = appendBuiltin(list, ">", builtins)
+
 	return list
 }
 func appendBuiltin(list []BuiltinIndex, name string, table map[string]*Builtin) []BuiltinIndex {
@@ -68,6 +76,19 @@ func appendBuiltin(list []BuiltinIndex, name string, table map[string]*Builtin) 
 		Name: name,
 		Func: table[name],
 	})
+}
+func Essentials() map[string]*Builtin {
+	builtins := map[string]*Builtin{}
+
+	registerBuiltin(builtins, "+", addFunc)
+	registerBuiltin(builtins, "-", minusFunc)
+	registerBuiltin(builtins, "*", multiplyFunc)
+	registerBuiltin(builtins, "/", divideFunc)
+	registerBuiltin(builtins, "=", equalFunc)
+	registerBuiltin(builtins, "<", ltFunc)
+	registerBuiltin(builtins, ">", gtFunc)
+
+	return builtins
 }
 
 func getBuiltins() map[string]*Builtin {
