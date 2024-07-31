@@ -51,6 +51,9 @@ func TestVM(t *testing.T) {
 		{"(if (< 1 2) 10)", 10},
 		{"(if (< 1 2) 10 20)", 10},
 		{"(if (> 1 2) 10 20)", 20},
+		{"(let one 1) one", 1},
+		{"(let one 1) (let two 2) (+ one two)", 3},
+		{"(let one 1) (let two (+ one one)) (+ one two)", 3},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {
@@ -73,15 +76,17 @@ func checkResult(t *testing.T, test vmTestCase) {
 	}
 	snaps.MatchSnapshot(t, ast)
 
-	compiler := compiler.NewCompiler()
+	c := compiler.NewCompiler()
 
-	err := compiler.Compile(ast)
+	err := c.Compile(ast)
 
 	if err != nil {
 		t.Fatalf("Error while compiling: %s", err)
 	}
 
-	bytecode := compiler.Bytecode()
+	bytecode := c.Bytecode()
+
+	bytecode = compiler.JumpPass(bytecode)
 
 	vm := NewVM(bytecode)
 

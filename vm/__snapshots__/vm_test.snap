@@ -573,3 +573,82 @@
     },
 }
 ---
+
+[TestVM/(let_one_1)_one - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.IntStatement{Value:1},
+        },
+        &ast.IdentStatement{
+            Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_one_1)_(let_two_2)_(+_one_two) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.IntStatement{Value:1},
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"two"},
+            Value: &ast.IntStatement{Value:2},
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_one_1)_(let_two_(+_one_one))_(+_one_two) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.IntStatement{Value:1},
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"two"},
+            Value: &ast.CallStatement{
+                Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

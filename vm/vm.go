@@ -17,6 +17,7 @@ var TRUE = &object.Boolean{Value: true}
 var FALSE = &object.Boolean{Value: false}
 
 const StackSize = 2048
+const GlobalsSize = 65536
 
 type VM struct {
 	instructions []*code.Instruction
@@ -26,6 +27,8 @@ type VM struct {
 	essentials   map[string]*object.Builtin
 	stack        []object.Object
 	stackPointer int
+
+	globals []object.Object
 }
 
 func NewVM(bytecode *compiler.Bytecode) *VM {
@@ -36,6 +39,7 @@ func NewVM(bytecode *compiler.Bytecode) *VM {
 		stack:        make([]object.Object, StackSize),
 		stackPointer: 0,
 		essentials:   object.Essentials(),
+		globals:      make([]object.Object, GlobalsSize),
 	}
 }
 func (vm *VM) executePush(instr *code.Instruction) error {
@@ -111,6 +115,15 @@ func (vm *VM) executeTrue() error {
 func (vm *VM) executeFalse() error {
 	return vm.push(FALSE)
 }
+func (vm *VM) executeSet(instr *code.Instruction) error {
+	globalIndex := instr.Operand
+	vm.globals[globalIndex] = vm.pop()
+	return nil
+}
+func (vm *VM) executeGet(instr *code.Instruction) error {
+	globalIndex := instr.Operand
+	return vm.push(vm.globals[globalIndex])
+}
 func (vm *VM) Run() error {
 	ip := 0
 	var err error
@@ -118,6 +131,8 @@ func (vm *VM) Run() error {
 		instr := vm.instructions[ip]
 
 		switch instr.OpCode {
+		case code.JT:
+			// Do nothing
 		case code.PUSH:
 			err = vm.executePush(instr)
 		case code.ADD:
@@ -138,6 +153,16 @@ func (vm *VM) Run() error {
 			err = vm.executeGT()
 		case code.EQ:
 			err = vm.executeEQ()
+		case code.JMP:
+			ip += int(instr.Operand)
+		case code.JCMP:
+			if !vm.stackTrue() {
+				ip += int(instr.Operand)
+			}
+		case code.SET:
+			err = vm.executeSet(instr)
+		case code.GET:
+			err = vm.executeGet(instr)
 		default:
 			err = fmt.Errorf("Unknown opcode %s", instr.OpCode.String())
 		}
@@ -172,6 +197,19 @@ func (vm *VM) push(value object.Object) error {
 	vm.stackPointer++
 
 	return nil
+}
+func (vm *VM) stackTrue() bool {
+	if vm.StackTop().Type() != object.BOOLEAN_OBJ {
+		return false
+	}
+
+	b, ok := vm.StackTop().(*object.Boolean)
+
+	if !ok {
+		return false
+	}
+
+	return b.Value
 }
 func (vm *VM) StackTop() object.Object {
 	if vm.stackPointer == 0 {
