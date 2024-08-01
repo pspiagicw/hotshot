@@ -875,3 +875,281 @@
     },
 }
 ---
+
+[TestVM/___________(let_returnsOne_(lambda()_1))___________(let_returnsOneReturner_(lambda_()_(returnsOne)))___________(returnsOneReturner)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.IntStatement{Value:1},
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+                        Args: nil,
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_oneAndTwo_(lambda_()_(let_one_1)_(let_two_2)_(+_one_two)))_(oneAndTwo) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"oneAndTwo"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                        Value: &ast.IntStatement{Value:2},
+                    },
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"oneAndTwo"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_oneAndTwo_(lambda_()_(let_one_1)_(let_two_2)_(+_one_two)))____________(let_threeAndFour_(lambda_()_(let_three_3)_(let_four_4)_(+_three_four)))___________(+_(oneAndTwo)_(threeAndFour)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"oneAndTwo"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                        Value: &ast.IntStatement{Value:2},
+                    },
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"threeAndFour"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"three"},
+                        Value: &ast.IntStatement{Value:3},
+                    },
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"four"},
+                        Value: &ast.IntStatement{Value:4},
+                    },
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"three"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"four"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"oneAndTwo"},
+                    Args: nil,
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"threeAndFour"},
+                    Args: nil,
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_globalSeed_50)___________(let_minusOne_(lambda_()_(let_num_1)_(-_globalSeed_num)))___________(let_minusTwo_(lambda_()_(let_num_2)_(-_globalSeed_num)))___________(+_(minusOne)_(minusTwo))___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"globalSeed"},
+            Value: &ast.IntStatement{Value:50},
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"minusOne"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"num"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"globalSeed"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"num"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"minusTwo"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"num"},
+                        Value: &ast.IntStatement{Value:2},
+                    },
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"MINUS", TokenValue:"-"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"globalSeed"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"num"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"minusOne"},
+                    Args: nil,
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"minusTwo"},
+                    Args: nil,
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_firstFoobar_(lambda_()_(let_foobar_50)_foobar))___________(let_secondFoobar_(lambda_()_(let_foobar_100)_foobar))___________(+_(firstFoobar)_(secondFoobar)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"firstFoobar"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"foobar"},
+                        Value: &ast.IntStatement{Value:50},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"foobar"},
+                    },
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"secondFoobar"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"foobar"},
+                        Value: &ast.IntStatement{Value:100},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"foobar"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"firstFoobar"},
+                    Args: nil,
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"secondFoobar"},
+                    Args: nil,
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

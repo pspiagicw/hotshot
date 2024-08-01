@@ -35,7 +35,7 @@ type VM struct {
 
 func NewVM(bytecode *compiler.Bytecode) *VM {
 	mainFn := &object.CompiledFunction{Instructions: bytecode.Instructions}
-	mainFrame := NewFrame(mainFn)
+	mainFrame := NewFrame(mainFn, 0)
 
 	frames := make([]*Frame, FramesSize)
 	frames[0] = mainFrame
@@ -151,13 +151,30 @@ func (vm *VM) executeCall(instr *code.Instruction) error {
 	if !ok {
 		return fmt.Errorf("calling non-function")
 	}
-	frame := NewFrame(fn)
+	frame := NewFrame(fn, vm.stackPointer)
 	vm.pushFrame(frame)
+	vm.stackPointer = frame.basePointer + int(fn.NumLocals)
 	return nil
 }
 func (vm *VM) executeReturn() error {
-	vm.popFrame()
+	result := vm.pop()
+	prevFrame := vm.popFrame()
+	vm.stackPointer = prevFrame.basePointer
+	return vm.push(result)
+}
+func (vm *VM) executeLocalSet(instr *code.Instruction) error {
+	frame := vm.currentFrame()
+
+	vm.stack[frame.basePointer+int(instr.Operand)] = vm.pop()
+
 	return nil
+}
+func (vm *VM) executeLocalGet(instr *code.Instruction) error {
+	frame := vm.currentFrame()
+
+	value := vm.stack[frame.basePointer+int(instr.Operand)]
+
+	return vm.push(value)
 }
 func (vm *VM) Run() error {
 	var ip int
@@ -207,6 +224,10 @@ func (vm *VM) Run() error {
 			err = vm.executeCall(instr)
 		case code.RETURN:
 			err = vm.executeReturn()
+		case code.LSET:
+			err = vm.executeLocalSet(instr)
+		case code.LGET:
+			err = vm.executeLocalGet(instr)
 		default:
 			err = fmt.Errorf("Unknown opcode %s", instr.OpCode.String())
 		}

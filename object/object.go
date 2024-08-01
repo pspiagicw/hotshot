@@ -224,6 +224,7 @@ func (r Return) Content() string {
 type CompiledFunction struct {
 	Instructions []*code.Instruction
 	Name         string
+	NumLocals    int
 }
 
 func (c CompiledFunction) Type() ObjectType {

@@ -185,9 +185,12 @@ func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
 		}
 	}
 	c.emit(code.RETURN, -1)
+	numLocals := c.symbols.numDefinitions
 	instructions := c.leaveScope()
+
 	compiledFn := &object.CompiledFunction{Instructions: instructions}
 	compiledFn.Name = "lambda"
+	compiledFn.NumLocals = numLocals
 	c.emit(code.PUSH, c.addConstant(compiledFn))
 
 	return nil
@@ -216,9 +219,12 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 		}
 	}
 	c.emit(code.RETURN, -1)
+	numLocals := c.symbols.numDefinitions
 	instructions := c.leaveScope()
+
 	compiledFn := &object.CompiledFunction{Instructions: instructions}
 	compiledFn.Name = node.Name.TokenValue
+	compiledFn.NumLocals = numLocals
 	c.emit(code.PUSH, c.addConstant(compiledFn))
 
 	c.emit(code.SET, int16(symbol.Index))

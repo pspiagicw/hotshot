@@ -56,13 +56,35 @@ func TestVM(t *testing.T) {
 		{"(let one 1) (let two (+ one one)) (+ one two)", 3},
 		{"(let fivePlusTen (lambda () (+ 5 10))) (fivePlusTen)", 15},
 		{"(let one (lambda () 1)) (let two (lambda () 2)) (+ (one) (two))", 3},
-		{`(let returnsOne (lambda() 1))
-            (let returnsOneReturner (lambda () (returnsOne)))
-            (returnsOneReturner)
-            `,
+		{`
+          (let returnsOne (lambda() 1))
+          (let returnsOneReturner (lambda () (returnsOne)))
+          (returnsOneReturner)
+          `,
 			1,
 		},
-		// {`(let one (lambda() (let one 1) one)) (one)`, 1},
+		{`(let one (lambda() (let one 1) one)) (one)`, 1},
+		{`(let oneAndTwo (lambda () (let one 1) (let two 2) (+ one two))) (oneAndTwo)`, 3},
+		{`
+          (let oneAndTwo (lambda () (let one 1) (let two 2) (+ one two))) 
+          (let threeAndFour (lambda () (let three 3) (let four 4) (+ three four)))
+          (+ (oneAndTwo) (threeAndFour))`,
+			10,
+		},
+		{`
+          (let firstFoobar (lambda () (let foobar 50) foobar))
+          (let secondFoobar (lambda () (let foobar 100) foobar))
+          (+ (firstFoobar) (secondFoobar))`,
+			150,
+		},
+		{`
+          (let globalSeed 50)
+          (let minusOne (lambda () (let num 1) (- globalSeed num)))
+          (let minusTwo (lambda () (let num 2) (- globalSeed num)))
+          (+ (minusOne) (minusTwo))
+          `,
+			97,
+		},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {
