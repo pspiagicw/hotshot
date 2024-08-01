@@ -159,6 +159,7 @@ func TestFunctionCalls(t *testing.T) {
 	constants := []interface{}{
 		[]*code.Instruction{
 			{OpCode: code.LGET, Operand: 0},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 		2,
 	}
@@ -182,6 +183,7 @@ func TestFunctionWithArgs(t *testing.T) {
 			{OpCode: code.LGET, Operand: 1},
 			{OpCode: code.LGET, Operand: 2},
 			{OpCode: code.ADD, Operand: 3},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 		1,
 		2,
@@ -210,6 +212,7 @@ func TestLocalScopes(t *testing.T) {
 			{OpCode: code.PUSH, Operand: 0},
 			{OpCode: code.LSET, Operand: 0},
 			{OpCode: code.LGET, Operand: 0},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 
@@ -233,6 +236,7 @@ func TestLocalStrict(t *testing.T) {
 			{OpCode: code.LGET, Operand: 0},
 			{OpCode: code.LGET, Operand: 1},
 			{OpCode: code.ADD, Operand: 2},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 
@@ -249,6 +253,7 @@ func TestLocals(t *testing.T) {
 		55,
 		[]*code.Instruction{
 			{OpCode: code.GET, Operand: 0},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 
@@ -265,7 +270,9 @@ func TestCall(t *testing.T) {
 	input := `(fn someFunc ()) (someFunc)`
 
 	constants := []interface{}{
-		[]*code.Instruction{},
+		[]*code.Instruction{
+			{OpCode: code.RETURN, Operand: -1},
+		},
 	}
 
 	bytecode := []*code.Instruction{
@@ -286,6 +293,7 @@ func TestFunctionDec(t *testing.T) {
 			{OpCode: code.PUSH, Operand: 0},
 			{OpCode: code.LSET, Operand: 0},
 			{OpCode: code.LGET, Operand: 0},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 
@@ -306,6 +314,7 @@ func TestLambda(t *testing.T) {
 		25,
 		[]*code.Instruction{
 			{OpCode: code.PUSH, Operand: 0},
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 	bytecode := []*code.Instruction{
@@ -322,6 +331,7 @@ func TestLambdaAssignment(t *testing.T) {
 		25,
 		[]*code.Instruction{
 			{OpCode: code.PUSH, Operand: 0}, // The 25
+			{OpCode: code.RETURN, Operand: -1},
 		},
 	}
 

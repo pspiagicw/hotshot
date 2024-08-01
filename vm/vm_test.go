@@ -54,6 +54,15 @@ func TestVM(t *testing.T) {
 		{"(let one 1) one", 1},
 		{"(let one 1) (let two 2) (+ one two)", 3},
 		{"(let one 1) (let two (+ one one)) (+ one two)", 3},
+		{"(let fivePlusTen (lambda () (+ 5 10))) (fivePlusTen)", 15},
+		{"(let one (lambda () 1)) (let two (lambda () 2)) (+ (one) (two))", 3},
+		{`(let returnsOne (lambda() 1))
+            (let returnsOneReturner (lambda () (returnsOne)))
+            (returnsOneReturner)
+            `,
+			1,
+		},
+		// {`(let one (lambda() (let one 1) one)) (one)`, 1},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {

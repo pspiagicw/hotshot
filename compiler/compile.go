@@ -184,6 +184,7 @@ func (c *Compiler) compileLambdaStatement(node *ast.LambdaStatement) error {
 			return err
 		}
 	}
+	c.emit(code.RETURN, -1)
 	instructions := c.leaveScope()
 	compiledFn := &object.CompiledFunction{Instructions: instructions}
 	compiledFn.Name = "lambda"
@@ -214,6 +215,7 @@ func (c *Compiler) compileFunctionStatement(node *ast.FunctionStatement) error {
 			return err
 		}
 	}
+	c.emit(code.RETURN, -1)
 	instructions := c.leaveScope()
 	compiledFn := &object.CompiledFunction{Instructions: instructions}
 	compiledFn.Name = node.Name.TokenValue

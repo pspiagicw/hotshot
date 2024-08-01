@@ -652,3 +652,226 @@
     },
 }
 ---
+
+[TestVM/(let_fivePlusTen_(lambda_()_(+_5_10)))_(fivePlusTen) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"fivePlusTen"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IntStatement{Value:5},
+                            &ast.IntStatement{Value:10},
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"fivePlusTen"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_one_(lambda_()_1))_(let_two_(lambda_()_2))_(+_(one)_(two)) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.IntStatement{Value:1},
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"two"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.IntStatement{Value:2},
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    Args: nil,
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"two"},
+                    Args: nil,
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/_____________(let_returnsOne_(lambda()_1))_____________(let_returnsOneReturner_(lambda_()_(returnsOne)))_____________(returnsOneReturner)_____________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.IntStatement{Value:1},
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+                        Args: nil,
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/_____________(let_one_(lambda()_(let_one_1)_one))_____________(one)_____________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_returnsOne_(lambda()_1))_____________(let_returnsOneReturner_(lambda_()_(returnsOne)))_____________(returnsOneReturner)_____________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.IntStatement{Value:1},
+                },
+            },
+        },
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOne"},
+                        Args: nil,
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"returnsOneReturner"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_one_(lambda()_(let_one_1)_one))_____________(one)_____________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_one_(lambda()_(let_one_1)_one))_(one) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                },
+                Body: {
+                    &ast.AssignmentStatement{
+                        Name:  &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                        Value: &ast.IntStatement{Value:1},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"one"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"one"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

@@ -44,6 +44,14 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 	bytecode = compiler.JumpPass(bytecode)
 
 	decompiler.Print(bytecode)
+	// vm := vm.NewVM(bytecode)
+	//
+	// error := vm.Run()
+	//
+	// if error != nil {
+	// 	goreland.LogFatal("Error while running the VM: %v", error)
+	// }
+	//    fmt.Println(vm.StackTop())
 }
 func readFile(file string) string {
 

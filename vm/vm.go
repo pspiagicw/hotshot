@@ -18,29 +18,49 @@ var FALSE = &object.Boolean{Value: false}
 
 const StackSize = 2048
 const GlobalsSize = 65536
+const FramesSize = 1024
 
 type VM struct {
-	instructions []*code.Instruction
-	constants    []object.Object
+	constants []object.Object
 
 	builtins     []object.BuiltinIndex
 	essentials   map[string]*object.Builtin
 	stack        []object.Object
 	stackPointer int
 
-	globals []object.Object
+	globals    []object.Object
+	frames     []*Frame
+	frameIndex int
 }
 
 func NewVM(bytecode *compiler.Bytecode) *VM {
+	mainFn := &object.CompiledFunction{Instructions: bytecode.Instructions}
+	mainFrame := NewFrame(mainFn)
+
+	frames := make([]*Frame, FramesSize)
+	frames[0] = mainFrame
+
 	return &VM{
-		instructions: bytecode.Instructions,
-		constants:    bytecode.Constants,
+		constants: bytecode.Constants,
 
 		stack:        make([]object.Object, StackSize),
 		stackPointer: 0,
 		essentials:   object.Essentials(),
 		globals:      make([]object.Object, GlobalsSize),
+		frames:       frames,
+		frameIndex:   1,
 	}
+}
+func (vm *VM) currentFrame() *Frame {
+	return vm.frames[vm.frameIndex-1]
+}
+func (vm *VM) pushFrame(f *Frame) {
+	vm.frames[vm.frameIndex] = f
+	vm.frameIndex++
+}
+func (vm *VM) popFrame() *Frame {
+	vm.frameIndex--
+	return vm.frames[vm.frameIndex]
 }
 func (vm *VM) executePush(instr *code.Instruction) error {
 	constant := vm.constants[instr.Operand]
@@ -124,11 +144,31 @@ func (vm *VM) executeGet(instr *code.Instruction) error {
 	globalIndex := instr.Operand
 	return vm.push(vm.globals[globalIndex])
 }
+func (vm *VM) executeCall(instr *code.Instruction) error {
+	top := vm.pop()
+	fn, ok := top.(*object.CompiledFunction)
+
+	if !ok {
+		return fmt.Errorf("calling non-function")
+	}
+	frame := NewFrame(fn)
+	vm.pushFrame(frame)
+	return nil
+}
+func (vm *VM) executeReturn() error {
+	vm.popFrame()
+	return nil
+}
 func (vm *VM) Run() error {
-	ip := 0
+	var ip int
+	var ins []*code.Instruction
 	var err error
-	for ip < len(vm.instructions) {
-		instr := vm.instructions[ip]
+	for vm.currentFrame().ip < len(vm.currentFrame().Instructions())-1 {
+		vm.currentFrame().ip++
+		ip = vm.currentFrame().ip
+		ins = vm.currentFrame().Instructions()
+
+		instr := ins[ip]
 
 		switch instr.OpCode {
 		case code.JT:
@@ -154,15 +194,19 @@ func (vm *VM) Run() error {
 		case code.EQ:
 			err = vm.executeEQ()
 		case code.JMP:
-			ip += int(instr.Operand)
+			vm.currentFrame().ip += int(instr.Operand)
 		case code.JCMP:
 			if !vm.stackTrue() {
-				ip += int(instr.Operand)
+				vm.currentFrame().ip += int(instr.Operand)
 			}
 		case code.SET:
 			err = vm.executeSet(instr)
 		case code.GET:
 			err = vm.executeGet(instr)
+		case code.CALL:
+			err = vm.executeCall(instr)
+		case code.RETURN:
+			err = vm.executeReturn()
 		default:
 			err = fmt.Errorf("Unknown opcode %s", instr.OpCode.String())
 		}
@@ -170,7 +214,6 @@ func (vm *VM) Run() error {
 		if err != nil {
 			return err
 		}
-		ip++
 	}
 	return nil
 }
