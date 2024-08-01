@@ -7,10 +7,8 @@ import (
 	"github.com/pspiagicw/goreland"
 	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/compiler"
-	"github.com/pspiagicw/hotshot/decompiler"
-	"github.com/pspiagicw/hotshot/eval"
-	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/printer"
+	"github.com/pspiagicw/hotshot/vm"
 )
 
 func ExecuteFile(file string, opts *argparse.Opts) {
@@ -19,11 +17,11 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 
 	program, errors := parseCode(code, opts)
 
-	errorHandler := func(message string) {
-		goreland.LogFatal("Runtime Error: %s", message)
-	}
+	// errorHandler := func(message string) {
+	// 	goreland.LogFatal("Runtime Error: %s", message)
+	// }
 
-	e := eval.NewEvaluator(errorHandler)
+	// e := eval.NewEvaluator(errorHandler)
 
 	handleErrors(errors, true)
 
@@ -31,9 +29,9 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 		fmt.Println(printer.PrintAST(program))
 	}
 
-	env := object.NewEnvironment()
+	// env := object.NewEnvironment()
 
-	_ = e.Eval(program, env)
+	// _ = e.Eval(program, env)
 
 	c := compiler.NewCompiler()
 	err := c.Compile(program)
@@ -43,15 +41,15 @@ func ExecuteFile(file string, opts *argparse.Opts) {
 	bytecode := c.Bytecode()
 	bytecode = compiler.JumpPass(bytecode)
 
-	decompiler.Print(bytecode)
-	// vm := vm.NewVM(bytecode)
-	//
-	// error := vm.Run()
-	//
-	// if error != nil {
-	// 	goreland.LogFatal("Error while running the VM: %v", error)
-	// }
-	//    fmt.Println(vm.StackTop())
+	// decompiler.Print(bytecode)
+	vm := vm.NewVM(bytecode)
+
+	error := vm.Run()
+
+	if error != nil {
+		goreland.LogFatal("Error while running the VM: %v", error)
+	}
+	fmt.Println(vm.StackTop())
 }
 func readFile(file string) string {
 

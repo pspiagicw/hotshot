@@ -151,7 +151,7 @@ func (vm *VM) executeCall(instr *code.Instruction) error {
 	if !ok {
 		return fmt.Errorf("calling non-function")
 	}
-	frame := NewFrame(fn, vm.stackPointer)
+	frame := NewFrame(fn, vm.stackPointer-int(instr.Operand))
 	vm.pushFrame(frame)
 	vm.stackPointer = frame.basePointer + int(fn.NumLocals)
 	return nil

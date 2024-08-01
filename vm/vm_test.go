@@ -85,6 +85,51 @@ func TestVM(t *testing.T) {
           `,
 			97,
 		},
+		{`
+          (let identity (lambda (a) a))
+          (identity 4)
+          `,
+			4,
+		},
+		{`
+          (let sum (lambda (a b) (+ a b)))
+          (sum 2 5)
+          `,
+			7,
+		},
+		{`
+          (fn sum (a b) (let c (+ a b)) c) 
+          (sum 1 2)
+          `,
+			3,
+		},
+		{`
+          (fn sum (a b) (let c (+ a b)) c) 
+          (+ (sum 1 2) (sum 3 4))
+          `,
+			10,
+		},
+		{`
+          (fn sum (a b) (let c (+ a b)) c) 
+          (fn outer () (+ (sum 1 2) (sum 3 4))) 
+          (outer)
+          `,
+			10,
+		},
+		{`
+          (let globalNum 10)
+
+          (fn sum (a b) 
+            (let c (+ a b))
+            (+ c globalNum))
+
+          (fn outer ()
+            (+ (sum 1 2) (sum 3 4) globalNum))
+
+          (+ (outer) globalNum)
+          `,
+			50,
+		},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {

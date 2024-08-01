@@ -1153,3 +1153,556 @@
     },
 }
 ---
+
+[TestVM/___________(let_identity_(lambda_(a)_a))___________(identity_4)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"identity"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                    },
+                },
+                Body: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"identity"},
+            Args: {
+                &ast.IntStatement{Value:4},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_sum_(lambda_(a_b)_(+_a_b)))___________(sum_2_5)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Value: &ast.LambdaStatement{
+                Args: {
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                    },
+                    &ast.IdentStatement{
+                        Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                    },
+                },
+                Body: {
+                    &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:5},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(fn_sum_(a_b)_(let_c_(+_a_b))_c)____________(sum_1_2)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(fn_sum_(a_b)_(let_c_(+_a_b))_c)____________(+_(sum_1_2)_(sum_3_4))___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                    Args: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                    },
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                    Args: {
+                        &ast.IntStatement{Value:3},
+                        &ast.IntStatement{Value:4},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(fn_sum_(a_b)_(let_c_(+_a_b))_c)____________(fn_outer_()_(+_(sum_1_2)_(sum_3_4)))___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                },
+            },
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: {
+            },
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:1},
+                                &ast.IntStatement{Value:2},
+                            },
+                        },
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:3},
+                                &ast.IntStatement{Value:4},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(fn_sum_(a_b)_(let_c_(+_a_b))_c)____________(fn_outer_()_(+_(sum_1_2)_(sum_3_4)))___________(outer)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                },
+            },
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: {
+            },
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:1},
+                                &ast.IntStatement{Value:2},
+                            },
+                        },
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:3},
+                                &ast.IntStatement{Value:4},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(fn_sum_(a_b)_(let_c_(+_a_b))_c)____________(fn_outer_()_(+_(sum_1_2)_(sum_3_4)))____________(outer)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                },
+            },
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: {
+            },
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:1},
+                                &ast.IntStatement{Value:2},
+                            },
+                        },
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:3},
+                                &ast.IntStatement{Value:4},
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: nil,
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_globalNum_10)____________(fn_sum_(a_b)______________(let_c_(+_a_b))_____________(+_c_globalNum))____________(fn_outer_()_____________(+_(sum_1_2)_(sum_3_4)_globalNum))____________(+_outer_globalNum)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+            Value: &ast.IntStatement{Value:10},
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                        },
+                    },
+                },
+            },
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: {
+            },
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:1},
+                                &ast.IntStatement{Value:2},
+                            },
+                        },
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:3},
+                                &ast.IntStatement{Value:4},
+                            },
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/___________(let_globalNum_10)____________(fn_sum_(a_b)______________(let_c_(+_a_b))_____________(+_c_globalNum))____________(fn_outer_()_____________(+_(sum_1_2)_(sum_3_4)_globalNum))____________(+_(outer)_globalNum)___________ - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+            Value: &ast.IntStatement{Value:10},
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                },
+            },
+            Body: {
+                &ast.AssignmentStatement{
+                    Name:  &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                    Value: &ast.CallStatement{
+                        Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                        Args: {
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                            },
+                            &ast.IdentStatement{
+                                Value: &token.Token{TokenType:"IDENT", TokenValue:"b"},
+                            },
+                        },
+                    },
+                },
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"c"},
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                        },
+                    },
+                },
+            },
+        },
+        &ast.FunctionStatement{
+            Name: &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+            Args: {
+            },
+            Body: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+                    Args: {
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:1},
+                                &ast.IntStatement{Value:2},
+                            },
+                        },
+                        &ast.CallStatement{
+                            Op:   &token.Token{TokenType:"IDENT", TokenValue:"sum"},
+                            Args: {
+                                &ast.IntStatement{Value:3},
+                                &ast.IntStatement{Value:4},
+                            },
+                        },
+                        &ast.IdentStatement{
+                            Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                        },
+                    },
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"PLUS", TokenValue:"+"},
+            Args: {
+                &ast.CallStatement{
+                    Op:   &token.Token{TokenType:"IDENT", TokenValue:"outer"},
+                    Args: nil,
+                },
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"globalNum"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
