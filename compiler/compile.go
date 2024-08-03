@@ -401,16 +401,25 @@ func (c *Compiler) compileIdentStatement(node *ast.IdentStatement) error {
 	c.loadSymbol(symbol)
 	return nil
 }
+func (c *Compiler) setSymbol(symbol Symbol) {
+	if symbol.Scope == Global {
+		c.emit(code.SET, int16(symbol.Index))
+	} else {
+		c.emit(code.LSET, int16(symbol.Index))
+	}
+}
 func (c *Compiler) compileAssignmentStatement(node *ast.AssignmentStatement) error {
 	err := c.Compile(node.Value)
 	if err != nil {
 		return err
 	}
-	symbol := c.symbols.Define(node.Name.TokenValue)
-	if symbol.Scope == Global {
-		c.emit(code.SET, int16(symbol.Index))
+	val, exists := c.symbols.Resolve(node.Name.TokenValue)
+
+	if exists {
+		c.setSymbol(val)
 	} else {
-		c.emit(code.LSET, int16(symbol.Index))
+		symbol := c.symbols.Define(node.Name.TokenValue)
+		c.setSymbol(symbol)
 	}
 	return nil
 }

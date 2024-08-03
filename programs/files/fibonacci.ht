@@ -4,5 +4,6 @@
         (true (+ (fibonacci (- n 1))
                  (fibonacci (- n 2))))))
 
-(fibonacci 35)
+(assert (fibonacci 7) 13 "fibonacci failed")
+(assert (fibonacci 10) 55 "fibonacci failed");
 
