@@ -60,6 +60,7 @@ func TestAssert(t *testing.T) {
 	bytecode := []*code.Instruction{
 		{OpCode: code.TRUE, Operand: -1},
 		{OpCode: code.TRUE, Operand: -1},
+		{OpCode: code.EQ, Operand: 2},
 		{OpCode: code.PUSH, Operand: 0},
 		{OpCode: code.ASSERT, Operand: -1},
 	}

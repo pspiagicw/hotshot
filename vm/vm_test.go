@@ -130,6 +130,8 @@ func TestVM(t *testing.T) {
           `,
 			50,
 		},
+		{`(len "something")`, 9},
+		{`(assert 3 3 "3 is equal to 3") 3`, 3},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {

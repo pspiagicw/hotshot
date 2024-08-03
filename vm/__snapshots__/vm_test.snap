@@ -1706,3 +1706,44 @@
     },
 }
 ---
+
+[TestVM/(len_"something") - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"len"},
+            Args: {
+                &ast.StringStatement{Value:"something"},
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(assert_3_3_"3_is_equal_to_3") - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssertStatement{
+            Left:    &ast.IntStatement{Value:3},
+            Right:   &ast.IntStatement{Value:3},
+            Message: &token.Token{TokenType:"STRING", TokenValue:"3 is equal to 3"},
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(assert_3_3_"3_is_equal_to_3")_3 - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssertStatement{
+            Left:    &ast.IntStatement{Value:3},
+            Right:   &ast.IntStatement{Value:3},
+            Message: &token.Token{TokenType:"STRING", TokenValue:"3 is equal to 3"},
+        },
+        &ast.IntStatement{Value:3},
+        &ast.EmptyStatement{},
+    },
+}
+---

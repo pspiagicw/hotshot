@@ -243,6 +243,7 @@ func (c *Compiler) compileAssertStatement(node *ast.AssertStatement) error {
 		return err
 	}
 
+	c.emit(code.EQ, 2)
 	c.emit(code.PUSH, c.addConstant(&object.String{Value: node.Message.TokenValue}))
 
 	c.emit(code.ASSERT, -1)
