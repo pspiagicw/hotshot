@@ -145,7 +145,7 @@ func (vm *VM) executeGet(instr *code.Instruction) error {
 	globalIndex := instr.Operand
 	return vm.push(vm.globals[globalIndex])
 }
-func (vm *VM) executeFunction(fn *object.CompiledFunction, instr *code.Instruction) error {
+func (vm *VM) executeUserFunction(fn *object.CompiledFunction, instr *code.Instruction) error {
 	frame := NewFrame(fn, vm.stackPointer-int(instr.Operand))
 	vm.pushFrame(frame)
 	vm.stackPointer = frame.basePointer + int(fn.NumLocals)
@@ -160,7 +160,7 @@ func (vm *VM) executeCall(instr *code.Instruction) error {
 	top := vm.pop()
 	switch obj := top.(type) {
 	case *object.CompiledFunction:
-		return vm.executeFunction(obj, instr)
+		return vm.executeUserFunction(obj, instr)
 	case *object.Builtin:
 		return vm.executeBuiltinFunction(obj, instr)
 	default:
@@ -227,6 +227,14 @@ func isTrue(obj object.Object) bool {
 
 	return b.Value
 }
+func (vm *VM) executeTable(instr *code.Instruction) error {
+	elements := vm.popElements(instr.Operand)
+
+	table := &object.Table{}
+	table.Elements = elements
+
+	return vm.push(table)
+}
 func (vm *VM) Run() error {
 	var ip int
 	var ins []*code.Instruction
@@ -283,6 +291,8 @@ func (vm *VM) Run() error {
 			err = vm.executeBuiltin(instr)
 		case code.ASSERT:
 			err = vm.executeAssert()
+		case code.TABLE:
+			err = vm.executeTable(instr)
 		default:
 			err = fmt.Errorf("Unknown opcode %s", instr.OpCode.String())
 		}

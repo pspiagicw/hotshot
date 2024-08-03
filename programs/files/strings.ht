@@ -1,7 +1,7 @@
-(echo (assert "HelloWorld" (concat "Hello" "World") "concat failed!"))
-(echo (assert "4" (string 4) "string failed!"))
-(echo (assert "true" (string true) "string failed!"))
-(echo (assert "[1 2 3 4]" (string {1 2 3 4}) "string failed!"))
+(assert "HelloWorld" (concat "Hello" "World") "concat failed!")
+(assert "4" (string 4) "string failed!")
+(assert "true" (string true) "string failed!")
+(assert "[1 2 3 4]" (string {1 2 3 4}) "string failed!")
 
 
 (assert (getchar "Hello" 0) "H" "getchar failed")

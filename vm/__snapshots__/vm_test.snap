@@ -1747,3 +1747,75 @@
     },
 }
 ---
+
+[TestVM/{1_2_3_4}_(pop_a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.TableStatement{
+            Elements: {
+                &ast.IntStatement{Value:1},
+                &ast.IntStatement{Value:2},
+                &ast.IntStatement{Value:3},
+                &ast.IntStatement{Value:4},
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"pop"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(pop_{1_2_3_4}) - 1]
+&ast.Program{
+    Statements: {
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"pop"},
+            Args: {
+                &ast.TableStatement{
+                    Elements: {
+                        &ast.IntStatement{Value:1},
+                        &ast.IntStatement{Value:2},
+                        &ast.IntStatement{Value:3},
+                        &ast.IntStatement{Value:4},
+                    },
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---
+
+[TestVM/(let_a_{1_2_3_4})_(pop_a) - 1]
+&ast.Program{
+    Statements: {
+        &ast.AssignmentStatement{
+            Name:  &token.Token{TokenType:"IDENT", TokenValue:"a"},
+            Value: &ast.TableStatement{
+                Elements: {
+                    &ast.IntStatement{Value:1},
+                    &ast.IntStatement{Value:2},
+                    &ast.IntStatement{Value:3},
+                    &ast.IntStatement{Value:4},
+                },
+            },
+        },
+        &ast.CallStatement{
+            Op:   &token.Token{TokenType:"IDENT", TokenValue:"pop"},
+            Args: {
+                &ast.IdentStatement{
+                    Value: &token.Token{TokenType:"IDENT", TokenValue:"a"},
+                },
+            },
+        },
+        &ast.EmptyStatement{},
+    },
+}
+---

@@ -13,6 +13,7 @@ import (
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
+	"github.com/pspiagicw/hotshot/vm"
 	"github.com/pspiagicw/regolith"
 )
 
@@ -77,14 +78,14 @@ func StartREPL(opts *argparse.Opts) {
 		bytecode = compiler.JumpPass(bytecode)
 
 		decompiler.Print(bytecode)
-		// vm := vm.NewVM(bytecode)
+		vm := vm.NewVM(bytecode)
 
-		// err = vm.Run()
-		// if err != nil {
-		// 	goreland.LogError("Error running the VM: %v", err)
-		// }
-		//
-		// fmt.Println(vm.StackTop())
+		err = vm.Run()
+		if err != nil {
+			goreland.LogError("Error running the VM: %v", err)
+		}
+
+		fmt.Println(vm.StackTop())
 	}
 
 }

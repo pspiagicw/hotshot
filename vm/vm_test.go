@@ -132,6 +132,8 @@ func TestVM(t *testing.T) {
 		},
 		{`(len "something")`, 9},
 		{`(assert 3 3 "3 is equal to 3") 3`, 3},
+		{`(pop {1 2 3 4})`, 4},
+		{`(let a {1 2 3 4}) (pop a)`, 4},
 	}
 	for _, test := range tt {
 		t.Run(test.input, func(t *testing.T) {

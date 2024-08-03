@@ -73,7 +73,7 @@ func functionpFunc(args []Object) Object {
 
 	result := true
 	for _, arg := range args {
-		if arg.Type() != FUNCTION_OBJ {
+		if arg.Type() != FUNCTION_OBJ || arg.Type() != COMPILED_FUNCTION_OBJ {
 			result = false
 		}
 	}

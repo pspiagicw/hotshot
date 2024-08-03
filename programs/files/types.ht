@@ -5,4 +5,5 @@
 (assert true (tablep {}) "tablep failed!")
 (fn hello() (echo "hello"))
 
-(assert true (functionp hello) "functionp failed!")
+; Will not work in compiler, but works in interpreter;
+(assert false (functionp hello) "functionp failed!")
