@@ -1,9 +1,4 @@
-(fn countit ()
-        (let counter 1)
-        (lambda () 
-                (inc counter)
-                counter
-            ))
+(fn countit () (let counter 1) (lambda () (inc counter) counter))
 
 (let c (countit))
 (assert (c) 2 "Closure doesn't work")

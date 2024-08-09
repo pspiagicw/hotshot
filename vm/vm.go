@@ -250,25 +250,68 @@ func (vm *VM) Run() error {
 		case code.JT:
 			// Do nothing
 		case code.PUSH:
-			err = vm.executePush(instr)
+			constant := vm.constants[instr.Operand]
+			err = vm.push(constant)
 		case code.ADD:
-			err = vm.executeAdd(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["+"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.SUB:
-			err = vm.executeSub(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["-"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.MUL:
-			err = vm.executeMul(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["*"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.DIV:
-			err = vm.executeDiv(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["/"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.TRUE:
-			err = vm.executeTrue()
+			err = vm.push(TRUE)
 		case code.FALSE:
-			err = vm.executeFalse()
+			err = vm.push(FALSE)
 		case code.LT:
-			err = vm.executeLT(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["<"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.GT:
-			err = vm.executeGT(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials[">"]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.EQ:
-			err = vm.executeEQ(instr)
+			elements := vm.popElements(instr.Operand)
+
+			fn := vm.essentials["="]
+
+			result := fn.Fn(elements)
+
+			err = vm.push(result)
 		case code.JMP:
 			vm.currentFrame().ip += int(instr.Operand)
 		case code.JCMP:
@@ -276,19 +319,41 @@ func (vm *VM) Run() error {
 				vm.currentFrame().ip += int(instr.Operand)
 			}
 		case code.SET:
-			err = vm.executeSet(instr)
+			globalIndex := instr.Operand
+			vm.globals[globalIndex] = vm.pop()
 		case code.GET:
-			err = vm.executeGet(instr)
+			globalIndex := instr.Operand
+			err = vm.push(vm.globals[globalIndex])
 		case code.CALL:
-			err = vm.executeCall(instr)
+			top := vm.pop()
+			switch obj := top.(type) {
+			case *object.CompiledFunction:
+				err = vm.executeUserFunction(obj, instr)
+			case *object.Builtin:
+				err = vm.executeBuiltinFunction(obj, instr)
+			default:
+				err = fmt.Errorf("calling non-function and non-builtin")
+			}
 		case code.RETURN:
-			err = vm.executeReturn()
+			result := vm.pop()
+			prevFrame := vm.popFrame()
+			vm.stackPointer = prevFrame.basePointer
+			err = vm.push(result)
 		case code.LSET:
-			err = vm.executeLocalSet(instr)
+			frame := vm.currentFrame()
+
+			vm.stack[frame.basePointer+int(instr.Operand)] = vm.pop()
+
 		case code.LGET:
-			err = vm.executeLocalGet(instr)
+			frame := vm.currentFrame()
+
+			value := vm.stack[frame.basePointer+int(instr.Operand)]
+
+			err = vm.push(value)
 		case code.BUILTIN:
-			err = vm.executeBuiltin(instr)
+			builtinIndex := instr.Operand
+			builtin := vm.builtins[builtinIndex]
+			err = vm.push(builtin.Func)
 		case code.ASSERT:
 			err = vm.executeAssert()
 		case code.TABLE:

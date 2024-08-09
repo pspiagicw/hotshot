@@ -24,7 +24,12 @@ This documentation is available on [GitHub](https://github.com/pspiagicw/hotshot
  - [Import](#import)
     - [import](#import)
     - [stdlib](#stdlib)
- - [Internals]()
+ - [Internals](#internals)
+    - [lexer](#lexer)
+    - [parser](#parser)
+    - [eval](#eval)
+    - [compiler](#compiler)
+    - [vm](#vm)
 
 This is `hotshot`. A LISP based language written in Golang.
 

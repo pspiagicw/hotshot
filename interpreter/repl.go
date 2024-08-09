@@ -8,8 +8,6 @@ import (
 	"github.com/pspiagicw/hotshot/argparse"
 	"github.com/pspiagicw/hotshot/ast"
 	"github.com/pspiagicw/hotshot/compiler"
-	"github.com/pspiagicw/hotshot/decompiler"
-	"github.com/pspiagicw/hotshot/eval"
 	"github.com/pspiagicw/hotshot/lexer"
 	"github.com/pspiagicw/hotshot/object"
 	"github.com/pspiagicw/hotshot/parser"
@@ -29,11 +27,6 @@ func getPrompt() string {
 func StartREPL(opts *argparse.Opts) {
 
 	printHeader()
-
-	env := object.NewEnvironment()
-	e := eval.NewEvaluator(func(message string) {
-		goreland.LogError("%s", message)
-	})
 
 	rg, err := regolith.New(&regolith.Config{
 		StartWords: []string{"(", "["},
@@ -61,11 +54,11 @@ func StartREPL(opts *argparse.Opts) {
 		if opts.AST {
 			fmt.Println(program.String())
 		}
-		result := e.Eval(program, env)
-		if opts.Null || result.Type() != object.NULL_OBJ {
-			fmt.Print("=> ")
-			fmt.Println(result.String())
-		}
+		// result := e.Eval(program, env)
+		// if opts.Null || result.Type() != object.NULL_OBJ {
+		// 	fmt.Print("=> ")
+		// 	fmt.Println(result.String())
+		// }
 		c := compiler.NewWithState(symbols, constants)
 		err = c.Compile(program)
 
@@ -77,7 +70,7 @@ func StartREPL(opts *argparse.Opts) {
 
 		bytecode = compiler.JumpPass(bytecode)
 
-		decompiler.Print(bytecode)
+		// decompiler.Print(bytecode)
 		vm := vm.NewVM(bytecode)
 
 		err = vm.Run()
