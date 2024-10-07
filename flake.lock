@@ -1,0 +1,58 @@
+{
+  "nodes": {
+    "custom": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1728289138,
+        "narHash": "sha256-86gW8ZdaFMGC2RkogxI6HObRpXPtKUzQlCFKKzlqyZs=",
+        "owner": "pspiagicw",
+        "repo": "packages",
+        "rev": "77694219783cd9cf43bb49d11c815869d2bf1d2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "pspiagicw",
+        "repo": "packages",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-eV+63gK0Mp7ygCR0Oy4yIYSNcum2VQwnZamHxYTNi+M=",
+        "path": "/nix/store/1h99qq6970gkx3j0m9w4yrrl9y99y1nk-source",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1728193676,
+        "narHash": "sha256-PbDWAIjKJdlVg+qQRhzdSor04bAPApDqIv2DofTyynk=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ecbc1ca8ffd6aea8372ad16be9ebbb39889e55b6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "custom": "custom",
+        "nixpkgs": "nixpkgs_2"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
