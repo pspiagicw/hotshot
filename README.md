@@ -116,7 +116,7 @@ go test -v ./...
 # Development
 
 Anybody is free to develop `hotshot`. You will need knowledge of Go and preferably understanding of *Compiler Theory*
-. You will need knowledge of Go and preferably understanding of *Compiler Theory*.
+.
 
 # Contribution
 
