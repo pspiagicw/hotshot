@@ -124,4 +124,111 @@ This project is under heavy development and contributions are highly appreciated
 A lot of decisions are already taken regarding the language, but a lot of them are still remaining.
 Hope you can join us in making them.
 
+# concepts
+
+`hotshot` is ultimately a LISP based langauge, so expect crazy amounts of brackets.
+
+
+## expressions
+
+`hotshot` supports expression, even `5` is a valid hotshot program.
+
+Technically this means, hotshot doesn't have return statements.
+
+There are few simple expression types, these also form the data-types.
+- Integer (`5` or `123`), these evaluate to the integers themselves.
+- String (`"this is a string"`)
+- Booleans (`true` `false`)
+
+You can perform operations on these data-types.
+
+- Arithmetic `(+ 1 2)`, `(- 2 1)`, `(*)`
+
+## variables
+
+You can use `(let <name> <value>)` to store variables, that is the only way of updating those variables too!
+
+
+For example
+
+```lisp
+(let name "pspiagicw")
+```
+
+## flow-control
+
+It supports `if`, `if-else`, `while` and `cond` statements.
+
+```lisp
+(echo (if (not (= number 1))
+        "Number is 1"
+        "Number is not 1"))
+```
+
+```lisp
+(while (> number 0)
+       (do
+         (echo "The value is:" number)
+         (let number (- number 1))))
+```
+
+```lisp
+(cond 
+    ((= number 1) "Number is 1")
+    ((= number 2) "Number is 2")
+    (true "Number is something else"))
+```
+
+```lisp
+(let number 3)
+(while (> number 0)
+       (do
+         (echo (if (= number 3) "The number is 3!"))
+         (let number (- number 1))
+         (echo (cond 
+              ((= number 1) "Number is 1")
+              ((= number 2) "Number is 2")
+              (true "Number is something else")))))
+```
+
+## functions
+
+Obviously it's functional-programming, so here you have functions.
+
+```lisp
+(fn hello () 
+    "Hello, hotshooter!")
+```
+
+```lisp
+(fn helloName (name) 
+    (concat "Hello " name))
+```
+
+```lisp
+(let greet (lambda (name) (concat "Hello " name)))
+(greet "hotshooter!")
+```
+
+
+```lisp
+
+(fn arithmetic (operation x y) (operation x y))
+
+(fn add (x y) (+ x y))
+
+(echo (arithmetic add 3 4))
+
+(echo (arithmetic (lambda (x y) (+ x y)) 3 4))
+```
+
+## builtins
+
+We have lots of built in functions, you can add even your own.
+
+
+
+
+
+
 
